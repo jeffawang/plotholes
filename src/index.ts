@@ -30,7 +30,7 @@ const sketch = function (p: p5) {
         p.createCanvas(WIDTH, HEIGHT, p.SVG);
         p.noLoop();
         p.noStroke();
-        p.background(COLORS.BG);
+        // p.background(COLORS.BG);
 
 
         p.randomSeed(SEED);
@@ -63,12 +63,11 @@ const sketch = function (p: p5) {
                 p.translate(size / 2, size / 2);
 
                 p.rotate(theta + p.random(-JITTER, JITTER));
-                // p.point(0, 0);
                 p.rect(dx, dy, size);
+
                 p.pop();
             }
         }
-        // p.save();
     };
     p.keyPressed = function () {
         if (p.key == 's') {
@@ -76,10 +75,6 @@ const sketch = function (p: p5) {
         }
     }
 };
-
-// export const makeArt = (node: HTMLElement) => {
-//     new p5(sketch, node);
-// }
 
 const art = document.getElementById('art') as HTMLElement;
 
