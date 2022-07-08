@@ -19,7 +19,7 @@ const sketch = function (p: p5) {
     const SHIFT_FACTOR = 1.5;
 
     const COLORS = {
-        BG: p.color(255),
+        BG: p.color(252),
         FG: p.color(0),
     };
 
