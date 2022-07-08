@@ -2,7 +2,10 @@ import p5 from "p5";
 import p5svg from "p5.js-svg";
 p5svg(p5);
 
+
 const sketch = function (p: p5) {
+    // TITLE is interpolated in the filename
+    const TITLE = "schotter"
 
     const WIDTH = 900;
     const HEIGHT = 1200;
@@ -20,6 +23,8 @@ const sketch = function (p: p5) {
         FG: p.color(0),
     };
 
+    const SEED = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+
     p.setup = function () {
         // NOTE(jw): p.SVG gets imperitively added by p5svg, IDE may not understand it
         p.createCanvas(WIDTH, HEIGHT, p.SVG);
@@ -27,10 +32,10 @@ const sketch = function (p: p5) {
         p.noStroke();
         p.background(COLORS.BG);
 
-        const seed = Math.floor(p.random(0, Number.MAX_SAFE_INTEGER));
-        p.randomSeed(seed);
-        p.noiseSeed(seed);
-        console.log(seed);
+
+        p.randomSeed(SEED);
+        p.noiseSeed(SEED);
+        console.log(SEED);
     }
 
     p.draw = function () {
@@ -67,7 +72,7 @@ const sketch = function (p: p5) {
     };
     p.keyPressed = function () {
         if (p.key == 's') {
-            p.save();
+            p.save(`${TITLE}_${SEED}.svg`);
         }
     }
 };
