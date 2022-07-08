@@ -25,12 +25,13 @@ const sketch = function (p: p5) {
 
     const SEED = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
 
-    let LOOP = true;
+    let LOOP = false;
 
     p.setup = function () {
         // NOTE(jw): p.SVG gets imperitively added by p5svg, IDE may not understand it
         p.createCanvas(WIDTH, HEIGHT, p.SVG);
-        // p.noLoop();
+        if (!LOOP)
+            p.noLoop();
         p.noStroke();
 
 
