@@ -1,6 +1,6 @@
 # plotholes
 
-`plotholes` helps rapidly create SVGs for pen plotting, using typescript, `p5js`, and `p5js-svg`.
+`plotholes` helps rapidly create SVGs for pen plotting, using typescript, `p5`, and `p5.js-svg`.
 
 ## Getting started
 
