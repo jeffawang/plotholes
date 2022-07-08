@@ -19,7 +19,7 @@ const sketch = function (p: p5) {
     const SHIFT_FACTOR = 1.5;
 
     const COLORS = {
-        BG: p.color(240),
+        BG: p.color(255),
         FG: p.color(0),
     };
 
@@ -30,7 +30,6 @@ const sketch = function (p: p5) {
         p.createCanvas(WIDTH, HEIGHT, p.SVG);
         p.noLoop();
         p.noStroke();
-        // p.background(COLORS.BG);
 
 
         p.randomSeed(SEED);
@@ -39,7 +38,7 @@ const sketch = function (p: p5) {
     }
 
     p.draw = function () {
-
+        p.background(COLORS.BG);
         p.noFill();
         p.stroke(COLORS.FG);
         p.strokeWeight(2);
@@ -69,9 +68,13 @@ const sketch = function (p: p5) {
             }
         }
     };
+
     p.keyPressed = function () {
-        if (p.key == 's') {
-            p.save(`${TITLE}_${SEED}.svg`);
+        switch (p.key) {
+            case 's':
+                p.save(`${TITLE}_${SEED}.svg`);
+            case 'r':
+                p.redraw();
         }
     }
 };
