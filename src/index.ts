@@ -18,6 +18,7 @@ const sketch = function (p: p5) {
         }
     }
     p.setup = function () {
+        // NOTE(jw): p.SVG gets imperitively added by p5svg, IDE may not understand it
         p.createCanvas(420, 420, p.SVG);
         p.noLoop();
         p.noStroke();
