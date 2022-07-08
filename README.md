@@ -4,7 +4,7 @@
 
 ## Getting started
 
-To make a new piece, run the server and edit the typescript in `src/index.ts`. The http server hot reloads, so you can see your changes in the browser reflected immediately on save.
+To make a new piece, run the server and edit the typescript in `src/index.ts`. The http server and browser code should hot reload, so you can see your changes in the browser reflected immediately on save.
 
 Using either of the instruction sets below, the server will be started at `http://localhost:1234`.
 
