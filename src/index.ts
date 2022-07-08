@@ -25,10 +25,12 @@ const sketch = function (p: p5) {
 
     const SEED = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
 
+    let LOOP = true;
+
     p.setup = function () {
         // NOTE(jw): p.SVG gets imperitively added by p5svg, IDE may not understand it
         p.createCanvas(WIDTH, HEIGHT, p.SVG);
-        p.noLoop();
+        // p.noLoop();
         p.noStroke();
 
 
@@ -73,8 +75,14 @@ const sketch = function (p: p5) {
         switch (p.key) {
             case 's':
                 p.save(`${TITLE}_${SEED}.svg`);
+                break;
             case 'r':
                 p.redraw();
+                break;
+            case ' ':
+                LOOP ? p.noLoop() : p.loop();
+                LOOP = !LOOP;
+                break;
         }
     }
 };
