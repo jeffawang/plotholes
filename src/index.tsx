@@ -1,5 +1,9 @@
 import p5 from "p5";
-import { Sketcher } from "./sketcher";
+import { Controls, Sketcher } from "./sketcher";
+
+import * as ReactDOM from 'react-dom/client';
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, ChakraProvider } from "@chakra-ui/react";
+import { ControlsComponent } from "./components/Controls";
 
 const sketcher = new Sketcher({
     title: "schotter",
@@ -58,3 +62,23 @@ const sketcher = new Sketcher({
 
 const art = document.getElementById('art') as HTMLElement;
 new p5(sketcher.p5Sketch(), art);
+
+const blah = document.getElementById('blah') as HTMLElement;
+
+function App() {
+    return <ChakraProvider>
+        <ControlsComponent />
+    </ChakraProvider>
+}
+
+// render(<h1>wtf</h1>, blah);
+const root = ReactDOM.createRoot(blah);
+root.render(<App />);
+
+
+
+
+
+
+
+
