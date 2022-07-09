@@ -1,6 +1,6 @@
 import p5 from "p5";
 import p5svg from "p5.js-svg";
-import { Uniforms } from "./components/Types";
+import { UniformControls } from "./components/Types";
 p5svg(p5);
 
 type honk<Type> = {
@@ -17,7 +17,7 @@ type Params = {
     title: string
     width: number
     height: number
-    uniforms: Uniforms
+    uniforms: UniformControls
 
     /**
      * sketch is the main way to access p5 for Sketcher users. Inside this
@@ -36,7 +36,7 @@ type Params = {
 
 class Sketcher {
     params: Params;
-    readonly uniforms: Uniforms;
+    readonly uniforms: UniformControls;
 
     constructor(params: Params) {
         if (params.seed === undefined)

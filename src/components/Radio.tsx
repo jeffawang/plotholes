@@ -1,9 +1,9 @@
 import { FormControl, FormHelperText, FormLabel, Radio, RadioGroup, Stack } from '@chakra-ui/react';
 
-import { RadioUniform } from "./Types";
+import { UniformRadio } from "./Types";
 
 export default function RadioControlComponent({ uniform, name }: {
-    uniform: RadioUniform
+    uniform: UniformRadio
     name: string
 }) {
     const onChange = (newSelected: string) => {

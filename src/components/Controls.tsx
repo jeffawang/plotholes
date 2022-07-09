@@ -2,10 +2,10 @@ import { Divider, Heading } from '@chakra-ui/react';
 import GroupControlComponent from "./Group";
 import RadioControlComponent from "./Radio";
 import SliderControlComponent from "./Slider";
-import { Uniform, Uniforms } from "./Types";
+import { UniformControl, UniformControls } from "./Types";
 
 export function Controls({ uniforms }: {
-    uniforms: Uniforms
+    uniforms: UniformControls
 }) {
     return <>
         {Object.keys(uniforms).map((name: string) => {

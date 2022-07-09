@@ -1,11 +1,11 @@
 import { Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Box, FormControl, FormLabel } from "@chakra-ui/react";
 
 import { Controls } from "./Controls";
-import { GroupUniform } from "./Types";
+import { UniformGroup } from "./Types";
 
 export default function GroupControlComponent({ name, uniform }: {
     name: string,
-    uniform: GroupUniform
+    uniform: UniformGroup
 }) {
     return <FormControl as="fieldset">
         <Accordion allowMultiple defaultIndex={[0]}>

@@ -1,9 +1,9 @@
-export type Uniform = SliderUniform | RadioUniform | GroupUniform
-export type Uniforms = {
-    [key: string]: Uniform
+export type UniformControl = UniformSlider | UniformRadio | UniformGroup
+export type UniformControls = {
+    [key: string]: UniformControl
 }
 
-export type SliderUniform = {
+export type UniformSlider = {
     type: "slider",
     value: number,
     min?: number,
@@ -11,14 +11,14 @@ export type SliderUniform = {
     step?: number
 }
 
-export type RadioUniform = {
+export type UniformRadio = {
     type: "radio",
     value: string,
     options: string[],
     description?: string,
 }
 
-export type GroupUniform = {
+export type UniformGroup = {
     type: "group",
-    children: Uniforms
+    children: UniformControls
 }

@@ -5,9 +5,9 @@ import { Box, ChakraProvider } from "@chakra-ui/react";
 import { theme } from "./theme";
 import { Sketcher } from "./sketcher";
 import { ControlsComponent } from "./components/Controls";
-import { Uniforms } from "./components/Types";
+import { UniformControls } from "./components/Types";
 
-let uniforms: Uniforms = {
+let uniforms: UniformControls = {
     shift_factor: { type: "slider", value: 0.5 },
     cols: { type: "slider", value: 15, step: 1, max: 50 },
     rows: { type: "slider", value: 11, step: 1, max: 50 },
