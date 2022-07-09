@@ -5,7 +5,7 @@ p5svg(p5);
 
 const sketch = function (p: p5) {
     // TITLE is interpolated in the filename
-    const TITLE = "schotter"
+    const TITLE = "ripple"
 
     const WIDTH = 900;
     const HEIGHT = 1200;
@@ -27,6 +27,30 @@ const sketch = function (p: p5) {
 
     let LOOP = false;
 
+    function polyline(points: [number, number][], close: boolean = true) {
+        let curr = points[0]
+        for (let i = 1; i < points.length; i++) {
+            const next = points[i];
+            p.line(curr[0], curr[1], next[0], next[1]);
+            curr = next;
+        }
+    }
+
+    function circle(cx: number, cy: number, r: number, samples: number = 100): [number, number][] {
+        r /= 2;
+        let currX = cx + r;
+        let currY = cy;
+        const points = new Array<[number, number]>(samples);
+
+        for (let i = 0; i <= samples; i++) {
+            const pct = i / samples;
+            const x = cx + r * p.cos(p.TAU * pct);
+            const y = cy + r * p.sin(p.TAU * pct);
+            points[i] = [x, y];
+        }
+        return points;
+    }
+
     p.setup = function () {
         // NOTE(jw): p.SVG gets imperitively added by p5svg, IDE may not understand it
         p.createCanvas(WIDTH, HEIGHT, p.SVG);
@@ -40,6 +64,21 @@ const sketch = function (p: p5) {
         console.log(SEED);
     }
 
+    function sin(startX: number,
+        startY: number,
+        endX: number,
+        amplitude: number,
+        period: number,
+        sampling: number = 1): [number, number][] {
+        const points = new Array<[number, number]>((endX - startX) / sampling);
+        for (let i = 0; i < points.length; i++) {
+            let x = startX + i * sampling;
+            let y = startY + p.sin(x / period * p.TAU) * amplitude;
+            points[i] = [x, y];
+        }
+        return points;
+    }
+
     p.draw = function () {
         p.background(COLORS.BG);
         p.noFill();
@@ -49,26 +88,21 @@ const sketch = function (p: p5) {
 
         const size = (WIDTH - 2 * MARGIN) / COLS;
 
-        p.translate(MARGIN, MARGIN);
+        const startX = WIDTH / 2;
+        const startY = HEIGHT / 4;
+        const endX = WIDTH - 100;
+        const amplitude = 50;
+        const period = 200;
+        const sampling = 1;
 
-        for (let y = 0; y < ROWS; y++) {
-            for (let x = 0; x < COLS; x++) {
-                const yness = y / ROWS + 0.2;
-                const dy = p.pow(p.random(-yness, yness), 3) * size * SHIFT_FACTOR;
-                const dx = p.pow(p.random(-yness, yness), 3) * size * SHIFT_FACTOR;
-                const theta = p.random(-p.PI, p.PI) * p.pow(yness, 3);
-                // console.log(dy);
-                p.push();
-
-                // move to top left of grid cell, then its center.
-                p.translate(x * size, y * size);
-                p.translate(size / 2, size / 2);
-
-                p.rotate(theta + p.random(-JITTER, JITTER));
-                p.rect(dx, dy, size);
-
-                p.pop();
-            }
+        const RADIAL_COUNT = 100;
+        const RADIUS = 420
+        p.translate(WIDTH / 2, HEIGHT / 2);
+        for (let i = 0; i < RADIAL_COUNT; i++) {
+            p.rotate(p.TAU / RADIAL_COUNT);
+            console.log(p.drawingContext);
+            const points = sin(0, 0, RADIUS, amplitude, period, 5);
+            polyline(points);
         }
     };
 
