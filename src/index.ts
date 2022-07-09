@@ -97,12 +97,34 @@ const sketch = function (p: p5) {
 
         const RADIAL_COUNT = 100;
         const RADIUS = 420
+        p.push();
         p.translate(WIDTH / 2, HEIGHT / 2);
         for (let i = 0; i < RADIAL_COUNT; i++) {
-            p.rotate(p.TAU / RADIAL_COUNT);
-            console.log(p.drawingContext);
+
+            p.translate(0, 10);
             const points = sin(0, 0, RADIUS, amplitude, period, 5);
             polyline(points);
+        }
+        p.pop()
+        // for (let x = 100; x < 110; x++) {
+        //     for (let y = 100; y < 110; y++) {
+        //         p.set(x, y, c);
+        //     }
+        // }
+        // p.updatePixels();
+
+        const GRID_SIZE = 10;
+        const NOISE_STEP = 0.1;
+        p.rectMode(p.CORNER);
+        for (let x = 0; x < WIDTH; x += GRID_SIZE) {
+            for (let y = 0; y < HEIGHT; y += GRID_SIZE) {
+                const n = p.noise(x / GRID_SIZE * NOISE_STEP, y / GRID_SIZE * NOISE_STEP);
+                p.push();
+                p.noStroke();
+                p.fill(p.color(n * 255));
+                p.rect(x, y, GRID_SIZE, GRID_SIZE);
+                p.pop();
+            }
         }
     };
 
