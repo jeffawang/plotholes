@@ -25,15 +25,20 @@ const sketch = function (p: p5) {
 
     const SEED = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
 
-    let LOOP = false;
+    let LOOP = true;
+
+    let capture: p5.Element;
 
     p.setup = function () {
         // NOTE(jw): p.SVG gets imperitively added by p5svg, IDE may not understand it
-        p.createCanvas(WIDTH, HEIGHT, p.SVG);
+        p.createCanvas(WIDTH, HEIGHT);
         if (!LOOP)
             p.noLoop();
         p.noStroke();
 
+        capture = p.createCapture(p.VIDEO);
+        capture.size(WIDTH, HEIGHT * 320 / 240);
+        capture.hide();
 
         p.randomSeed(SEED);
         p.noiseSeed(SEED);
@@ -49,27 +54,33 @@ const sketch = function (p: p5) {
 
         const size = (WIDTH - 2 * MARGIN) / COLS;
 
-        p.translate(MARGIN, MARGIN);
+        // p.translate(MARGIN, MARGIN);
 
-        for (let y = 0; y < ROWS; y++) {
-            for (let x = 0; x < COLS; x++) {
-                const yness = y / ROWS + 0.2;
-                const dy = p.pow(p.random(-yness, yness), 3) * size * SHIFT_FACTOR;
-                const dx = p.pow(p.random(-yness, yness), 3) * size * SHIFT_FACTOR;
-                const theta = p.random(-p.PI, p.PI) * p.pow(yness, 3);
-                // console.log(dy);
-                p.push();
+        p.image(capture, 0, 0, WIDTH, HEIGHT * 1080 / 1920);
+        p.loadImage
+        p.get()
+        capture.loadPixels();
+        console.log(capture.pixels[0]);
 
-                // move to top left of grid cell, then its center.
-                p.translate(x * size, y * size);
-                p.translate(size / 2, size / 2);
+        // for (let y = 0; y < ROWS; y++) {
+        //     for (let x = 0; x < COLS; x++) {
+        //         const yness = y / ROWS + 0.2;
+        //         const dy = p.pow(p.random(-yness, yness), 3) * size * SHIFT_FACTOR;
+        //         const dx = p.pow(p.random(-yness, yness), 3) * size * SHIFT_FACTOR;
+        //         const theta = p.random(-p.PI, p.PI) * p.pow(yness, 3);
+        //         // console.log(dy);
+        //         p.push();
 
-                p.rotate(theta + p.random(-JITTER, JITTER));
-                p.rect(dx, dy, size);
+        //         // move to top left of grid cell, then its center.
+        //         p.translate(x * size, y * size);
+        //         p.translate(size / 2, size / 2);
 
-                p.pop();
-            }
-        }
+        //         p.rotate(theta + p.random(-JITTER, JITTER));
+        //         p.rect(dx, dy, size);
+
+        //         p.pop();
+        //     }
+        // }
     };
 
     p.keyPressed = function () {
