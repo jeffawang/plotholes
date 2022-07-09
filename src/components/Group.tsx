@@ -1,6 +1,6 @@
 import { Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Box, FormControl, FormLabel } from "@chakra-ui/react";
 
-import { subControl } from "./Controls";
+import { Control, Controls } from "./Controls";
 import { GroupUniform } from "./Types";
 
 export default function GroupControlComponent({ name, uniform }: {
@@ -19,10 +19,9 @@ export default function GroupControlComponent({ name, uniform }: {
                     </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                    {Object.keys(uniform.children).map((name) => subControl(name, uniform.children[name]))}
+                    <Controls uniforms={uniform.children} />
                 </AccordionPanel>
             </AccordionItem>
         </Accordion>
     </FormControl>;
 }
-
