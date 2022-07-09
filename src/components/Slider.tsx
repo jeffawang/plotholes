@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Text, Box, NumberInput, NumberInputField } from '@chakra-ui/react'
+import { Text, Box, NumberInput, NumberInputField, FormControl, FormLabel } from '@chakra-ui/react'
 import { Slider, SliderTrack, SliderFilledTrack, SliderThumb } from '@chakra-ui/react'
 
 import { SliderControl } from "./Types";
@@ -19,8 +19,8 @@ export default function SliderControlComponent({ control }: {
     };
     const onChangeWithString = (_: string, n: number) => { onChange(n) };
 
-    return <>
-        <Text>{control.name}</Text>
+    return <FormControl as="fieldset" >
+        <FormLabel as="legend">{control.name}</FormLabel>
         <Box display="flex" style={{ gap: 20 }}>
             <NumberInput value={value} onChange={onChangeWithString} size="xs" textAlign="right" max={1} min={0} maxW="3rem">
                 <NumberInputField paddingLeft="0.3em" paddingRight="0.3em" textAlign="right" />
@@ -36,5 +36,5 @@ export default function SliderControlComponent({ control }: {
                 <SliderThumb />
             </Slider>
         </Box>
-    </>
+    </FormControl >;
 }

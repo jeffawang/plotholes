@@ -1,4 +1,4 @@
-import { FormControl, FormHelperText, FormLabel, HStack, Radio, RadioGroup } from '@chakra-ui/react';
+import { FormControl, FormHelperText, FormLabel, HStack, Radio, RadioGroup, Stack } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { RadioControl } from "./Types";
 
@@ -16,7 +16,7 @@ export default function RadioControlComponent({ control, key }: {
     return <FormControl as="fieldset">
         <FormLabel as="legend">{control.name}</FormLabel>
         <RadioGroup defaultValue={control.defaultValue} onChange={onChange}>
-            <HStack spacing="24px">
+            <Stack spacing="10px">
                 {control.options.map((option) =>
                     <Radio
                         defaultChecked={option.value === control.defaultValue}
@@ -26,7 +26,7 @@ export default function RadioControlComponent({ control, key }: {
                         {option.name}
                     </Radio>
                 )}
-            </HStack>
+            </Stack>
         </RadioGroup>
         <FormHelperText>{control.description}</FormHelperText>
     </FormControl>;
