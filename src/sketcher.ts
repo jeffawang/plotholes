@@ -36,6 +36,7 @@ type Params = {
 
 class Sketcher {
     params: Params;
+    readonly uniforms: Uniforms;
 
     constructor(params: Params) {
         if (params.seed === undefined)
@@ -43,6 +44,7 @@ class Sketcher {
         if (params.loop === undefined)
             params.loop = false;
         this.params = params;
+        this.uniforms = params.uniforms
     }
 
     /**

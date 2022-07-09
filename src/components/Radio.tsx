@@ -1,9 +1,10 @@
-import { FormControl, FormHelperText, FormLabel, HStack, Radio, RadioGroup, Stack } from '@chakra-ui/react';
+import { FormControl, FormHelperText, FormLabel, Radio, RadioGroup, Stack } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { RadioControl } from "./Types";
+import { RadioUniform } from "./Types";
 
-export default function RadioControlComponent({ control }: {
-    control: RadioControl
+export default function RadioControlComponent({ uniform, name }: {
+    uniform: RadioUniform
+    name: string
 }) {
     useEffect(() => {
         // ...
@@ -14,22 +15,22 @@ export default function RadioControlComponent({ control }: {
     };
 
     return <FormControl as="fieldset">
-        <FormLabel as="legend">{control.name}</FormLabel>
-        <RadioGroup defaultValue={control.defaultValue} onChange={onChange} children={[]}>
+        <FormLabel as="legend">{name}</FormLabel>
+        <RadioGroup defaultValue={uniform.value} onChange={onChange} children={[]}>
             < Stack spacing="10px" >
                 {
-                    control.options.map((option) =>
+                    uniform.options.map((option) =>
                         <Radio
-                            defaultChecked={option.value === control.defaultValue}
-                            value={option.value}
-                            key={option.value}
+                            defaultChecked={option === uniform.value}
+                            value={option}
+                            key={option}
                         >
-                            {option.name}
+                            {option}
                         </Radio>
                     )
                 }
             </Stack>
         </RadioGroup >
-        <FormHelperText>{control.description}</FormHelperText>
+        <FormHelperText>{uniform.description}</FormHelperText>
     </FormControl >;
 }

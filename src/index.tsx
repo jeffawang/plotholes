@@ -1,6 +1,6 @@
 import p5 from "p5";
 import * as ReactDOM from 'react-dom/client';
-import { Box, Button, ChakraProvider } from "@chakra-ui/react";
+import { Box, ChakraProvider } from "@chakra-ui/react";
 
 import { theme } from "./theme";
 import { Sketcher } from "./sketcher";
@@ -12,6 +12,11 @@ let uniforms: Uniforms = {
     cols: { type: "slider", value: 15, step: 1, max: 50 },
     rows: { type: "slider", value: 11, step: 1, max: 50 },
     greeting: { type: "radio", value: "hello", options: ["hello", "bonjour", "hola"] },
+    mygroup: {
+        type: "group", children: {
+            blah: { type: "slider", value: 0.5 }
+        }
+    }
 };
 
 const sketcher = new Sketcher({

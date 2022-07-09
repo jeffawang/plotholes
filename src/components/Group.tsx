@@ -1,10 +1,11 @@
 import { Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Box, FormControl, FormLabel } from "@chakra-ui/react";
-import { subControl } from "./Controls";
-import SliderControlComponent from "./Slider";
-import { GroupControl, SketchControl, SliderControl } from "./Types";
 
-export default function GroupControlComponent({ control }: {
-    control: GroupControl
+import { subControl } from "./Controls";
+import { GroupUniform } from "./Types";
+
+export default function GroupControlComponent({ name, uniform }: {
+    name: string,
+    uniform: GroupUniform
 }) {
     return <FormControl as="fieldset">
         <Accordion allowMultiple defaultIndex={[0]}>
@@ -12,13 +13,13 @@ export default function GroupControlComponent({ control }: {
                 <h2>
                     <AccordionButton>
                         <Box flex='1' textAlign='left'>
-                            <FormLabel as="legend">{control.name}</FormLabel>
+                            <FormLabel as="legend">{name}</FormLabel>
                         </Box>
                         <AccordionIcon />
                     </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                    {control.children.map(subControl)}
+                    {Object.keys(uniform.children).map((name) => subControl(name, uniform.children[name]))}
                 </AccordionPanel>
             </AccordionItem>
         </Accordion>

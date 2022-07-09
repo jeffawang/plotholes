@@ -95,21 +95,22 @@ function uniformsToControls(uniforms: Uniforms): SketchControl[] {
     });
 }
 
-export function subControl(control: SketchControl) {
-    switch (control.type) {
+export function subControl(name: string, uniform: Uniform) {
+    switch (uniform.type) {
         case "radio":
-            return <RadioControlComponent control={control} />;
+            return <RadioControlComponent name={name} uniform={uniform} />;
         case "slider":
-            return <SliderControlComponent control={control} />;
+            return <SliderControlComponent name={name} uniform={uniform} />;
         case "group":
-            return <GroupControlComponent control={control} />;
+            return <GroupControlComponent name={name} uniform={uniform} />;
     }
 }
 
 function ControlsComponent({ name, uniforms }) {
     return <div style={{ "padding": "10px" }}>
         <Heading>{name}</Heading>
-        {uniformsToControls(uniforms).map(subControl)}
+        {Object.keys(uniforms).map((name) => subControl(name, uniforms[name]))}
+        {/* {uniformsToControls(uniforms).map(subControl)} */}
         {/* {exampleControls.map(subControl)} */}
     </div>;
 }
