@@ -1,6 +1,6 @@
 import { Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Box, FormControl, FormLabel } from "@chakra-ui/react";
 
-import { Control, Controls } from "./Controls";
+import { Controls } from "./Controls";
 import { GroupUniform } from "./Types";
 
 export default function GroupControlComponent({ name, uniform }: {
