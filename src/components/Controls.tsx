@@ -63,20 +63,20 @@ let exampleControls: SketchControl[] = [
     },
 ]
 
-export function subControl(control: SketchControl, key: string) {
+export function subControl(control: SketchControl) {
     switch (control.type) {
         case "radio":
-            return <RadioControlComponent control={control} key={key} />;
+            return <RadioControlComponent control={control} />;
         case "slider":
-            return <SliderControlComponent control={control} key={key} />;
+            return <SliderControlComponent control={control} />;
         case "group":
-            return <GroupControlComponent control={control} key={key} />;
+            return <GroupControlComponent control={control} />;
     }
 }
 
 function ControlsComponent() {
     return <div>
-        {exampleControls.map((control, i) => subControl(control, `sketch-control-${i}`))}
+        {exampleControls.map(subControl)}
     </div>;
 }
 

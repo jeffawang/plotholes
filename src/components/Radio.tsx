@@ -2,7 +2,7 @@ import { FormControl, FormHelperText, FormLabel, HStack, Radio, RadioGroup } fro
 import { useEffect } from 'react';
 import { RadioControl } from "./Types";
 
-export default function RadioControlComponent({ control }: {
+export default function RadioControlComponent({ control, key }: {
     control: RadioControl
 }) {
     useEffect(() => {
@@ -10,7 +10,7 @@ export default function RadioControlComponent({ control }: {
     });
 
     const onChange = (newSelected: string) => {
-        console.log(newSelected);
+        // console.log(newSelected);
     };
 
     return <FormControl as="fieldset">
