@@ -1,6 +1,11 @@
 import p5 from "p5";
 import p5svg from "p5.js-svg";
+import { Uniforms } from "./components/Types";
 p5svg(p5);
+
+type honk<Type> = {
+    field: keyof Type
+}
 
 /**
  * Params holds the parameters surrounding the sketch that may also interact
@@ -12,7 +17,7 @@ type Params = {
     title: string
     width: number
     height: number
-    controls: Controls
+    uniforms: Uniforms
 
     /**
      * sketch is the main way to access p5 for Sketcher users. Inside this
@@ -28,8 +33,6 @@ type Params = {
     seed?: number
     loop?: boolean
 }
-
-type Controls = {}
 
 class Sketcher {
     params: Params;
@@ -116,4 +119,4 @@ class Sketcher {
     }
 }
 
-export { Sketcher, Params, Controls };
+export { Sketcher, Params };

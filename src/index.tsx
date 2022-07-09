@@ -1,17 +1,24 @@
 import p5 from "p5";
-import { Controls, Sketcher } from "./sketcher";
-
 import * as ReactDOM from 'react-dom/client';
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, ChakraProvider, extendTheme } from "@chakra-ui/react";
-import { mode, StyleFunctionProps } from '@chakra-ui/theme-tools';
-import { ControlsComponent } from "./components/Controls";
+import { Box, Button, ChakraProvider } from "@chakra-ui/react";
+
 import { theme } from "./theme";
+import { Sketcher } from "./sketcher";
+import { ControlsComponent } from "./components/Controls";
+import { Uniforms } from "./components/Types";
+
+let uniforms: Uniforms = {
+    shift_factor: { type: "slider", value: 0.5 },
+    cols: { type: "slider", value: 15, step: 1, max: 50 },
+    rows: { type: "slider", value: 11, step: 1, max: 50 },
+    greeting: { type: "radio", value: "hello", options: ["hello", "bonjour", "hola"] },
+};
 
 const sketcher = new Sketcher({
     title: "schotter",
     width: 900,
     height: 1200,
-    controls: {},
+    uniforms: uniforms,
     sketch: (p: p5, s: Sketcher) => {
         const ROWS = 15;
         const COLS = 11;
@@ -70,7 +77,7 @@ const controlsElement = document.getElementById('controls') as HTMLElement;
 function App() {
     return <ChakraProvider theme={theme}>
         <Box marginTop={"30px"}>
-            <ControlsComponent name={sketcher.params.title} />
+            <ControlsComponent name={sketcher.params.title} uniforms={sketcher.params.uniforms} />
         </Box>
     </ChakraProvider>
 }

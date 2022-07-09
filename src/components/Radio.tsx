@@ -2,7 +2,7 @@ import { FormControl, FormHelperText, FormLabel, HStack, Radio, RadioGroup, Stac
 import { useEffect } from 'react';
 import { RadioControl } from "./Types";
 
-export default function RadioControlComponent({ control, key }: {
+export default function RadioControlComponent({ control }: {
     control: RadioControl
 }) {
     useEffect(() => {
@@ -15,19 +15,21 @@ export default function RadioControlComponent({ control, key }: {
 
     return <FormControl as="fieldset">
         <FormLabel as="legend">{control.name}</FormLabel>
-        <RadioGroup defaultValue={control.defaultValue} onChange={onChange}>
-            <Stack spacing="10px">
-                {control.options.map((option) =>
-                    <Radio
-                        defaultChecked={option.value === control.defaultValue}
-                        value={option.value}
-                        key={option.value}
-                    >
-                        {option.name}
-                    </Radio>
-                )}
+        <RadioGroup defaultValue={control.defaultValue} onChange={onChange} children={[]}>
+            < Stack spacing="10px" >
+                {
+                    control.options.map((option) =>
+                        <Radio
+                            defaultChecked={option.value === control.defaultValue}
+                            value={option.value}
+                            key={option.value}
+                        >
+                            {option.name}
+                        </Radio>
+                    )
+                }
             </Stack>
-        </RadioGroup>
+        </RadioGroup >
         <FormHelperText>{control.description}</FormHelperText>
-    </FormControl>;
+    </FormControl >;
 }

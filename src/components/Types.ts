@@ -9,8 +9,11 @@ export type GroupControl = {
 export type SliderControl = {
     type: "slider"
     name: string
-    field: string
+    uniform: string
     defaultValue: number
+    step?: number
+    min?: number
+    max?: number
 }
 
 export type RadioControl = {
@@ -18,9 +21,32 @@ export type RadioControl = {
     name: string
     description?: string
     defaultValue: string
-    field: string
+    uniform: string
     options: {
         name: string
         value: string
     }[]
+}
+
+export type Uniforms = {
+    [key: string]: SliderUniform | RadioUniform | GroupUniform
+}
+
+export type SliderUniform = {
+    type: "slider",
+    value: number,
+    min?: number,
+    max?: number,
+    step?: number
+}
+
+export type RadioUniform = {
+    type: "radio",
+    value: string,
+    options: string[],
+}
+
+export type GroupUniform = {
+    type: "group",
+    children: []
 }

@@ -2,7 +2,7 @@ import { Heading } from '@chakra-ui/react';
 import GroupControlComponent from "./Group";
 import RadioControlComponent from "./Radio";
 import SliderControlComponent from "./Slider";
-import { SketchControl } from "./Types";
+import { SketchControl, Uniform, Uniforms } from "./Types";
 
 let exampleControls: SketchControl[] = [
     {
@@ -12,7 +12,7 @@ let exampleControls: SketchControl[] = [
             {
                 type: "slider",
                 name: "a slider in group 1",
-                field: "stuff",
+                uniform: "stuff",
                 defaultValue: 0.5
             },
             {
@@ -22,13 +22,13 @@ let exampleControls: SketchControl[] = [
                     {
                         type: "slider",
                         name: "a slider in the nested group",
-                        field: "stuff",
+                        uniform: "stuff",
                         defaultValue: 0.5
                     },
                     {
                         type: "slider",
                         name: "another slider in the nested group",
-                        field: "stuff2",
+                        uniform: "stuff2",
                         defaultValue: 0.75
                     },
                 ]
@@ -38,7 +38,7 @@ let exampleControls: SketchControl[] = [
     {
         type: "slider",
         name: "a groupless slider",
-        field: "stuff2",
+        uniform: "stuff2",
         defaultValue: 0.75
     },
     {
@@ -59,9 +59,41 @@ let exampleControls: SketchControl[] = [
             },
         ],
         defaultValue: "option1",
-        field: "omg"
+        uniform: "omg"
     },
 ]
+
+function uniformsToControls(uniforms: Uniforms): SketchControl[] {
+    return Object.keys(uniforms).map((name) => {
+        const u = uniforms[name];
+        switch (u.type) {
+            case 'slider':
+                return {
+                    type: "slider",
+                    name: name,
+                    uniform: name,
+                    defaultValue: u.value,
+                    step: u.step,
+                    min: u.min,
+                    max: u.max,
+                }
+            case 'radio':
+                return {
+                    type: "radio",
+                    name: name,
+                    uniform: name,
+                    defaultValue: u.value,
+                    options: u.options.map((v) => ({ name: v, value: v }))
+                }
+            case 'group':
+                return {
+                    type: "group",
+                    name: name,
+                    children: [] // TODO
+                }
+        }
+    });
+}
 
 export function subControl(control: SketchControl) {
     switch (control.type) {
@@ -74,10 +106,11 @@ export function subControl(control: SketchControl) {
     }
 }
 
-function ControlsComponent({ name }) {
+function ControlsComponent({ name, uniforms }) {
     return <div style={{ "padding": "10px" }}>
         <Heading>{name}</Heading>
-        {exampleControls.map(subControl)}
+        {uniformsToControls(uniforms).map(subControl)}
+        {/* {exampleControls.map(subControl)} */}
     </div>;
 }
 
