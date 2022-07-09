@@ -2,8 +2,10 @@ import p5 from "p5";
 import { Controls, Sketcher } from "./sketcher";
 
 import * as ReactDOM from 'react-dom/client';
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, ChakraProvider } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { mode, StyleFunctionProps } from '@chakra-ui/theme-tools';
 import { ControlsComponent } from "./components/Controls";
+import { theme } from "./theme";
 
 const sketcher = new Sketcher({
     title: "schotter",
@@ -63,16 +65,17 @@ const sketcher = new Sketcher({
 const art = document.getElementById('art') as HTMLElement;
 new p5(sketcher.p5Sketch(), art);
 
-const blah = document.getElementById('blah') as HTMLElement;
+const controlsElement = document.getElementById('controls') as HTMLElement;
 
 function App() {
-    return <ChakraProvider>
-        <ControlsComponent name={sketcher.params.title} />
+    return <ChakraProvider theme={theme}>
+        <Box marginTop={"30px"}>
+            <ControlsComponent name={sketcher.params.title} />
+        </Box>
     </ChakraProvider>
 }
 
-// render(<h1>wtf</h1>, blah);
-const root = ReactDOM.createRoot(blah);
+const root = ReactDOM.createRoot(controlsElement);
 root.render(<App />);
 
 
