@@ -1,4 +1,4 @@
-import { Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Box } from "@chakra-ui/react";
+import { Heading } from '@chakra-ui/react';
 import GroupControlComponent from "./Group";
 import RadioControlComponent from "./Radio";
 import SliderControlComponent from "./Slider";
@@ -74,8 +74,9 @@ export function subControl(control: SketchControl) {
     }
 }
 
-function ControlsComponent() {
-    return <div>
+function ControlsComponent({ name }) {
+    return <div style={{ "padding": "10px" }}>
+        <Heading>{name}</Heading>
         {exampleControls.map(subControl)}
     </div>;
 }

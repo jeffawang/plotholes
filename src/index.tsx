@@ -67,7 +67,7 @@ const blah = document.getElementById('blah') as HTMLElement;
 
 function App() {
     return <ChakraProvider>
-        <ControlsComponent />
+        <ControlsComponent name={sketcher.params.title} />
     </ChakraProvider>
 }
 
