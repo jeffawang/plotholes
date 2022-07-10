@@ -9,7 +9,7 @@ export default function GroupControlComponent({ name, uniform }: {
     uniform: UniformGroup
 }) {
     return <FormControl as="fieldset">
-        <Accordion allowMultiple defaultIndex={[0]}>
+        <Accordion allowMultiple defaultIndex={uniform.collapsed ? [] : [0]}>
             <AccordionItem>
                 <h2>
                     <AccordionButton>

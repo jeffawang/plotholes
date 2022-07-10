@@ -44,6 +44,7 @@ export type UniformCheckbox = {
 export type UniformGroup = {
     type: "group",
     value: UniformControls
+    collapsed?: boolean
 
     // NOTE(jw): onChange not called for groups.
     onChange?: (u: UniformGroup) => void

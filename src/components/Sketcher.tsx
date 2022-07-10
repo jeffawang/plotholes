@@ -14,7 +14,7 @@ function newSettings<UC extends UniformControls>(sketcher: Sketcher<UC>) {
     };
     return {
         settings: {
-            type: group, value: settings
+            type: group, value: settings, collapsed: true
         },
     };
 }
