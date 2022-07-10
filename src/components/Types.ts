@@ -3,6 +3,10 @@ export type UniformControls = {
     [key: string]: UniformControl
 }
 
+export const slider = "slider" as const
+export const radio = "radio" as const
+export const group = "group" as const
+
 export type UniformSlider = {
     type: "slider",
     value: number,

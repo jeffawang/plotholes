@@ -1,11 +1,7 @@
 import p5 from "p5";
 import p5svg from "p5.js-svg";
-import { UniformControls } from "./components/Types";
+import { UniformControls, UniformGroup } from "./components/Types";
 p5svg(p5);
-
-type honk<Type> = {
-    field: keyof Type
-}
 
 /**
  * Params holds the parameters surrounding the sketch that may also interact
@@ -13,11 +9,11 @@ type honk<Type> = {
  * sketch function itself. This is the main configuration interface into
  * Sketcher.
  */
-type Params = {
+type Params<UC extends UniformControls> = {
     title: string
     width: number
     height: number
-    controls: UniformControls
+    controls: UC
 
     /**
      * sketch is the main way to access p5 for Sketcher users. Inside this
@@ -28,23 +24,49 @@ type Params = {
      * @param p - a p5 object
      * @param s - a Sketcher object to provide access to Params, Controls, etc.
      */
-    sketch: (p: p5, s: Sketcher) => void
+    sketch: (p: p5, s: Sketcher<UC>, u: Proxy<UC>) => void
 
     seed?: number
     loop?: boolean
 }
 
-class Sketcher {
-    params: Params;
-    readonly uniforms: UniformControls;
+/** Proxy<UC> takes a UniformControls type parameter and proxies access to it.
+ * For example, there is a slider with a name `hello`, accesses to the proxy of
+ * that slider to `hello` will access the `value` field within the object under
+ * `hello`.
+ * 
+ * This enables access to the uniform values like this: `u.hello`, rather than
+ * the more cumbersome `u.hello.value`.
+ * 
+ * For nested groups, this effect is amplified, allowing access like
+ * `u.mygroup.nestedgroup.hello` rather than
+ * `u.mygroup.value.nestedgroup.value.hello.value`.
+ * 
+ * This access pattern also prevents accidentally modifying the uniform control
+ * values in the sketch while just trying to access the uniform values.
+ * */
+export type Proxy<UC extends UniformControls> = {
+    [Property in keyof UC]: UC[Property] extends UniformGroup ? Proxy<UC[Property]["value"]> : UC[Property]["value"]
+}
 
-    constructor(params: Params) {
+class Sketcher<UC extends UniformControls> {
+    params: Params<UC>;
+    uniforms: UC | Proxy<UC>;
+
+    constructor(params: Params<UC>) {
         if (params.seed === undefined)
             params.seed = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
         if (params.loop === undefined)
             params.loop = false;
         this.params = params;
-        this.uniforms = params.controls
+        this.uniforms = new Proxy(params.controls, { get: this.getUniform.bind(this) });
+    }
+
+    getUniform(target, prop, receiver) {
+        const uniform = target[prop];
+        if (uniform.type === "group")
+            return new Proxy(uniform.value, { get: this.getUniform.bind(this) });
+        return uniform.value;
     }
 
     /**
@@ -115,7 +137,7 @@ class Sketcher {
      */
     p5Sketch() {
         return (p: p5) => {
-            this.params.sketch(p, this);
+            this.params.sketch(p, this, this.uniforms as Proxy<UC>);
             this.setDefaults(p);
         }
     }
