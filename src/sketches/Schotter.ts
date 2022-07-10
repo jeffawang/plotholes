@@ -1,6 +1,6 @@
 import p5 from "p5";
 import { group, radio, slider } from "../components/Types";
-import { Sketcher, Proxy } from "../sketcher";
+import { Sketcher, Uniforms } from "../sketcher";
 
 let controls = {
     shift_factor: { type: slider, value: 1.5, min: 0, max: 10 },
@@ -21,7 +21,7 @@ export const sketcher = new Sketcher({
     controls: controls,
     settings: {},
 
-    sketch: (p: p5, s: Sketcher<typeof controls>, u: Proxy<typeof controls>) => {
+    sketch: (p: p5, s: Sketcher<typeof controls>, u: Uniforms<typeof controls>) => {
         const MARGIN = 100;
         const COLORS = {
             BG: p.color(252),

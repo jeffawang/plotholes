@@ -24,7 +24,7 @@ type Params<UC extends UniformControls> = {
      * @param p - a p5 object
      * @param s - a Sketcher object to provide access to Params, Controls, etc.
      */
-    sketch: (p: p5, s: Sketcher<UC>, u: Proxy<UC>) => void
+    sketch: (p: p5, s: Sketcher<UC>, u: Uniforms<UC>) => void
 
     settings: {
         seed?: number
@@ -34,7 +34,7 @@ type Params<UC extends UniformControls> = {
     }
 }
 
-/** Proxy<UC> takes a UniformControls type parameter and proxies access to it.
+/** Uniforms<UC> takes a UniformControls type parameter and proxies access to it.
  * For example, there is a slider with a name `hello`, accesses to the proxy of
  * that slider to `hello` will access the `value` field within the object under
  * `hello`.
@@ -49,13 +49,13 @@ type Params<UC extends UniformControls> = {
  * This access pattern also prevents accidentally modifying the uniform control
  * values in the sketch while just trying to access the uniform values.
  * */
-export type Proxy<UC extends UniformControls> = {
-    [Property in keyof UC]: UC[Property] extends UniformGroup ? Proxy<UC[Property]["value"]> : UC[Property]["value"]
+export type Uniforms<UC extends UniformControls> = {
+    [Property in keyof UC]: UC[Property] extends UniformGroup ? Uniforms<UC[Property]["value"]> : UC[Property]["value"]
 }
 
 class Sketcher<UC extends UniformControls> {
     params: Params<UC>;
-    uniforms: UC | Proxy<UC>;
+    uniforms: UC | Uniforms<UC>;
     p: p5;
 
     constructor(params: Params<UC>) {
@@ -167,7 +167,7 @@ class Sketcher<UC extends UniformControls> {
     p5Sketch() {
         return (p: p5) => {
             this.p = p;
-            this.params.sketch(p, this, this.uniforms as Proxy<UC>);
+            this.params.sketch(p, this, this.uniforms as Uniforms<UC>);
             this.setDefaults(p);
         }
     }
