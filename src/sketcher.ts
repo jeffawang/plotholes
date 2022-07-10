@@ -58,16 +58,20 @@ class Sketcher<UC extends UniformControls> {
     p: p5;
 
     constructor(params: Params<UC>) {
-        if (params.settings === undefined)
-            params.settings = {};
-        if (params.settings.seed === undefined)
-            params.settings.seed = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-        if (params.settings.loop === undefined)
-            params.settings.loop = false;
-        if (params.settings.autoresize === undefined)
-            params.settings.autoresize = true;
+        params.settings ??= {};
+        params.settings.seed ??= Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+        params.settings.loop ??= false;
+        params.settings.autoresize ??= true;
         this.params = params;
         this.uniforms = new Proxy(params.controls, { get: this.getUniform.bind(this) });
+    }
+
+    setSeed(seed: number) {
+        this.params.settings.seed = seed;
+        if (this.p) {
+            this.p.randomSeed(seed);
+            this.p.noiseSeed(seed);
+        }
     }
 
     setLoop(loop: boolean) {

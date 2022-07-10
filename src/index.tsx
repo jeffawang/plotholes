@@ -15,7 +15,7 @@ function App() {
     </ChakraProvider>
 }
 
-const root = ReactDOM.createRoot(document.body);
+const root = ReactDOM.createRoot(document.getElementById("app"));
 root.render(<App />);
 
 

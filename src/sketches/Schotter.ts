@@ -19,6 +19,7 @@ export const sketcher = new Sketcher({
     width: 900,
     height: 1200,
     controls: controls,
+    settings: {},
 
     sketch: (p: p5, s: Sketcher<typeof controls>, u: Proxy<typeof controls>) => {
         const MARGIN = 100;
