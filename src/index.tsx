@@ -7,8 +7,6 @@ import { theme } from "./theme";
 import { sketcher as schotter } from "./sketches/Schotter";
 import { SketcherComponent } from "./components/Sketcher";
 
-const art = document.getElementById('art') as HTMLElement;
-
 const appElement = document.getElementById('app') as HTMLElement;
 
 function App() {
@@ -18,7 +16,7 @@ function App() {
     </ChakraProvider>
 }
 
-const root = ReactDOM.createRoot(appElement);
+const root = ReactDOM.createRoot(document.body);
 root.render(<App />);
 
 
