@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Box, Divider, Heading } from '@chakra-ui/react';
+import { Divider, Heading } from '@chakra-ui/react';
 import GroupControlComponent from "./Group";
 import RadioControlComponent from "./Radio";
 import SliderControlComponent from "./Slider";
-import { UniformControl, UniformControls } from "./Types";
+import { UniformControls } from "./Types";
 
 export function Controls({ uniforms }: {
     uniforms: UniformControls
