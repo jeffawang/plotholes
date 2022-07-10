@@ -14,6 +14,11 @@ export function Plot<UC extends UniformControls>({ sketcher }: {
         new p5(sketcher.p5Sketch(), elRef.current!);
 
         function handleResize() {
+            console.log(sketcher.settings.autoresize)
+            if (!sketcher.settings.autoresize) {
+                setScale(1.0);
+                return;
+            }
             const h = sketcher.params.height + 100;
             const wh = window.innerHeight;
             const scale = Math.min(1.0, window.innerHeight / h);

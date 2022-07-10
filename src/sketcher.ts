@@ -1,6 +1,6 @@
 import p5 from "p5";
 import p5svg from "p5.js-svg";
-import { checkbox, group, radio, slider, UniformControls, UniformGroup } from "./components/Types";
+import { checkbox, group, radio, slider, UniformControl, UniformControls, UniformGroup } from "./components/Types";
 p5svg(p5);
 
 /**
@@ -49,11 +49,13 @@ export type Proxy<UC extends UniformControls> = {
     [Property in keyof UC]: UC[Property] extends UniformGroup ? Proxy<UC[Property]["value"]> : UC[Property]["value"]
 }
 
+type Settings = ReturnType<InstanceType<typeof Sketcher>["newSettingsControls"]>["globals"]["value"];
+
 class Sketcher<UC extends UniformControls> {
     params: Params<UC>;
     uniforms: UC | Proxy<UC>;
-    settings: UniformControls | Proxy<UniformControls>;
-    settingsControls: UniformControls;
+    settingsControls: Settings;
+    settings: Settings | Proxy<Settings>;
 
     constructor(params: Params<UC>) {
         if (params.seed === undefined)
@@ -63,15 +65,16 @@ class Sketcher<UC extends UniformControls> {
         this.params = params;
         this.uniforms = new Proxy(params.controls, { get: this.getUniform.bind(this) });
 
-        this.settingsControls = this.newSettingsControls();
+        this.settingsControls = this.newSettingsControls().globals.value;
         this.settings = new Proxy(this.settingsControls, { get: this.getUniform.bind(this) });
     }
 
-    newSettingsControls(): UniformControls {
+    newSettingsControls() {
         return {
             globals: {
                 type: group, value: {
                     loop: { type: checkbox, value: this.params.loop as boolean },
+                    autoresize: { type: checkbox, value: true },
                 }
             }
         };
