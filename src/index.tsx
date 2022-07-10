@@ -1,4 +1,5 @@
 import p5 from "p5";
+import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Box, ChakraProvider } from "@chakra-ui/react";
 
@@ -24,10 +25,6 @@ function App() {
 
 const root = ReactDOM.createRoot(controlsElement);
 root.render(<App />);
-
-
-
-
 
 
 
