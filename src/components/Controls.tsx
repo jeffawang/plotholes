@@ -31,12 +31,11 @@ export function Controls({ uniforms }: {
     </>;
 }
 
-function ControlsComponent({ name, uniforms, globalUniforms }) {
+function ControlsComponent({ name, uniforms }) {
     return <>
         <Heading>{name}</Heading>
         <Divider marginTop="5px" marginBottom="20px" />
         <Controls uniforms={uniforms} />
-        <Controls uniforms={globalUniforms} />
     </>;
 }
 

@@ -15,6 +15,8 @@ export default function NumberControlComponent({ name, uniform }: {
     const onChange = (n: number) => {
         setValue(n);
         uniform.value = n;
+        if (uniform.onChange !== undefined)
+            uniform.onChange(uniform)
     };
     const onChangeWithString = (_: string, n: number) => { onChange(n) };
 

@@ -15,6 +15,7 @@ export type UniformSlider = {
     min?: number
     max?: number
     step?: number
+    onChange?: (u: UniformSlider) => void
 };
 
 export type UniformNumber = {
@@ -23,6 +24,7 @@ export type UniformNumber = {
     min?: number
     max?: number
     step?: number
+    onChange?: (u: UniformNumber) => void
 };
 
 export type UniformRadio = {
@@ -30,14 +32,19 @@ export type UniformRadio = {
     value: string
     options: string[]
     description?: string
+    onChange?: (u: UniformRadio) => void
 };
 
 export type UniformCheckbox = {
     type: "checkbox"
     value: boolean
+    onChange?: (u: UniformCheckbox) => void
 };
 
 export type UniformGroup = {
     type: "group",
     value: UniformControls
+
+    // NOTE(jw): onChange not called for groups.
+    onChange?: (u: UniformGroup) => void
 };

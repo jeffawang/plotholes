@@ -12,6 +12,8 @@ export default function CheckboxComponent({ name, uniform }: {
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         uniform.value = e.target.checked;
         setValue(e.target.checked);
+        if (uniform.onChange !== undefined)
+            uniform.onChange(uniform)
     };
 
     return < Stack spacing="10px" >

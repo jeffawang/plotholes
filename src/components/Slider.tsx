@@ -19,6 +19,8 @@ export default function SliderControlComponent({ name, uniform }: {
     const onChange = (n: number) => {
         setValue(n);
         // uniforms.current[control.uniform].value = value;
+        if (uniform.onChange !== undefined)
+            uniform.onChange(uniform)
     };
     const onChangeWithString = (_: string, n: number) => { onChange(n) };
 

@@ -9,6 +9,8 @@ export default function RadioControlComponent({ uniform, name }: {
 }) {
     const onChange = (newSelected: string) => {
         uniform.value = newSelected
+        if (uniform.onChange !== undefined)
+            uniform.onChange(uniform)
     };
 
     return <FormControl as="fieldset">

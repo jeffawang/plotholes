@@ -56,6 +56,7 @@ class Sketcher<UC extends UniformControls> {
     uniforms: UC | Proxy<UC>;
     settingsControls: Settings;
     settings: Settings["settings"]["value"] | Proxy<Settings["settings"]["value"]>;
+    p: p5;
 
     constructor(params: Params<UC>) {
         if (params.seed === undefined)
@@ -67,6 +68,15 @@ class Sketcher<UC extends UniformControls> {
 
         this.settingsControls = this.newSettingsControls();
         this.settings = new Proxy(this.settingsControls.settings.value, { get: this.getUniform.bind(this) });
+    }
+
+    setLoop(loop: boolean) {
+        this.params.loop = loop;
+        if (this.p !== undefined)
+            if (loop)
+                this.p.loop();
+            else
+                this.p.noLoop();
     }
 
     newSettingsControls() {
@@ -156,6 +166,7 @@ class Sketcher<UC extends UniformControls> {
      */
     p5Sketch() {
         return (p: p5) => {
+            this.p = p;
             this.params.sketch(p, this, this.uniforms as Proxy<UC>);
             this.setDefaults(p);
         }
