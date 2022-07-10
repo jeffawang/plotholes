@@ -49,13 +49,13 @@ export type Proxy<UC extends UniformControls> = {
     [Property in keyof UC]: UC[Property] extends UniformGroup ? Proxy<UC[Property]["value"]> : UC[Property]["value"]
 }
 
-type Settings = ReturnType<InstanceType<typeof Sketcher>["newSettingsControls"]>["globals"]["value"];
+type Settings = ReturnType<InstanceType<typeof Sketcher>["newSettingsControls"]>;
 
 class Sketcher<UC extends UniformControls> {
     params: Params<UC>;
     uniforms: UC | Proxy<UC>;
     settingsControls: Settings;
-    settings: Settings | Proxy<Settings>;
+    settings: Settings["settings"]["value"] | Proxy<Settings["settings"]["value"]>;
 
     constructor(params: Params<UC>) {
         if (params.seed === undefined)
@@ -65,13 +65,13 @@ class Sketcher<UC extends UniformControls> {
         this.params = params;
         this.uniforms = new Proxy(params.controls, { get: this.getUniform.bind(this) });
 
-        this.settingsControls = this.newSettingsControls().globals.value;
-        this.settings = new Proxy(this.settingsControls, { get: this.getUniform.bind(this) });
+        this.settingsControls = this.newSettingsControls();
+        this.settings = new Proxy(this.settingsControls.settings.value, { get: this.getUniform.bind(this) });
     }
 
     newSettingsControls() {
         return {
-            globals: {
+            settings: {
                 type: group, value: {
                     loop: { type: checkbox, value: this.params.loop as boolean },
                     autoresize: { type: checkbox, value: true },
