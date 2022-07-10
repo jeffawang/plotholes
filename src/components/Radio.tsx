@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { FormControl, FormHelperText, FormLabel, Radio, RadioGroup, Stack } from '@chakra-ui/react';
 
 import { UniformRadio } from "./Types";
@@ -12,7 +13,7 @@ export default function RadioControlComponent({ uniform, name }: {
 
     return <FormControl as="fieldset">
         <FormLabel as="legend">{name}</FormLabel>
-        <RadioGroup defaultValue={uniform.value} onChange={onChange} children={[]}>
+        <RadioGroup defaultValue={uniform.value} onChange={onChange}>
             < Stack spacing="10px" >
                 {
                     uniform.options.map((option) =>
