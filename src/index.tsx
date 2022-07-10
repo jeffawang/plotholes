@@ -18,9 +18,9 @@ const appElement = document.getElementById('app') as HTMLElement;
 function Plot<UC extends UniformControls>({ sketcher }: {
     sketcher: Sketcher<UC>
 }) {
-    const elRef = useRef();
+    const elRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
-        new p5(sketcher.p5Sketch(), elRef.current);
+        new p5(sketcher.p5Sketch(), elRef.current as HTMLElement);
     }, [])
     return <Box ref={elRef}></Box>
 }
