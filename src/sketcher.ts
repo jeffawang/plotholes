@@ -17,7 +17,7 @@ type Params = {
     title: string
     width: number
     height: number
-    uniforms: UniformControls
+    controls: UniformControls
 
     /**
      * sketch is the main way to access p5 for Sketcher users. Inside this
@@ -44,7 +44,7 @@ class Sketcher {
         if (params.loop === undefined)
             params.loop = false;
         this.params = params;
-        this.uniforms = params.uniforms
+        this.uniforms = params.controls
     }
 
     /**

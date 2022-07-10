@@ -1,4 +1,4 @@
-import { Divider, Heading } from '@chakra-ui/react';
+import { Box, Divider, Heading } from '@chakra-ui/react';
 import GroupControlComponent from "./Group";
 import RadioControlComponent from "./Radio";
 import SliderControlComponent from "./Slider";
@@ -23,11 +23,11 @@ export function Controls({ uniforms }: {
 }
 
 function ControlsComponent({ name, uniforms }) {
-    return <div style={{ "padding": "20px" }}>
+    return <Box padding="20px" minWidth="270px">
         <Heading>{name}</Heading>
         <Divider marginTop="5px" marginBottom="20px" />
         <Controls uniforms={uniforms} />
-    </div>;
+    </Box>;
 }
 
 export { ControlsComponent }

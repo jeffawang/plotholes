@@ -27,7 +27,7 @@ export default function SliderControlComponent({ name, uniform }: {
 
     return <FormControl as="fieldset" >
         <FormLabel as="legend">{name}</FormLabel>
-        <Box display="flex" style={{ gap: 20 }}>
+        <Box display="flex" style={{ gap: 15 }}>
             <NumberInput value={value} onChange={onChangeWithString} size="xs" textAlign="right" max={1} min={0} maxW="3rem">
                 <NumberInputField paddingLeft="0.3em" paddingRight="0.3em" textAlign="right" />
             </NumberInput>

@@ -19,7 +19,7 @@ export default function GroupControlComponent({ name, uniform }: {
                     </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                    <Controls uniforms={uniform.children} />
+                    <Controls uniforms={uniform.value} />
                 </AccordionPanel>
             </AccordionItem>
         </Accordion>

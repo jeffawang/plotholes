@@ -7,13 +7,13 @@ import { Sketcher } from "./sketcher";
 import { ControlsComponent } from "./components/Controls";
 import { UniformControls } from "./components/Types";
 
-let uniforms: UniformControls = {
+let controls: UniformControls = {
     shift_factor: { type: "slider", value: 0.5 },
     cols: { type: "slider", value: 15, step: 1, max: 50 },
     rows: { type: "slider", value: 11, step: 1, max: 50 },
     greeting: { type: "radio", value: "hello", options: ["hello", "bonjour", "hola"] },
     mygroup: {
-        type: "group", children: {
+        type: "group", value: {
             blah: { type: "slider", value: 0.5 }
         }
     }
@@ -23,7 +23,7 @@ const sketcher = new Sketcher({
     title: "schotter",
     width: 900,
     height: 1200,
-    uniforms: uniforms,
+    controls: controls,
     sketch: (p: p5, s: Sketcher) => {
         const ROWS = 15;
         const COLS = 11;
@@ -82,7 +82,7 @@ const controlsElement = document.getElementById('controls') as HTMLElement;
 function App() {
     return <ChakraProvider theme={theme}>
         <Box marginTop={"30px"}>
-            <ControlsComponent name={sketcher.params.title} uniforms={sketcher.params.uniforms} />
+            <ControlsComponent name={sketcher.params.title} uniforms={sketcher.params.controls} />
         </Box>
     </ChakraProvider>
 }

@@ -20,5 +20,5 @@ export type UniformRadio = {
 
 export type UniformGroup = {
     type: "group",
-    children: UniformControls
+    value: UniformControls
 }
