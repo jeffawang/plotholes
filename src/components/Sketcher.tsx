@@ -3,13 +3,14 @@ import React, { useEffect, useState } from "react";
 import { Sketcher } from "../sketcher";
 import { Controls, ControlsComponent } from "./Controls";
 import { Plot } from "./Plot";
-import { checkbox, group, UniformCheckbox, UniformControls, UniformNumber, _number } from "./Types";
+import { checkbox, group, slider, UniformCheckbox, UniformControls, UniformNumber, UniformSlider, _number } from "./Types";
 
 function newSettings<UC extends UniformControls>(sketcher: Sketcher<UC>) {
     const settings: UniformControls = {
         loop: { type: checkbox, value: false },
         autoresize: { type: checkbox, value: true },
-        seed: { type: _number, value: sketcher.params.settings.seed || Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) }
+        seed: { type: _number, value: sketcher.params.settings.seed || Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) },
+        framerate: { type: slider, value: 60, min: 0, max: 60, step: 0.5 },
     };
     return {
         settings: {
@@ -40,6 +41,7 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
         const scale = Math.min(1.0, window.innerHeight / h);
         setPlotScale(scale);
     }
+
     useEffect(() => {
         window.addEventListener('resize', handleResize);
         handleResize();
@@ -50,12 +52,11 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
         handleResize();
     }
 
-    settingsUniforms.seed.onChange = (u: UniformNumber) => {
-        console.log("changed", u.value)
-        sketcher.setSeed(u.value);
-    }
-
+    settingsUniforms.seed.onChange = (u: UniformNumber) => sketcher.setSeed(u.value);
     sketcher.setSeed(settingsUniforms.seed.value as number);
+
+    settingsUniforms.framerate.onChange = (u: UniformSlider) => sketcher.setFramerate(u.value);
+
 
     return <Box display="flex">
         <Box marginTop={"30px"} padding="20px" minWidth="270px">

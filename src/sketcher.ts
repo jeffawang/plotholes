@@ -30,6 +30,7 @@ type Params<UC extends UniformControls> = {
         seed?: number
         loop?: boolean
         autoresize?: boolean
+        framerate?: number
     }
 }
 
@@ -66,6 +67,13 @@ class Sketcher<UC extends UniformControls> {
         this.uniforms = new Proxy(params.controls, { get: this.getUniform.bind(this) });
     }
 
+    setFramerate(fps: number) {
+        this.params.settings.framerate = fps;
+        console.log(this.p)
+        if (this.p)
+            this.p.frameRate(fps);
+    }
+
     setSeed(seed: number) {
         this.params.settings.seed = seed;
         if (this.p) {
@@ -83,19 +91,7 @@ class Sketcher<UC extends UniformControls> {
                 this.p.noLoop();
     }
 
-    newSettingsControls() {
-        return {
-            settings: {
-                type: group, value: {
-                    loop: { type: checkbox, value: this.params.settings.loop! },
-                    autoresize: { type: checkbox, value: true },
-                    seed: { type: _number, value: this.params.settings.seed! },
-                }
-            }
-        };
-    }
-
-    getUniform(target, prop, receiver) {
+    getUniform(target, prop, _) {
         const uniform = target[prop];
         if (uniform.type === "group")
             return new Proxy(uniform.value, { get: this.getUniform.bind(this) });
