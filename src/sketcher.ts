@@ -73,9 +73,9 @@ class Sketcher<UC extends UniformControls> {
         return {
             settings: {
                 type: group, value: {
-                    loop: { type: checkbox, value: this.params.loop as boolean },
-                    autoresize: { type: checkbox, value: false },
-                    seed: { type: _number, value: this.params.seed },
+                    loop: { type: checkbox, value: this.params.loop! },
+                    autoresize: { type: checkbox, value: true },
+                    seed: { type: _number, value: this.params.seed! },
                 }
             }
         };
