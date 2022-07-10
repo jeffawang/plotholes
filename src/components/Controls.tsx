@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { Box, Divider, Heading } from '@chakra-ui/react';
 import GroupControlComponent from "./Group";
 import RadioControlComponent from "./Radio";
@@ -23,11 +24,11 @@ export function Controls({ uniforms }: {
 }
 
 function ControlsComponent({ name, uniforms }) {
-    return <Box padding="20px" minWidth="270px">
+    return <>
         <Heading>{name}</Heading>
         <Divider marginTop="5px" marginBottom="20px" />
         <Controls uniforms={uniforms} />
-    </Box>;
+    </>;
 }
 
 export { ControlsComponent }
