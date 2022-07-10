@@ -9,7 +9,6 @@ import CheckboxComponent from './Checkbox';
 export function Controls({ uniforms }: {
     uniforms: UniformControls
 }) {
-    console.log("BLAH", uniforms)
     return <>
         {Object.keys(uniforms).map((name: string) => {
             const uniform = uniforms[name];

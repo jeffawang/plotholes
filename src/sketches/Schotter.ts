@@ -50,7 +50,7 @@ export const sketcher = new Sketcher({
                     const dy = p.pow(p.random(-yness, yness), 3) * size * u.shift_factor;
                     const dx = p.pow(p.random(-yness, yness), 3) * size * u.shift_factor;
                     const theta = p.random(-p.PI, p.PI) * p.pow(yness, 3);
-                    // console.log(dy);
+
                     p.push();
 
                     // move to top left of grid cell, then its center.
