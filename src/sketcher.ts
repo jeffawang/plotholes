@@ -1,6 +1,6 @@
 import p5 from "p5";
 import p5svg from "p5.js-svg";
-import { checkbox, group, radio, slider, UniformControl, UniformControls, UniformGroup } from "./components/Types";
+import { checkbox, group, _number, radio, slider, UniformControl, UniformControls, UniformGroup } from "./components/Types";
 p5svg(p5);
 
 /**
@@ -75,6 +75,7 @@ class Sketcher<UC extends UniformControls> {
                 type: group, value: {
                     loop: { type: checkbox, value: this.params.loop as boolean },
                     autoresize: { type: checkbox, value: false },
+                    seed: { type: _number, value: this.params.seed },
                 }
             }
         };

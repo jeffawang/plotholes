@@ -5,6 +5,7 @@ import RadioControlComponent from "./Radio";
 import SliderControlComponent from "./Slider";
 import { UniformControls } from "./Types";
 import CheckboxComponent from './Checkbox';
+import NumberControlComponent from './Number';
 
 export function Controls({ uniforms }: {
     uniforms: UniformControls
@@ -21,6 +22,8 @@ export function Controls({ uniforms }: {
                     return <GroupControlComponent name={name} uniform={uniform} />;
                 case "checkbox":
                     return <CheckboxComponent name={name} uniform={uniform} />;
+                case "number":
+                    return <NumberControlComponent name={name} uniform={uniform} />;
                 default:
                     console.error("uh oh")
             }
