@@ -32,7 +32,7 @@ function App() {
             <Box marginTop={"30px"} padding="20px" minWidth="270px">
                 <ControlsComponent name={schotter.params.title} uniforms={schotter.params.controls} />
             </Box>
-            <Box boxShadow={"0px 10px 30px #aaa"} >
+            <Box boxShadow={"0px 10px 30px #aaa"}>
                 <Plot sketcher={schotter} />
             </Box>
         </Box>
