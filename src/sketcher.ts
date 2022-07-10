@@ -26,8 +26,11 @@ type Params<UC extends UniformControls> = {
      */
     sketch: (p: p5, s: Sketcher<UC>, u: Proxy<UC>) => void
 
-    seed?: number
-    loop?: boolean
+    settings: {
+        seed?: number
+        loop?: boolean
+        autoresize?: boolean
+    }
 }
 
 /** Proxy<UC> takes a UniformControls type parameter and proxies access to it.
@@ -49,29 +52,26 @@ export type Proxy<UC extends UniformControls> = {
     [Property in keyof UC]: UC[Property] extends UniformGroup ? Proxy<UC[Property]["value"]> : UC[Property]["value"]
 }
 
-type Settings = ReturnType<InstanceType<typeof Sketcher>["newSettingsControls"]>;
-
 class Sketcher<UC extends UniformControls> {
     params: Params<UC>;
     uniforms: UC | Proxy<UC>;
-    settingsControls: Settings;
-    settings: Settings["settings"]["value"] | Proxy<Settings["settings"]["value"]>;
     p: p5;
 
     constructor(params: Params<UC>) {
-        if (params.seed === undefined)
-            params.seed = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-        if (params.loop === undefined)
-            params.loop = false;
+        if (params.settings === undefined)
+            params.settings = {};
+        if (params.settings.seed === undefined)
+            params.settings.seed = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+        if (params.settings.loop === undefined)
+            params.settings.loop = false;
+        if (params.settings.autoresize === undefined)
+            params.settings.autoresize = true;
         this.params = params;
         this.uniforms = new Proxy(params.controls, { get: this.getUniform.bind(this) });
-
-        this.settingsControls = this.newSettingsControls();
-        this.settings = new Proxy(this.settingsControls.settings.value, { get: this.getUniform.bind(this) });
     }
 
     setLoop(loop: boolean) {
-        this.params.loop = loop;
+        this.params.settings.loop = loop;
         if (this.p !== undefined)
             if (loop)
                 this.p.loop();
@@ -83,9 +83,9 @@ class Sketcher<UC extends UniformControls> {
         return {
             settings: {
                 type: group, value: {
-                    loop: { type: checkbox, value: this.params.loop! },
+                    loop: { type: checkbox, value: this.params.settings.loop! },
                     autoresize: { type: checkbox, value: true },
-                    seed: { type: _number, value: this.params.seed! },
+                    seed: { type: _number, value: this.params.settings.seed! },
                 }
             }
         };
@@ -110,10 +110,10 @@ class Sketcher<UC extends UniformControls> {
         return () => {
             // @ts-ignore NOTE(jw): p.SVG gets imperitively added by p5svg, IDE may not understand it, so ts-ignore it.
             p.createCanvas(this.params.width, this.params.height, p.SVG);
-            if (!this.params.loop)
+            if (!this.params.settings.loop)
                 p.noLoop();
 
-            const seed = this.params.seed as number;
+            const seed = this.params.settings.seed as number;
             p.randomSeed(seed);
             p.noiseSeed(seed);
             console.log(seed);
@@ -132,14 +132,14 @@ class Sketcher<UC extends UniformControls> {
         return () => {
             switch (p.key) {
                 case 's':
-                    p.save(`${this.params.title}_${this.params.seed}.svg`);
+                    p.save(`${this.params.title}_${this.params.settings.seed}.svg`);
                     break;
                 case 'r':
                     p.redraw();
                     break;
                 case ' ':
-                    this.params.loop ? p.noLoop() : p.loop();
-                    this.params.loop = !this.params.loop;
+                    this.params.settings.loop ? p.noLoop() : p.loop();
+                    this.params.settings.loop = !this.params.settings.loop;
                     break;
             }
         }
