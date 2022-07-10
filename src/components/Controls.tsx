@@ -4,10 +4,12 @@ import GroupControlComponent from "./Group";
 import RadioControlComponent from "./Radio";
 import SliderControlComponent from "./Slider";
 import { UniformControls } from "./Types";
+import CheckboxComponent from './Checkbox';
 
 export function Controls({ uniforms }: {
     uniforms: UniformControls
 }) {
+    console.log("BLAH", uniforms)
     return <>
         {Object.keys(uniforms).map((name: string) => {
             const uniform = uniforms[name];
@@ -18,16 +20,21 @@ export function Controls({ uniforms }: {
                     return <SliderControlComponent name={name} uniform={uniform} />;
                 case "group":
                     return <GroupControlComponent name={name} uniform={uniform} />;
+                case "checkbox":
+                    return <CheckboxComponent name={name} uniform={uniform} />;
+                default:
+                    console.error("uh oh")
             }
         })}
     </>;
 }
 
-function ControlsComponent({ name, uniforms }) {
+function ControlsComponent({ name, uniforms, globalUniforms }) {
     return <>
         <Heading>{name}</Heading>
         <Divider marginTop="5px" marginBottom="20px" />
         <Controls uniforms={uniforms} />
+        <Controls uniforms={globalUniforms} />
     </>;
 }
 

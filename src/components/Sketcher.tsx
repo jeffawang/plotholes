@@ -10,7 +10,7 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
 }) {
     return <Box display="flex">
         <Box marginTop={"30px"} padding="20px" minWidth="270px">
-            <ControlsComponent name={sketcher.params.title} uniforms={sketcher.params.controls} />
+            <ControlsComponent name={sketcher.params.title} uniforms={sketcher.params.controls} globalUniforms={sketcher.settingsControls} />
         </Box>
         <Box>
             <Plot sketcher={sketcher} />

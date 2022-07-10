@@ -1,6 +1,6 @@
 import p5 from "p5";
 import p5svg from "p5.js-svg";
-import { UniformControls, UniformGroup } from "./components/Types";
+import { checkbox, group, radio, slider, UniformControls, UniformGroup } from "./components/Types";
 p5svg(p5);
 
 /**
@@ -52,6 +52,8 @@ export type Proxy<UC extends UniformControls> = {
 class Sketcher<UC extends UniformControls> {
     params: Params<UC>;
     uniforms: UC | Proxy<UC>;
+    settings: UniformControls | Proxy<UniformControls>;
+    settingsControls: UniformControls;
 
     constructor(params: Params<UC>) {
         if (params.seed === undefined)
@@ -60,6 +62,19 @@ class Sketcher<UC extends UniformControls> {
             params.loop = false;
         this.params = params;
         this.uniforms = new Proxy(params.controls, { get: this.getUniform.bind(this) });
+
+        this.settingsControls = this.newSettingsControls();
+        this.settings = new Proxy(this.settingsControls, { get: this.getUniform.bind(this) });
+    }
+
+    newSettingsControls(): UniformControls {
+        return {
+            globals: {
+                type: group, value: {
+                    loop: { type: checkbox, value: this.params.loop as boolean },
+                }
+            }
+        };
     }
 
     getUniform(target, prop, receiver) {

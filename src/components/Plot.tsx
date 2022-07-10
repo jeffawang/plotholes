@@ -15,7 +15,7 @@ export function Plot<UC extends UniformControls>({ sketcher }: {
 
         function handleResize() {
             const h = sketcher.params.height + 100;
-            const wh = window.innerHeight + 30;
+            const wh = window.innerHeight;
             const scale = Math.min(1.0, window.innerHeight / h);
             setScale(scale);
         }

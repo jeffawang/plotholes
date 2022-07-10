@@ -10,7 +10,6 @@ import { SketcherComponent } from "./components/Sketcher";
 const appElement = document.getElementById('app') as HTMLElement;
 
 function App() {
-    console.log(schotter)
     return <ChakraProvider theme={theme}>
         <SketcherComponent sketcher={schotter} />
     </ChakraProvider>
