@@ -45,6 +45,12 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
     useEffect(() => {
         window.addEventListener('resize', handleResize);
         handleResize();
+
+        // Prevent spacebar from doing pagedown.
+        window.onkeydown = function (event) {
+            if (event.keyCode === 32)
+                event.preventDefault();
+        };
     }, []);
 
     settingsUniforms.autoresize.onChange = (u: UniformCheckbox) => {
