@@ -64,7 +64,7 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
     settingsUniforms.framerate.onChange = (u: UniformSlider) => sketcher.setFramerate(u.value);
 
 
-    return <Box display="flex" alignItems="flex-start">
+    return <Box display="flex" alignItems="flex-start" overflow="visible">
         <Box marginTop={"30px"} padding="20px" minWidth="270px">
             <ControlsComponent name={sketcher.params.title} uniforms={sketcher.params.controls} />
             <Controls uniforms={settings} />
