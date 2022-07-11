@@ -15,15 +15,15 @@ export function Controls({ uniforms }: {
             const uniform = uniforms[name];
             switch (uniform.type) {
                 case "radio":
-                    return <RadioControlComponent name={name} uniform={uniform} />;
+                    return <RadioControlComponent name={name} uniform={uniform} key={name} />;
                 case "slider":
-                    return <SliderControlComponent name={name} uniform={uniform} />;
+                    return <SliderControlComponent name={name} uniform={uniform} key={name} />;
                 case "group":
-                    return <GroupControlComponent name={name} uniform={uniform} />;
+                    return <GroupControlComponent name={name} uniform={uniform} key={name} />;
                 case "checkbox":
-                    return <CheckboxComponent name={name} uniform={uniform} />;
+                    return <CheckboxComponent name={name} uniform={uniform} key={name} />;
                 case "number":
-                    return <NumberControlComponent name={name} uniform={uniform} />;
+                    return <NumberControlComponent name={name} uniform={uniform} key={name} />;
                 default:
                     console.error("uh oh")
             }
