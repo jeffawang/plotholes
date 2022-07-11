@@ -9,9 +9,9 @@ export const theme = extendTheme({
                 color: mode('gray.800', 'whiteAlpha.900')(props),
                 bg: mode('white', 'gray.800')(props),
                 lineHeight: 'base',
-                margin: '30px',
+                padding: '30px',
                 display: 'flex',
-                justifyContent: 'center'
+                width: '100%',
             },
         }),
     },

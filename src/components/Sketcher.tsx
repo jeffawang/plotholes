@@ -65,7 +65,8 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
     sketcher.setFramerate(settingsUniforms.framerate.value as number)
 
 
-    return <Box display="flex" alignItems="flex-start" overflow="visible">
+    return <Box display="flex" alignItems="flex-start" overflow="visible" width="100%">
+        <Box flexGrow={"1"}></Box>
         <Box marginTop={"30px"} padding="20px" minWidth="270px">
             <ControlsComponent name={sketcher.params.title} uniforms={sketcher.params.controls} />
             <Controls uniforms={settings} />
@@ -77,5 +78,6 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
         >
             <Plot sketcher={sketcher} />
         </Box>
+        <Box flexGrow={"1"}></Box>
     </Box>
 }
