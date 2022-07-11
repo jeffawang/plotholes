@@ -22,8 +22,12 @@ export function SketchIndex({ sketches }) {
                     {Object.keys(sketches).map((filename) => {
                         const sketcher = sketches[filename].sketcher;
                         return <Tr _hover={{ background: "gray.100" }} borderTop="0.5px solid" borderColor={"gray.200"}>
-                            <Td><Link to={`/${filename}`}>{sketcher.params.title}</Link></Td>
-                        </Tr>;
+                            <Link to={`/${filename}`}>
+                                <Box>
+                                    <Td>{sketcher.params.title}</Td>
+                                </Box>
+                            </Link>
+                        </Tr>
                     })}
                 </Tbody>
             </Table>
