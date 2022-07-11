@@ -1,11 +1,12 @@
 import { SettingsIcon } from "@chakra-ui/icons";
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Button, ButtonGroup, Flex, IconButton, Spacer, Stack } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Flex, Spacer } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Sketcher } from "../sketcher";
 import { Controls, ControlsComponent } from "./ControlPanel";
 import { PlayPause } from "./Controls/PlayPause";
 import { Plot } from "./Plot";
-import { checkbox, group, slider, UniformCheckbox, UniformControls, UniformNumber, UniformSlider, _number } from "./Controls/UniformControls";
+import { checkbox, slider, UniformCheckbox, UniformControls, UniformNumber, UniformSlider, _number } from "./Controls/UniformControls";
+import { GlobalHotKeys } from "react-hotkeys";
 
 function newSettings<UC extends UniformControls>(sketcher: Sketcher<UC>) {
     return {
@@ -36,12 +37,6 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
     useEffect(() => {
         window.addEventListener('resize', handleResize);
         handleResize();
-
-        // Prevent spacebar from doing pagedown.
-        window.onkeydown = function (event) {
-            if (event.keyCode === 32)
-                event.preventDefault();
-        };
     }, []);
 
     settings.autoresize.onChange = (u: UniformCheckbox) => {
@@ -55,33 +50,38 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
     settings.framerate.onChange = (u: UniformSlider) => sketcher.setFramerate(u.value);
     sketcher.setFramerate(settings.framerate.value as number)
 
+    const keyMap = {
+        playpause: ['g', `p`]
+    }
 
-    return <Box display="flex" alignItems="flex-start" overflow="visible" width="100%">
-        <Box flexGrow={"1"}></Box>
-        <Box marginTop={"30px"} padding="16px" minWidth="270px">
-            <ControlsComponent name={sketcher.params.title} uniforms={sketcher.params.controls} />
-            <Accordion allowToggle>
-                <AccordionItem>
-                    <Flex direction="row" padding="10px">
-                        <PlayPause sketcher={sketcher} />
-                        <Spacer />
-                        <AccordionButton width={"inherit"} padding={"7px"} borderRadius="50%" border="1px solid" borderColor="gray.200">
-                            <SettingsIcon />
-                        </AccordionButton>
-                    </Flex>
-                    <AccordionPanel pb={4}>
-                        <Controls uniforms={settings} />
-                    </AccordionPanel>
-                </AccordionItem>
-            </Accordion>
-        </Box>
-        <Box
-            transform={`scale(${plotScale})`}
-            transformOrigin="top left"
-            boxShadow={"0px 10px 30px #aaa"}
-        >
-            <Plot sketcher={sketcher} />
-        </Box>
-        <Box flexGrow={"1"}></Box>
-    </Box >
+    return <GlobalHotKeys keyMap={keyMap}>
+        <Box display="flex" alignItems="flex-start" overflow="visible" width="100%">
+            <Box flexGrow={"1"}></Box>
+            <Box marginTop={"30px"} padding="16px" minWidth="270px">
+                <ControlsComponent sketcher={sketcher} />
+                <Accordion allowToggle>
+                    <AccordionItem>
+                        <Flex direction="row" padding="10px">
+                            <PlayPause sketcher={sketcher} />
+                            <Spacer />
+                            <AccordionButton width={"inherit"} padding={"7px"} borderRadius="50%" border="1px solid" borderColor="gray.200">
+                                <SettingsIcon />
+                            </AccordionButton>
+                        </Flex>
+                        <AccordionPanel pb={4}>
+                            <Controls uniforms={settings} />
+                        </AccordionPanel>
+                    </AccordionItem>
+                </Accordion>
+            </Box>
+            <Box
+                transform={`scale(${plotScale})`}
+                transformOrigin="top left"
+                boxShadow={"0px 10px 30px #aaa"}
+            >
+                <Plot sketcher={sketcher} />
+            </Box>
+            <Box flexGrow={"1"}></Box>
+        </Box >
+    </GlobalHotKeys>
 }

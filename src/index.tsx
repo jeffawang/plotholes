@@ -15,6 +15,7 @@ import { SketcherComponent } from "./components/Sketcher";
 // @ts-ignore Note(jw): glob imports are a non-standard parcel feature. IDE might not understand.
 import * as Sketches from "./sketches/*.ts";
 import { SketchIndex } from './components/SketchIndex';
+import { HotKeys } from 'react-hotkeys';
 
 const appElement = document.getElementById('app') as HTMLElement;
 

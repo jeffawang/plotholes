@@ -6,6 +6,7 @@ import SliderControlComponent from "./Controls/Slider";
 import { UniformControls } from "./Controls/UniformControls";
 import CheckboxComponent from './Controls/Checkbox';
 import NumberControlComponent from './Controls/Number';
+import { Sketcher } from '../sketcher';
 
 export function Controls({ uniforms }: {
     uniforms: UniformControls
@@ -31,11 +32,13 @@ export function Controls({ uniforms }: {
     </>;
 }
 
-function ControlsComponent({ name, uniforms }) {
+function ControlsComponent<UC extends UniformControls>({ sketcher }: {
+    sketcher: Sketcher<UC>
+}) {
     return <>
-        <Heading>{name}</Heading>
+        <Heading>{sketcher.params.title}</Heading>
         <Divider marginTop="5px" marginBottom="20px" />
-        <Controls uniforms={uniforms} />
+        <Controls uniforms={sketcher.params.controls} />
     </>;
 }
 

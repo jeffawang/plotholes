@@ -144,10 +144,10 @@ class Sketcher<UC extends UniformControls> {
                 case 'r':
                     p.redraw();
                     break;
-                case ' ':
-                    this.params.settings.loop ? p.noLoop() : p.loop();
-                    this.params.settings.loop = !this.params.settings.loop;
-                    break;
+                // case ' ':
+                //     this.params.settings.loop ? p.noLoop() : p.loop();
+                //     this.params.settings.loop = !this.params.settings.loop;
+                //     break;
             }
         }
     }

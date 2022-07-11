@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ButtonGroup, Button } from "@chakra-ui/react";
+import { GlobalHotKeys, HotKeys } from "react-hotkeys";
 
 function Butt({ selected, children, onClick }) {
     return selected ?
@@ -19,23 +20,32 @@ function Butt({ selected, children, onClick }) {
 export function PlayPause({ sketcher }) {
     let [state, setState] = useState(sketcher.params.loop);
 
-    return <ButtonGroup size='sm' isAttached variant='outline'>
-        <Butt selected={state} onClick={() => {
-            sketcher.setLoop(true);
-            console.log()
-            setState(true);
-        }}>Play</Butt>
-        <Butt selected={!state} onClick={() => {
-            sketcher.setLoop(false);
-            setState(false);
-        }}>
-            Pause
-        </Butt>
-        <Butt selected={false} onClick={() => {
-            sketcher.step();
-            setState(false);
-        }}>
-            Step
-        </Butt>
-    </ButtonGroup>;
+    // Hotkey keyMap defined in Sketcher.tsx
+    const hotkeyHandlers = {
+        playpause: ((_) => {
+            setState((prevState) => {
+                const newState = !prevState;
+                sketcher.setLoop(newState);
+                return newState;
+            });
+        })
+    };
+
+    const setLoop = (loop: boolean) => {
+        sketcher.setLoop(loop);
+        setState(loop);
+    };
+
+    return <GlobalHotKeys handlers={hotkeyHandlers}>
+        <ButtonGroup size='sm' isAttached variant='outline'>
+            <Butt selected={state} onClick={() => setLoop(true)}>Play</Butt>
+            <Butt selected={!state} onClick={() => setLoop(false)}>Pause</Butt>
+            <Butt selected={false} onClick={() => {
+                setLoop(false);
+                sketcher.step();
+            }}>
+                Step
+            </Butt>
+        </ButtonGroup>
+    </GlobalHotKeys >;
 }
