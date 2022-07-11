@@ -29,9 +29,9 @@ export const sketcher = new Sketcher({
         // p.keyPressed = function() { ... }
 
         const SAMPLES = 200;
-        const circle = [...Array<p5.Vector>(SAMPLES)].map(() => p.createVector());
-        const points = [...Array<p5.Vector>(SAMPLES)].map(() => p.createVector());
-        const drawingPoints = [...Array<p5.Vector>(SAMPLES)].map(() => p.createVector());
+        const circle = [...Array(SAMPLES)].map(() => p.createVector());
+        const points = [...Array(SAMPLES)].map(() => p.createVector());
+        const drawingPoints = [...Array(SAMPLES)].map(() => p.createVector());
 
         p.draw = function () {
             p.background(COLORS.BG);
