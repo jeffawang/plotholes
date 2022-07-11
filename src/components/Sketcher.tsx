@@ -1,7 +1,8 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, IconButton, Stack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Sketcher } from "../sketcher";
 import { Controls, ControlsComponent } from "./Controls";
+import { PlayPause } from "./PlayPause";
 import { Plot } from "./Plot";
 import { checkbox, group, slider, UniformCheckbox, UniformControls, UniformNumber, UniformSlider, _number } from "./UniformControls";
 
@@ -69,6 +70,9 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
         <Box flexGrow={"1"}></Box>
         <Box marginTop={"30px"} padding="20px" minWidth="270px">
             <ControlsComponent name={sketcher.params.title} uniforms={sketcher.params.controls} />
+            <Box padding="10px">
+                <PlayPause sketcher={sketcher} />
+            </Box>
             <Controls uniforms={settings} />
         </Box>
         <Box

@@ -69,7 +69,6 @@ class Sketcher<UC extends UniformControls> {
 
     setFramerate(fps: number) {
         this.params.settings.framerate = fps;
-        console.log(this.p)
         if (this.p)
             this.p.frameRate(fps);
     }
@@ -79,6 +78,14 @@ class Sketcher<UC extends UniformControls> {
         if (this.p) {
             this.p.randomSeed(seed);
             this.p.noiseSeed(seed);
+        }
+    }
+
+    step() {
+        this.params.settings.loop = false;
+        if (this.p !== undefined) {
+            this.p.noLoop();
+            this.p.redraw();
         }
     }
 
