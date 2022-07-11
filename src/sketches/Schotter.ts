@@ -1,5 +1,5 @@
 import p5 from "p5";
-import { group, radio, slider } from "../components/UniformControls";
+import { group, radio, slider } from "../components/Controls/UniformControls";
 import { Sketcher, Uniforms } from "../sketcher";
 
 let controls = {

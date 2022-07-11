@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Divider, Heading } from '@chakra-ui/react';
-import GroupControlComponent from "./Group";
-import RadioControlComponent from "./Radio";
-import SliderControlComponent from "./Slider";
-import { UniformControls } from "./UniformControls";
-import CheckboxComponent from './Checkbox';
-import NumberControlComponent from './Number';
+import GroupControlComponent from "./Controls/Group";
+import RadioControlComponent from "./Controls/Radio";
+import SliderControlComponent from "./Controls/Slider";
+import { UniformControls } from "./Controls/UniformControls";
+import CheckboxComponent from './Controls/Checkbox';
+import NumberControlComponent from './Controls/Number';
 
 export function Controls({ uniforms }: {
     uniforms: UniformControls

@@ -2,10 +2,10 @@ import { SettingsIcon } from "@chakra-ui/icons";
 import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Button, ButtonGroup, Flex, IconButton, Spacer, Stack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Sketcher } from "../sketcher";
-import { Controls, ControlsComponent } from "./Controls";
-import { PlayPause } from "./PlayPause";
+import { Controls, ControlsComponent } from "./ControlPanel";
+import { PlayPause } from "./Controls/PlayPause";
 import { Plot } from "./Plot";
-import { checkbox, group, slider, UniformCheckbox, UniformControls, UniformNumber, UniformSlider, _number } from "./UniformControls";
+import { checkbox, group, slider, UniformCheckbox, UniformControls, UniformNumber, UniformSlider, _number } from "./Controls/UniformControls";
 
 function newSettings<UC extends UniformControls>(sketcher: Sketcher<UC>) {
     const settings: UniformControls = {

@@ -1,6 +1,6 @@
 import p5 from "p5";
 import p5svg from "p5.js-svg";
-import { _number, UniformControls, UniformGroup } from "./components/UniformControls";
+import { _number, UniformControls, UniformGroup } from "./components/Controls/UniformControls";
 p5svg(p5);
 
 /**
