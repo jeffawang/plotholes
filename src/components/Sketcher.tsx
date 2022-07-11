@@ -8,23 +8,17 @@ import { Plot } from "./Plot";
 import { checkbox, group, slider, UniformCheckbox, UniformControls, UniformNumber, UniformSlider, _number } from "./Controls/UniformControls";
 
 function newSettings<UC extends UniformControls>(sketcher: Sketcher<UC>) {
-    const settings: UniformControls = {
+    return {
         autoresize: { type: checkbox, value: true },
         seed: { type: _number, value: sketcher.params.settings.seed || Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) },
         framerate: { type: slider, value: sketcher.params.settings.framerate || 60, min: 0, max: 60, step: 0.5 },
-    };
-    return {
-        settings: {
-            type: group, value: settings, collapsed: true
-        },
-    };
+    } as UniformControls;
 }
 
 export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
     sketcher: Sketcher<UC>
 }) {
     const settings = newSettings(sketcher);
-    const settingsUniforms = settings.settings.value;
 
     const [plotScale, setPlotScale] = useState(1.0);
 
@@ -50,16 +44,16 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
         };
     }, []);
 
-    settingsUniforms.autoresize.onChange = (u: UniformCheckbox) => {
+    settings.autoresize.onChange = (u: UniformCheckbox) => {
         sketcher.params.settings.autoresize = u.value;
         handleResize();
     }
 
-    settingsUniforms.seed.onChange = (u: UniformNumber) => sketcher.setSeed(u.value);
-    sketcher.setSeed(settingsUniforms.seed.value as number);
+    settings.seed.onChange = (u: UniformNumber) => sketcher.setSeed(u.value);
+    sketcher.setSeed(settings.seed.value as number);
 
-    settingsUniforms.framerate.onChange = (u: UniformSlider) => sketcher.setFramerate(u.value);
-    sketcher.setFramerate(settingsUniforms.framerate.value as number)
+    settings.framerate.onChange = (u: UniformSlider) => sketcher.setFramerate(u.value);
+    sketcher.setFramerate(settings.framerate.value as number)
 
 
     return <Box display="flex" alignItems="flex-start" overflow="visible" width="100%">
@@ -76,7 +70,7 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
                         </AccordionButton>
                     </Flex>
                     <AccordionPanel pb={4}>
-                        <Controls uniforms={settings.settings.value} />
+                        <Controls uniforms={settings} />
                     </AccordionPanel>
                 </AccordionItem>
             </Accordion>
