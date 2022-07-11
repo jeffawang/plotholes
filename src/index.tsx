@@ -14,6 +14,7 @@ import { SketcherComponent } from "./components/Sketcher";
 
 // @ts-ignore Note(jw): glob imports are a non-standard parcel feature. IDE might not understand.
 import * as Sketches from "./sketches/*.ts";
+import { SketchIndex } from './components/SketchIndex';
 
 const appElement = document.getElementById('app') as HTMLElement;
 
@@ -24,7 +25,7 @@ function App() {
                 {Object.keys(Sketches).map((file) =>
                     <Route path={`/${file}`} element={< SketcherComponent sketcher={Sketches[file].sketcher} />} />)
                 }
-                <Route path="/" element={<SketcherComponent sketcher={morphingShapes} />} />
+                <Route path="/" element={<SketchIndex sketches={Sketches} />} />
             </Routes>
         </Router>
     </ChakraProvider>
