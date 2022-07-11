@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { Box, Divider, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, Divider, Heading, Spacer, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 
 export function SketchIndex({ sketches }) {
     return <Box display="flex" gap="30px">
+        <Spacer />
         <Box textAlign="right">
             <Heading marginBottom="10px">plotholes</Heading>
         </Box>
@@ -32,5 +33,7 @@ export function SketchIndex({ sketches }) {
                 </Tbody>
             </Table>
         </TableContainer>
+        <Spacer />
+        <Spacer />
     </Box>;
 }
