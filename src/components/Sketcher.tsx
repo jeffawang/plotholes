@@ -10,7 +10,7 @@ function newSettings<UC extends UniformControls>(sketcher: Sketcher<UC>) {
         loop: { type: checkbox, value: false },
         autoresize: { type: checkbox, value: true },
         seed: { type: _number, value: sketcher.params.settings.seed || Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) },
-        framerate: { type: slider, value: 60, min: 0, max: 60, step: 0.5 },
+        framerate: { type: slider, value: sketcher.params.settings.framerate || 60, min: 0, max: 60, step: 0.5 },
     };
     return {
         settings: {
@@ -62,6 +62,7 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
     sketcher.setSeed(settingsUniforms.seed.value as number);
 
     settingsUniforms.framerate.onChange = (u: UniformSlider) => sketcher.setFramerate(u.value);
+    sketcher.setFramerate(settingsUniforms.framerate.value as number)
 
 
     return <Box display="flex" alignItems="flex-start" overflow="visible">
