@@ -22,12 +22,14 @@ export function SketchIndex({ sketches }) {
                 <Tbody>
                     {Object.keys(sketches).map((filename) => {
                         const sketcher = sketches[filename].sketcher;
-                        return <Tr _hover={{ background: "gray.100" }} borderTop="0.5px solid" borderColor={"gray.200"}>
-                            <Link to={`/${filename}`}>
-                                <Box>
-                                    <Td>{sketcher.params.title}</Td>
-                                </Box>
-                            </Link>
+                        return <Tr _hover={{ background: "gray.100" }} borderTop="0.5px solid" borderColor={"gray.200"} key={filename}>
+                            <Td padding="0">
+                                <Link to={`/${encodeURIComponent(filename)}`}>
+                                    <Box padding="8px 16px">
+                                        {sketcher.params.title}
+                                    </Box>
+                                </Link>
+                            </Td>
                         </Tr>
                     })}
                 </Tbody>

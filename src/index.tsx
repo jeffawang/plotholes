@@ -22,8 +22,13 @@ function App() {
     return <ChakraProvider theme={theme}>
         <Router>
             <Routes>
-                {Object.keys(Sketches).map((file) =>
-                    <Route path={`/${file}`} element={< SketcherComponent sketcher={Sketches[file].sketcher} />} />)
+                {Object.keys(Sketches).map((filename) =>
+                    <Route
+                        key={filename}
+                        path={`/${encodeURIComponent(filename)}`}
+                        element={
+                            < SketcherComponent sketcher={Sketches[filename].sketcher} />
+                        } />)
                 }
                 <Route path="/" element={<SketchIndex sketches={Sketches} />} />
             </Routes>
