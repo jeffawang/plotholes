@@ -22,9 +22,9 @@ function App() {
         <>
             <Router>
                 <Routes>
-                    {Object.keys(Sketches).map((file) => {
-                        return <Route path={`/${file}`} element={< SketcherComponent sketcher={Sketches[file].sketcher} />} />;
-                    })}
+                    {Object.keys(Sketches).map((file) =>
+                        <Route path={`/${file}`} element={< SketcherComponent sketcher={Sketches[file].sketcher} />} />)
+                    }
                     <Route path="/" element={<SketcherComponent sketcher={morphingShapes} />} />
                 </Routes>
             </Router>
