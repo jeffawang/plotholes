@@ -64,14 +64,14 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
 
     return <Box display="flex" alignItems="flex-start" overflow="visible" width="100%">
         <Box flexGrow={"1"}></Box>
-        <Box marginTop={"30px"} padding="20px" minWidth="270px">
+        <Box marginTop={"30px"} padding="16px" minWidth="270px">
             <ControlsComponent name={sketcher.params.title} uniforms={sketcher.params.controls} />
             <Accordion allowToggle>
                 <AccordionItem>
                     <Flex direction="row" padding="10px">
                         <PlayPause sketcher={sketcher} />
                         <Spacer />
-                        <AccordionButton width={"inherit"} padding={"8px"} borderRadius="50%">
+                        <AccordionButton width={"inherit"} padding={"7px"} borderRadius="50%" border="1px solid" borderColor="gray.200">
                             <SettingsIcon />
                         </AccordionButton>
                     </Flex>
