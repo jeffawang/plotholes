@@ -14,9 +14,7 @@ export const sketcher = new Sketcher({
     width: 900,
     height: 1200,
     controls: controls,
-    settings: {
-        loop: false,
-    },
+    settings: {},
 
     sketch: (p: p5, s: Sketcher<typeof controls>, u: Uniforms<typeof controls>) => {
         const MARGIN = 100;
@@ -72,16 +70,16 @@ export const sketcher = new Sketcher({
                 );
             }
 
-            for (let i = 0; i < u.steps; i++) {
+
+            p.translate(start);
+            const step = p.createVector().lerp(end.sub(start), 1 / u.steps);
+            for (let i = 0; i <= u.steps; i++) {
                 const lerpAmount = i / u.steps;
                 for (let j = 0; j < drawingPoints.length; j++)
                     drawingPoints[j] = points[j].lerp(circle[j], lerpAmount);
-                const step = start.lerp(end, lerpAmount);
 
-                p.push();
-                p.translate(step);
                 polyline(drawingPoints);
-                p.pop();
+                p.translate(step);
             }
         };
     }
