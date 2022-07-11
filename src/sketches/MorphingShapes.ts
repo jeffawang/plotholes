@@ -67,7 +67,6 @@ export const sketcher = new Sketcher({
 
                 const cx = p.cos(theta) * (u.radius);
                 const cy = p.sin(theta) * (u.radius);
-                console.log(i, [cx, cy])
                 circle[i] = [cx, cy];
             }
 
