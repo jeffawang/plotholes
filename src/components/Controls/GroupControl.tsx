@@ -4,7 +4,7 @@ import { Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPane
 import { Controls } from "../ControlPanel";
 import { UniformGroup } from "./UniformControls";
 
-export default function GroupControlComponent({ name, uniform }: {
+export default function GroupControl({ name, uniform }: {
     name: string,
     uniform: UniformGroup
 }) {

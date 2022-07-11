@@ -17,7 +17,7 @@ function Butt({ selected, children, onClick }) {
         <Button onClick={onClick}>{children}</Button>
 }
 
-export function PlayPause({ sketcher }) {
+export function PlayPauseControl({ sketcher }) {
     let [state, setState] = useState(sketcher.params.loop);
 
     // Hotkey keyMap defined in Sketcher.tsx

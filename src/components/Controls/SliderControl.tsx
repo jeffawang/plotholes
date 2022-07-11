@@ -5,7 +5,7 @@ import { Slider, SliderTrack, SliderFilledTrack, SliderThumb } from '@chakra-ui/
 
 import { UniformSlider } from "./UniformControls";
 
-export default function SliderControlComponent({ name, uniform }: {
+export default function SliderControl({ name, uniform }: {
     name: string
     uniform: UniformSlider
 }) {

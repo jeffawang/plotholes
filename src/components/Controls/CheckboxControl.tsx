@@ -4,7 +4,7 @@ import { useState } from "react"
 import { UniformCheckbox } from "./UniformControls"
 
 
-export default function CheckboxComponent({ name, uniform }: {
+export default function CheckboxControl({ name, uniform }: {
     name: string
     uniform: UniformCheckbox
 }) {

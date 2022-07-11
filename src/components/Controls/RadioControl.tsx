@@ -3,7 +3,7 @@ import { FormControl, FormHelperText, FormLabel, Radio, RadioGroup, Stack } from
 
 import { UniformRadio } from "./UniformControls";
 
-export default function RadioControlComponent({ uniform, name }: {
+export default function RadioControl({ uniform, name }: {
     uniform: UniformRadio
     name: string
 }) {
