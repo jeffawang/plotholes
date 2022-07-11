@@ -31,9 +31,9 @@ export const sketcher = new Sketcher({
         // p.keyPressed = function() { ... }
 
         const SAMPLES = 200;
-        const circle = new Array<[number, number]>(SAMPLES);
-        const points = new Array<[number, number]>(SAMPLES);
-        const drawingPoints = new Array<[number, number]>(SAMPLES);
+        const circle = [...Array<p5.Vector>(SAMPLES)].map(() => p.createVector());
+        const points = [...Array<p5.Vector>(SAMPLES)].map(() => p.createVector());
+        const drawingPoints = [...Array<p5.Vector>(SAMPLES)].map(() => p.createVector());
 
         p.draw = function () {
             p.background(COLORS.BG);
@@ -41,48 +41,45 @@ export const sketcher = new Sketcher({
             p.stroke(COLORS.FG);
             p.strokeWeight(2);
 
-            const start = [s.params.width / 3, s.params.height / 4];
-            const end = [s.params.width / 3 * 2, s.params.height / 4 * 3];
+            const start = p.createVector(s.params.width / 3, s.params.height / 4);
+            const end = p.createVector(s.params.width / 3 * 2, s.params.height / 4 * 3);
 
             function tri(theta: number, points: number): number {
                 const i = points / p.PI;
                 return p.abs((theta * i) % 2 - 1) - 0.5;
             }
 
-            function polyline(points: [number, number][], close: boolean = true) {
+            function polyline(points: p5.Vector[], close: boolean = true) {
                 p.beginShape();
                 for (const point of points)
-                    p.vertex(point[0], point[1]);
+                    p.vertex(point.x, point.y);
                 if (close)
-                    p.vertex(points[0][0], points[0][1]);
+                    p.vertex(points[0].x, points[0].y);
                 p.endShape();
             }
 
             for (let i = 0; i < SAMPLES; i++) {
                 const theta = p.TAU * i / SAMPLES;
                 const r = u.radius + tri(theta, u.points) * u.factor;
-                const x = p.cos(theta) * r;
-                const y = p.sin(theta) * r;
-                points[i] = [x, y];
 
-                const cx = p.cos(theta) * (u.radius);
-                const cy = p.sin(theta) * (u.radius);
-                circle[i] = [cx, cy];
+                points[i].set(
+                    p.cos(theta) * r,
+                    p.sin(theta) * r
+                );
+                circle[i].set(
+                    p.cos(theta) * u.radius,
+                    p.sin(theta) * u.radius
+                );
             }
 
-            for (let i = 0; i < u.steps + 1; i++) {
-                for (let j = 0; j < drawingPoints.length; j++) {
-                    drawingPoints[j] = [
-                        p.lerp(points[j][0], circle[j][0], i / u.steps),
-                        p.lerp(points[j][1], circle[j][1], i / u.steps),
-                    ];
-                }
-                const step = [
-                    p.lerp(start[0], end[0], i / u.steps),
-                    p.lerp(start[1], end[1], i / u.steps),
-                ];
+            for (let i = 0; i < u.steps; i++) {
+                const lerpAmount = i / u.steps;
+                for (let j = 0; j < drawingPoints.length; j++)
+                    drawingPoints[j] = points[j].lerp(circle[j], lerpAmount);
+                const step = start.lerp(end, lerpAmount);
+
                 p.push();
-                p.translate(step[0], step[1]);
+                p.translate(step);
                 polyline(drawingPoints);
                 p.pop();
             }
