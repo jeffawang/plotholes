@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react";
 import p5 from "p5";
 import React, { useRef, useEffect, useState } from "react";
 import { Sketcher } from "../sketcher";
-import { UniformControls } from "./Types";
+import { UniformControls } from "./UniformControls";
 
 export function Plot<UC extends UniformControls>({ sketcher }: {
     sketcher: Sketcher<UC>

@@ -1,6 +1,6 @@
 import { FormControl, FormLabel, NumberInput, NumberInputField } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { UniformNumber } from "./Types";
+import { UniformNumber } from "./UniformControls";
 
 export default function NumberControlComponent({ name, uniform }: {
     name: string

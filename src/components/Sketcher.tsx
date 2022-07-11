@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Sketcher } from "../sketcher";
 import { Controls, ControlsComponent } from "./Controls";
 import { Plot } from "./Plot";
-import { checkbox, group, slider, UniformCheckbox, UniformControls, UniformNumber, UniformSlider, _number } from "./Types";
+import { checkbox, group, slider, UniformCheckbox, UniformControls, UniformNumber, UniformSlider, _number } from "./UniformControls";
 
 function newSettings<UC extends UniformControls>(sketcher: Sketcher<UC>) {
     const settings: UniformControls = {

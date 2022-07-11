@@ -1,6 +1,6 @@
 import p5 from "p5";
 import p5svg from "p5.js-svg";
-import { checkbox, group, _number, radio, slider, UniformControl, UniformControls, UniformGroup } from "./components/Types";
+import { checkbox, group, _number, radio, slider, UniformControl, UniformControls, UniformGroup } from "./components/UniformControls";
 p5svg(p5);
 
 /**

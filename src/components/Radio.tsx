@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FormControl, FormHelperText, FormLabel, Radio, RadioGroup, Stack } from '@chakra-ui/react';
 
-import { UniformRadio } from "./Types";
+import { UniformRadio } from "./UniformControls";
 
 export default function RadioControlComponent({ uniform, name }: {
     uniform: UniformRadio

@@ -3,7 +3,7 @@ import { Divider, Heading } from '@chakra-ui/react';
 import GroupControlComponent from "./Group";
 import RadioControlComponent from "./Radio";
 import SliderControlComponent from "./Slider";
-import { UniformControls } from "./Types";
+import { UniformControls } from "./UniformControls";
 import CheckboxComponent from './Checkbox';
 import NumberControlComponent from './Number';
 
