@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Divider, Flex, Heading, Spacer } from '@chakra-ui/react';
+import { SettingsIcon } from '@chakra-ui/icons';
+
 import GroupControl from "./Controls/GroupControl";
 import RadioControl from "./Controls/RadioControl";
 import SliderControl from "./Controls/SliderControl";
-import { UniformControls } from "./Controls/UniformControls";
 import Checkbox from './Controls/CheckboxControl';
 import NumberControl from './Controls/NumberControl';
+import PlayPauseControl from './Controls/PlayPauseControl';
+
+import { UniformControls } from "./Controls/UniformControls";
 import { Sketcher } from '../sketcher';
-import { SettingsIcon } from '@chakra-ui/icons';
-import { PlayPauseControl } from './Controls/PlayPauseControl';
 
 export function Controls({ uniforms }: {
     uniforms: UniformControls
