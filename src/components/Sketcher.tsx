@@ -51,7 +51,8 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
     sketcher.setFramerate(settings.framerate.value as number)
 
     const keyMap = {
-        playpause: ['g', `p`]
+        playpause: ['g', `p`],
+        redraw: 'r'
     }
 
     return <GlobalHotKeys keyMap={keyMap}>

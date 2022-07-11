@@ -80,7 +80,7 @@ See some of the existing sketches for examples of how to instantiate these contr
 | --- | ---  |
 | `s` | save the result as an svg for plotting. The `title` and seed will be interpolated into the filename (but not the version of the code!). |
 | `r` | redraw the sketch once |
-| `spacebar` | toggle playing/pausing the sketch. |
+| `g` / `p` | toggle playing/pausing the sketch. |
 
 ## Todo
 

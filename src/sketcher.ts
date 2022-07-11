@@ -141,9 +141,9 @@ class Sketcher<UC extends UniformControls> {
                 case 's':
                     p.save(`${this.params.title}_${this.params.settings.seed}.svg`);
                     break;
-                case 'r':
-                    p.redraw();
-                    break;
+                // case 'r':
+                //     p.redraw();
+                //     break;
                 // case ' ':
                 //     this.params.settings.loop ? p.noLoop() : p.loop();
                 //     this.params.settings.loop = !this.params.settings.loop;

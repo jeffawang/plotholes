@@ -22,30 +22,27 @@ export function PlayPause({ sketcher }) {
 
     // Hotkey keyMap defined in Sketcher.tsx
     const hotkeyHandlers = {
-        playpause: ((_) => {
+        playpause: (_) => {
             setState((prevState) => {
-                const newState = !prevState;
-                sketcher.setLoop(newState);
-                return newState;
+                sketcher.setLoop(!prevState);
+                return !prevState;
             });
-        })
+        },
+        redraw: () => setLoop(false, true)
     };
 
-    const setLoop = (loop: boolean) => {
+    const setLoop = (loop: boolean, redraw: boolean = false) => {
         sketcher.setLoop(loop);
         setState(loop);
+        if (redraw)
+            sketcher.step();
     };
 
     return <GlobalHotKeys handlers={hotkeyHandlers}>
         <ButtonGroup size='sm' isAttached variant='outline'>
             <Butt selected={state} onClick={() => setLoop(true)}>Play</Butt>
             <Butt selected={!state} onClick={() => setLoop(false)}>Pause</Butt>
-            <Butt selected={false} onClick={() => {
-                setLoop(false);
-                sketcher.step();
-            }}>
-                Step
-            </Butt>
+            <Butt selected={false} onClick={() => setLoop(false, true)}>Step</Butt>
         </ButtonGroup>
     </GlobalHotKeys >;
 }
