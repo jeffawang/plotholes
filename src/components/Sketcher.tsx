@@ -8,7 +8,6 @@ import { checkbox, group, slider, UniformCheckbox, UniformControls, UniformNumbe
 
 function newSettings<UC extends UniformControls>(sketcher: Sketcher<UC>) {
     const settings: UniformControls = {
-        loop: { type: checkbox, value: false },
         autoresize: { type: checkbox, value: true },
         seed: { type: _number, value: sketcher.params.settings.seed || Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) },
         framerate: { type: slider, value: sketcher.params.settings.framerate || 60, min: 0, max: 60, step: 0.5 },
@@ -27,10 +26,6 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
     const settingsUniforms = settings.settings.value;
 
     const [plotScale, setPlotScale] = useState(1.0);
-
-    settingsUniforms.loop.onChange = (u: UniformCheckbox) => {
-        sketcher.setLoop(u.value);
-    };
 
     function handleResize() {
         if (!sketcher.params.settings.autoresize) {
