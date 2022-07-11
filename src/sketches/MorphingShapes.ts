@@ -39,8 +39,12 @@ export const sketcher = new Sketcher({
             p.stroke(COLORS.FG);
             p.strokeWeight(2);
 
-            const start = p.createVector(s.params.width / 3, s.params.height / 4);
-            const end = p.createVector(s.params.width / 3 * 2, s.params.height / 4 * 3);
+            const start = p.createVector(
+                s.params.width / 3,
+                s.params.height / 4);
+            const end = p.createVector(
+                s.params.width / 3 * 2,
+                s.params.height / 4 * 3);
 
             function tri(theta: number, points: number): number {
                 const i = points / p.PI;
