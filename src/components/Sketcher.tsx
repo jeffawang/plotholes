@@ -1,4 +1,5 @@
-import { Box, Button, ButtonGroup, IconButton, Stack } from "@chakra-ui/react";
+import { SettingsIcon } from "@chakra-ui/icons";
+import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Box, Button, ButtonGroup, Flex, IconButton, Spacer, Stack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Sketcher } from "../sketcher";
 import { Controls, ControlsComponent } from "./Controls";
@@ -65,10 +66,20 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
         <Box flexGrow={"1"}></Box>
         <Box marginTop={"30px"} padding="20px" minWidth="270px">
             <ControlsComponent name={sketcher.params.title} uniforms={sketcher.params.controls} />
-            <Box padding="10px">
-                <PlayPause sketcher={sketcher} />
-            </Box>
-            <Controls uniforms={settings} />
+            <Accordion allowToggle>
+                <AccordionItem>
+                    <Flex direction="row" padding="10px">
+                        <PlayPause sketcher={sketcher} />
+                        <Spacer />
+                        <AccordionButton width={"inherit"} padding={"8px"} borderRadius="50%">
+                            <SettingsIcon />
+                        </AccordionButton>
+                    </Flex>
+                    <AccordionPanel pb={4}>
+                        <Controls uniforms={settings.settings.value} />
+                    </AccordionPanel>
+                </AccordionItem>
+            </Accordion>
         </Box>
         <Box
             transform={`scale(${plotScale})`}
@@ -78,5 +89,5 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
             <Plot sketcher={sketcher} />
         </Box>
         <Box flexGrow={"1"}></Box>
-    </Box>
+    </Box >
 }
