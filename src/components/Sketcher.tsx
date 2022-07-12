@@ -9,6 +9,7 @@ import { Centered } from "./Helpers";
 
 type Settings = {
     autoresize: UniformCheckbox
+    redrawOnChanges: UniformCheckbox
     seed: UniformNumber
     framerate: UniformSlider
 };
@@ -30,11 +31,22 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
         setPlotScale(scale);
     }
 
+    function handleControlChanged() {
+        if (sketcher.params.settings.redrawOnChanges && !sketcher.params.settings.loop && sketcher.p) {
+            sketcher.p.redraw()
+        }
+    }
+
     useEffect(() => {
         window.addEventListener('resize', handleResize);
+        document.addEventListener('controlChanged', handleControlChanged);
         handleResize();
-        return () => window.removeEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            document.removeEventListener('controlChanged', handleControlChanged);
+        };
     }, []);
+
 
     const settings: Settings = {
         autoresize: {
@@ -43,6 +55,13 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
             onChange: (u) => {
                 sketcher.params.settings.autoresize = u.value;
                 handleResize();
+            }
+        },
+        redrawOnChanges: {
+            type: checkbox,
+            value: sketcher.params.settings.redrawOnChanges || false,
+            onChange: (u) => {
+                sketcher.params.settings.redrawOnChanges = u.value;
             }
         },
         seed: {
@@ -57,6 +76,7 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
         },
     };
 
+    sketcher.params.settings.redrawOnChanges = settings.redrawOnChanges.value;
     sketcher.setSeed(settings.seed.value as number);
     sketcher.setFramerate(settings.framerate.value as number);
 

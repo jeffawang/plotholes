@@ -30,6 +30,7 @@ type Params<UC extends UniformControls> = {
         seed?: number
         loop?: boolean
         autoresize?: boolean
+        redrawOnChanges?: boolean
         framerate?: number
     }
 }

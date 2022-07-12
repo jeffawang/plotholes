@@ -17,6 +17,7 @@ export default function NumberControl({ name, uniform }: {
         uniform.value = n;
         if (uniform.onChange !== undefined)
             uniform.onChange(uniform)
+        document.dispatchEvent(new Event('controlChanged'));
     };
     const onChangeWithString = (_: string, n: number) => { onChange(n) };
 

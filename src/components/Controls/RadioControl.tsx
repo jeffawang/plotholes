@@ -11,6 +11,7 @@ export default function RadioControl({ uniform, name }: {
         uniform.value = newSelected
         if (uniform.onChange !== undefined)
             uniform.onChange(uniform)
+        document.dispatchEvent(new Event('controlChanged'));
     };
 
     return <FormControl as="fieldset">

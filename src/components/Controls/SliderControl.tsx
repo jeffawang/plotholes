@@ -21,6 +21,7 @@ export default function SliderControl({ name, uniform }: {
         // uniforms.current[control.uniform].value = value;
         if (uniform.onChange !== undefined)
             uniform.onChange(uniform)
+        document.dispatchEvent(new Event('controlChanged'));
     };
     const onChangeWithString = (_: string, n: number) => { onChange(n) };
 

@@ -14,6 +14,7 @@ export default function CheckboxControl({ name, uniform }: {
         setValue(e.target.checked);
         if (uniform.onChange !== undefined)
             uniform.onChange(uniform)
+        document.dispatchEvent(new Event('controlChanged'));
     };
 
     return < Stack spacing="10px" >
