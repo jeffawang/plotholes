@@ -23,8 +23,10 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
             setPlotScale(1.0);
             return;
         }
-        const h = sketcher.params.height + 100;
-        const scale = Math.min(1.0, window.innerHeight / h);
+        const canvasHeight = sketcher.params.height;
+        // Subtract 60 for margins. Maybe parameterize this in the future.
+        const targetHeight = window.innerHeight - 60;
+        const scale = Math.min(1.0, targetHeight / canvasHeight);
         setPlotScale(scale);
     }
 
@@ -56,7 +58,7 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
     };
 
     sketcher.setSeed(settings.seed.value as number);
-    sketcher.setFramerate(settings.framerate.value as number)
+    sketcher.setFramerate(settings.framerate.value as number);
 
     const keyMap = {
         playpause: ['g', `p`],
@@ -68,12 +70,16 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
             <Box marginTop={"30px"} padding="16px" minWidth="270px">
                 <ControlPanel sketcher={sketcher} settings={settings} />
             </Box>
-            <Box
-                transform={`scale(${plotScale})`}
-                transformOrigin="top left"
-                boxShadow={"0px 10px 30px #aaa"}
-            >
-                <Plot sketcher={sketcher} />
+            <Box width={sketcher.params.width * plotScale} height={sketcher.params.height * plotScale}>
+                <Box
+                    transform={`scale(${plotScale})`}
+                    transformOrigin="top left"
+                    boxShadow={"0px 10px 30px #aaa"}
+                    position="absolute"
+                    marginBottom="30px"
+                >
+                    <Plot sketcher={sketcher} />
+                </Box>
             </Box>
         </Centered>
     </GlobalHotKeys>
