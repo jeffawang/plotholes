@@ -85,13 +85,15 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
         playpause: ['g', `p`],
         redraw: 'r',
         help: 'shift+?',
+        save: 's'
     }
 
     const { isOpen, onClose, onToggle } = useDisclosure();
 
     const handlers = {
         // HotKey modal toggle
-        help: onToggle
+        help: onToggle,
+        save: sketcher.save.bind(sketcher)
     }
 
     return <GlobalHotKeys keyMap={keyMap} handlers={handlers}>

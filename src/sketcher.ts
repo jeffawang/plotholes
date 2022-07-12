@@ -90,6 +90,11 @@ class Sketcher<UC extends UniformControls> {
         }
     }
 
+    save() {
+        if (this.p !== undefined)
+            this.p.save(`${this.params.title}_${this.params.settings.seed}.svg`);
+    }
+
     setLoop(loop: boolean) {
         this.params.settings.loop = loop;
         if (this.p !== undefined)
@@ -129,39 +134,12 @@ class Sketcher<UC extends UniformControls> {
     }
 
     /**
-     * keyPressed is used inside of Sketcher to set the default sketch
-     * keyPressed function. Users of Sketcher can call it inside their sketch
-     * closure to extend it if necessary.
-     * 
-     * @param p - a p5 object, typically passed through from a p5 sketch closure.
-     * @returns a setup closure that can be set on the p5 sketch directly.
-     */
-    keyPressed(p: p5) {
-        return () => {
-            switch (p.key) {
-                case 's':
-                    p.save(`${this.params.title}_${this.params.settings.seed}.svg`);
-                    break;
-                // case 'r':
-                //     p.redraw();
-                //     break;
-                // case ' ':
-                //     this.params.settings.loop ? p.noLoop() : p.loop();
-                //     this.params.settings.loop = !this.params.settings.loop;
-                //     break;
-            }
-        }
-    }
-
-    /**
      * setDefaults defaults the keyPressed and setup functions for the given p5
      * instance if the user did not specify them in the sketch closure.
      * 
      * @param p - a p5 object, typically passed through from a p5 sketch closure.
      */
     setDefaults(p: p5) {
-        if (p.keyPressed === undefined)
-            p.keyPressed = this.keyPressed(p).bind(this)
         if (p.setup === undefined)
             p.setup = this.setup(p).bind(this);
     }
