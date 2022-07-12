@@ -6,6 +6,7 @@ let controls = {
     amplitude: { type: slider, value: 42, min: 0, max: 100 },
     noiseFactor: { type: slider, value: 0.003, min: 0, max: 0.1, step: 0.001 },
     lines: { type: slider, value: 24, min: 1, max: 50, step: 1 },
+    noiseDimensions: { type: radio, value: "one", options: ["one", "two"] }
 };
 
 export const sketcher = new Sketcher({
@@ -45,7 +46,8 @@ export const sketcher = new Sketcher({
             for (let l = 0; l < u.lines - 1; l++) {
                 p.beginShape();
                 for (let x = 0; x <= w; x += 10) {
-                    line[x] += p.map(p.noise(x * u.noiseFactor), 0, 1, 0, u.amplitude);
+                    const noiseY = u.noiseDimensions === "one" ? undefined : l / u.noiseFactor + p.frameCount * 0.01;
+                    line[x] += p.map(p.noise(x * u.noiseFactor, noiseY), 0, 1, 0, u.amplitude);
                     p.vertex(x, p.min(h, line[x]));
                 }
                 if (l == u.lines - 2) {
