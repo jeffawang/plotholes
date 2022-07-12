@@ -1,4 +1,4 @@
-import { Text, Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spacer, useDisclosure, useModal, Link, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Kbd } from "@chakra-ui/react";
+import { Box, useDisclosure } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Sketcher } from "../sketcher";
 import { ControlPanel } from "./ControlPanel";
