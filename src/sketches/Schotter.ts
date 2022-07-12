@@ -28,10 +28,9 @@ export const sketcher = new Sketcher({
             FG: p.color(0),
         };
 
-        // The setup() and keyPressed() functions are defaulted by Sketcher,
-        //      but they can be overridden in this scope.
+        // The setup() function is defaulted by Sketcher,
+        //      but it can be overridden in this scope.
         // p.setup = function() { ... }
-        // p.keyPressed = function() { ... }
 
         p.draw = function () {
             p.background(COLORS.BG);
