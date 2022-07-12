@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import { ChakraProvider } from "@chakra-ui/react";
+import { Box, ChakraProvider } from "@chakra-ui/react";
 import { theme } from "./theme";
 
 import { SketcherComponent } from "./components/Sketcher";
@@ -15,19 +15,21 @@ const appElement = document.getElementById('app') as HTMLElement;
 
 function App() {
     return <ChakraProvider theme={theme}>
-        <BrowserRouter>
-            <Routes>
-                {Object.keys(Sketches).map((filename) =>
-                    <Route
-                        key={filename}
-                        path={`/${encodeURIComponent(filename)}`}
-                        element={
-                            < SketcherComponent sketcher={Sketches[filename].sketcher} />
-                        } />)
-                }
-                <Route path="/" element={<SketchIndex sketches={Sketches} />} />
-            </Routes>
-        </BrowserRouter>
+        <Box padding="30px">
+            <BrowserRouter>
+                <Routes>
+                    {Object.keys(Sketches).map((filename) =>
+                        <Route
+                            key={filename}
+                            path={`/${encodeURIComponent(filename)}`}
+                            element={
+                                < SketcherComponent sketcher={Sketches[filename].sketcher} />
+                            } />)
+                    }
+                    <Route path="/" element={<SketchIndex sketches={Sketches} />} />
+                </Routes>
+            </BrowserRouter>
+        </Box>
     </ChakraProvider>
 }
 
