@@ -1,4 +1,4 @@
-import { Box, Spacer } from "@chakra-ui/react";
+import { Text, Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spacer, useDisclosure, useModal, Link, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Kbd } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Sketcher } from "../sketcher";
 import { ControlPanel } from "./ControlPanel";
@@ -6,6 +6,7 @@ import { Plot } from "./Plot";
 import { checkbox, slider, _number, UniformControls, UniformCheckbox, UniformNumber, UniformSlider } from "./Controls/UniformControls";
 import { GlobalHotKeys } from "react-hotkeys";
 import { Centered } from "./Helpers";
+import HotKeyModal from "./HotKeyModal";
 
 type Settings = {
     autoresize: UniformCheckbox
@@ -82,11 +83,20 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
 
     const keyMap = {
         playpause: ['g', `p`],
-        redraw: 'r'
+        redraw: 'r',
+        help: 'shift+?',
     }
 
-    return <GlobalHotKeys keyMap={keyMap}>
+    const { isOpen, onClose, onToggle } = useDisclosure();
+
+    const handlers = {
+        // HotKey modal toggle
+        help: onToggle
+    }
+
+    return <GlobalHotKeys keyMap={keyMap} handlers={handlers}>
         <Centered>
+            <HotKeyModal isOpen={isOpen} onClose={onClose} />
             <Box marginTop={"30px"} padding="16px" minWidth="270px">
                 <ControlPanel sketcher={sketcher} settings={settings} />
             </Box>
