@@ -70,13 +70,19 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
             <Box marginTop={"30px"} padding="16px" minWidth="270px">
                 <ControlPanel sketcher={sketcher} settings={settings} />
             </Box>
-            <Box width={sketcher.params.width * plotScale} height={sketcher.params.height * plotScale}>
+            <Box
+                width={sketcher.params.width * plotScale}
+                height={sketcher.params.height * plotScale}
+                backgroundColor="red"
+                position="relative"
+                boxShadow={"0px 10px 30px #aaa"}
+            >
                 <Box
                     transform={`scale(${plotScale})`}
                     transformOrigin="top left"
-                    boxShadow={"0px 10px 30px #aaa"}
                     position="absolute"
-                    marginBottom="30px"
+                    top="0"
+                    left="0"
                 >
                     <Plot sketcher={sketcher} />
                 </Box>
