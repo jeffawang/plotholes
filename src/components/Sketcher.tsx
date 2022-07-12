@@ -73,7 +73,6 @@ export function SketcherComponent<UC extends UniformControls>({ sketcher }: {
             <Box
                 width={sketcher.params.width * plotScale}
                 height={sketcher.params.height * plotScale}
-                backgroundColor="red"
                 position="relative"
                 boxShadow={"0px 10px 30px #aaa"}
             >
