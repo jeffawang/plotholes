@@ -10,11 +10,13 @@ function Butt({ selected, children, onClick }) {
             color="blue.500"
             _hover={{ bgColor: "blue.200" }}
             _active={{ bgColor: "blue.300", color: "blue.600" }}
+            zIndex={2}
+            _focus={{ zIndex: 2 }}
         >
             {children}
         </Button>
         :
-        <Button onClick={onClick}>{children}</Button>
+        <Button onClick={onClick} zIndex={1}>{children}</Button>
 }
 
 export default function PlayPauseControl({ sketcher }) {
