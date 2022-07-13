@@ -15,7 +15,7 @@ export const sketcher = new Sketcher({
     height: 420,
     controls: controls,
     settings: {
-        loop: true,
+        loop: false,
         redrawOnChanges: true
     },
 
@@ -28,10 +28,6 @@ export const sketcher = new Sketcher({
         // The setup() function is defaulted by Sketcher,
         //      but it can be overridden in this scope.
         // p.setup = function() { ... }
-
-        const margin = 100;
-        const h = (s.params.height - 2 * margin);
-        const w = (s.params.width - 2 * margin);
 
         p.draw = function () {
             p.background(colors.bg);
