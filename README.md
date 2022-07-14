@@ -10,19 +10,9 @@ To make a new piece, make a new sketch in the `src/sketches/` directory (eg. by 
 
 Using either of the instruction sets below, the server will be started at `http://localhost:1234`.
 
-### Get started with npm
-
-```bash
-# Install deps
-npm i
-
-# Run the server (on http://localhost:1234)
-npm start
-```
-
 ### Get started with yarn
 
-I personally use yarn, but you do you.
+This repo uses yarn. If you don't have it yet, install it with `npm install -g yarn`.
 
 ```bash
 # Install deps
@@ -30,7 +20,19 @@ yarn
 
 # Run the server (on http://localhost:1234)
 yarn start
+
+# Run the lint script (see vscode setup section below)
+yarn lint
+
+# Run eslint on the entire codebase and fix errors/warnings
+yarn eslint --fix .
 ```
+
+### Developing in vscode
+
+When you open up vscode in the project, it should recommend the `ESLint` extension if you don't have it. This will help automatically run the linter and formatter on save.
+
+The workspace-specific `settings.json` configures vscode to run `eslint` on save, which should format with `prettier` and fix any fixable eslint errors/warnings.
 
 ## Coding up some art
 
