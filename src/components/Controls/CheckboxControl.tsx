@@ -1,5 +1,5 @@
 import { Checkbox, Stack } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { UniformCheckbox } from './UniformControls';
 
@@ -11,11 +11,16 @@ export default function CheckboxControl({
   uniform: UniformCheckbox;
 }) {
   const [value, setValue] = useState(uniform.value);
+
+  useEffect(() => {
+    uniform.value = value;
+    document.dispatchEvent(new Event('controlChanged'));
+  }, [value]);
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     uniform.value = e.target.checked;
     setValue(e.target.checked);
     if (uniform.onChange !== undefined) uniform.onChange(uniform);
-    document.dispatchEvent(new Event('controlChanged'));
   };
 
   return (

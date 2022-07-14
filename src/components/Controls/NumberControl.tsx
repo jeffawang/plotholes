@@ -18,16 +18,13 @@ export default function NumberControl({
 
   useEffect(() => {
     uniform.value = value;
-  });
+    document.dispatchEvent(new Event('controlChanged'));
+  }, [value]);
 
-  const onChange = (n: number) => {
+  const onChange = (_: string, n: number) => {
     setValue(n);
     uniform.value = n;
     if (uniform.onChange !== undefined) uniform.onChange(uniform);
-    document.dispatchEvent(new Event('controlChanged'));
-  };
-  const onChangeWithString = (_: string, n: number) => {
-    onChange(n);
   };
 
   return (
@@ -35,7 +32,7 @@ export default function NumberControl({
       <FormLabel as="legend">{name}</FormLabel>
       <NumberInput
         value={value}
-        onChange={onChangeWithString}
+        onChange={onChange}
         size="xs"
         textAlign="right"
       >
