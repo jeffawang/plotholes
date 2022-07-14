@@ -30,9 +30,7 @@ yarn eslint --fix .
 
 ### Developing in vscode
 
-When you open up vscode in the project, it should recommend the `ESLint` extension if you don't have it. This will help automatically run the linter and formatter on save.
-
-The workspace-specific `settings.json` configures vscode to run `eslint` on save, which should format with `prettier` and fix any fixable eslint errors/warnings.
+When you open up vscode in the project, it should recommend the ESLint and Prettier extensions if you don't have them. Combined with the workspace configuration in `.vscode/settings.json`, these will run the linter and code formatter on save.
 
 ## Coding up some art
 
