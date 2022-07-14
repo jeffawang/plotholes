@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
     Accordion,
     AccordionButton,
@@ -8,18 +8,18 @@ import {
     Flex,
     Heading,
     Spacer,
-} from "@chakra-ui/react";
-import { SettingsIcon } from "@chakra-ui/icons";
+} from '@chakra-ui/react';
+import { SettingsIcon } from '@chakra-ui/icons';
 
-import GroupControl from "./Controls/GroupControl";
-import RadioControl from "./Controls/RadioControl";
-import SliderControl from "./Controls/SliderControl";
-import Checkbox from "./Controls/CheckboxControl";
-import NumberControl from "./Controls/NumberControl";
-import PlayPauseControl from "./Controls/PlayPauseControl";
+import GroupControl from './Controls/GroupControl';
+import RadioControl from './Controls/RadioControl';
+import SliderControl from './Controls/SliderControl';
+import Checkbox from './Controls/CheckboxControl';
+import NumberControl from './Controls/NumberControl';
+import PlayPauseControl from './Controls/PlayPauseControl';
 
-import { UniformControls } from "./Controls/UniformControls";
-import { Sketcher } from "../sketcher";
+import { UniformControls } from './Controls/UniformControls';
+import { Sketcher } from '../sketcher';
 
 export function Controls({ uniforms }: { uniforms: UniformControls }) {
     return (
@@ -27,7 +27,7 @@ export function Controls({ uniforms }: { uniforms: UniformControls }) {
             {Object.keys(uniforms).map((name: string) => {
                 const uniform = uniforms[name];
                 switch (uniform.type) {
-                    case "radio":
+                    case 'radio':
                         return (
                             <RadioControl
                                 name={name}
@@ -35,7 +35,7 @@ export function Controls({ uniforms }: { uniforms: UniformControls }) {
                                 key={name}
                             />
                         );
-                    case "slider":
+                    case 'slider':
                         return (
                             <SliderControl
                                 name={name}
@@ -43,7 +43,7 @@ export function Controls({ uniforms }: { uniforms: UniformControls }) {
                                 key={name}
                             />
                         );
-                    case "group":
+                    case 'group':
                         return (
                             <GroupControl
                                 name={name}
@@ -51,7 +51,7 @@ export function Controls({ uniforms }: { uniforms: UniformControls }) {
                                 key={name}
                             />
                         );
-                    case "checkbox":
+                    case 'checkbox':
                         return (
                             <Checkbox
                                 name={name}
@@ -59,7 +59,7 @@ export function Controls({ uniforms }: { uniforms: UniformControls }) {
                                 key={name}
                             />
                         );
-                    case "number":
+                    case 'number':
                         return (
                             <NumberControl
                                 name={name}
@@ -68,7 +68,7 @@ export function Controls({ uniforms }: { uniforms: UniformControls }) {
                             />
                         );
                     default:
-                        console.error("uh oh");
+                        console.error('uh oh');
                 }
             })}
         </>
@@ -89,8 +89,8 @@ function SettingsControls<UC extends UniformControls>({
                     <PlayPauseControl sketcher={sketcher} />
                     <Spacer />
                     <AccordionButton
-                        width={"inherit"}
-                        padding={"7px"}
+                        width={'inherit'}
+                        padding={'7px'}
                         borderRadius="50%"
                         border="1px solid"
                         borderColor="gray.200"

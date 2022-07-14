@@ -1,20 +1,20 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
+import * as React from 'react';
+import { useState, useEffect } from 'react';
 import {
     Box,
     NumberInput,
     NumberInputField,
     FormControl,
     FormLabel,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 import {
     Slider,
     SliderTrack,
     SliderFilledTrack,
     SliderThumb,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import { UniformSlider } from "./UniformControls";
+import { UniformSlider } from './UniformControls';
 
 export default function SliderControl({
     name,
@@ -34,7 +34,7 @@ export default function SliderControl({
         setValue(n);
         // uniforms.current[control.uniform].value = value;
         if (uniform.onChange !== undefined) uniform.onChange(uniform);
-        document.dispatchEvent(new Event("controlChanged"));
+        document.dispatchEvent(new Event('controlChanged'));
     };
     const onChangeWithString = (_: string, n: number) => {
         onChange(n);

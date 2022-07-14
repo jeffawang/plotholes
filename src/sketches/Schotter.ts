@@ -1,14 +1,14 @@
-import p5 from "p5";
-import { group, radio, slider } from "../components/Controls/UniformControls";
-import { Sketcher, Uniforms } from "../sketcher";
+import p5 from 'p5';
+import { group, radio, slider } from '../components/Controls/UniformControls';
+import { Sketcher, Uniforms } from '../sketcher';
 
 let controls = {
     shift_factor: { type: slider, value: 1.5, min: 0, max: 10 },
     jitter: { type: slider, value: 0.2, min: 0, max: 1 },
     greeting: {
         type: radio,
-        value: "hello",
-        options: ["hello", "bonjour", "hola"],
+        value: 'hello',
+        options: ['hello', 'bonjour', 'hola'],
     },
     dimensions: {
         type: group,
@@ -20,7 +20,7 @@ let controls = {
 };
 
 export const sketcher = new Sketcher({
-    title: "schotter",
+    title: 'schotter',
     width: 900,
     height: 1200,
     controls: controls,
@@ -46,7 +46,7 @@ export const sketcher = new Sketcher({
             p.noFill();
             p.stroke(COLORS.FG);
             p.strokeWeight(2);
-            p.rectMode("center");
+            p.rectMode('center');
 
             const size = (s.params.width - 2 * MARGIN) / u.dimensions.cols;
 

@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 import {
     Box,
@@ -13,9 +13,9 @@ import {
     Th,
     Thead,
     Tr,
-} from "@chakra-ui/react";
-import { Sketcher } from "../sketcher";
-import { UniformControls } from "./controls/UniformControls";
+} from '@chakra-ui/react';
+import { Sketcher } from '../sketcher';
+import { UniformControls } from './controls/UniformControls';
 
 export function SketchIndex<UC extends UniformControls>({
     sketches,
@@ -34,7 +34,7 @@ export function SketchIndex<UC extends UniformControls>({
                 variant="unstyled"
                 size="sm"
                 border="1px solid"
-                borderColor={"gray.400"}
+                borderColor={'gray.400'}
             >
                 <Thead>
                     <Tr>
@@ -46,9 +46,9 @@ export function SketchIndex<UC extends UniformControls>({
                         const sketcher = sketches[filename].sketcher;
                         return (
                             <Tr
-                                _hover={{ background: "gray.100" }}
+                                _hover={{ background: 'gray.100' }}
                                 borderTop="0.5px solid"
-                                borderColor={"gray.200"}
+                                borderColor={'gray.200'}
                                 key={filename}
                             >
                                 <Td padding="0">

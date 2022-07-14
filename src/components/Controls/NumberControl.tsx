@@ -3,9 +3,9 @@ import {
     FormLabel,
     NumberInput,
     NumberInputField,
-} from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import { UniformNumber } from "./UniformControls";
+} from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { UniformNumber } from './UniformControls';
 
 export default function NumberControl({
     name,
@@ -24,7 +24,7 @@ export default function NumberControl({
         setValue(n);
         uniform.value = n;
         if (uniform.onChange !== undefined) uniform.onChange(uniform);
-        document.dispatchEvent(new Event("controlChanged"));
+        document.dispatchEvent(new Event('controlChanged'));
     };
     const onChangeWithString = (_: string, n: number) => {
         onChange(n);

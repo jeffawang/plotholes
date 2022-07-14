@@ -1,6 +1,6 @@
-import p5 from "p5";
-import { slider } from "../components/controls/UniformControls";
-import { Sketcher, Uniforms } from "../sketcher";
+import p5 from 'p5';
+import { slider } from '../components/controls/UniformControls';
+import { Sketcher, Uniforms } from '../sketcher';
 
 let controls = {
     points: { type: slider, value: 50, min: 1, max: 50, step: 2 },
@@ -10,7 +10,7 @@ let controls = {
 };
 
 export const sketcher = new Sketcher({
-    title: "bagel",
+    title: 'bagel',
     width: 420,
     height: 420,
     controls: controls,

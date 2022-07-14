@@ -1,10 +1,10 @@
-import p5 from "p5";
-import p5svg from "p5.js-svg";
+import p5 from 'p5';
+import p5svg from 'p5.js-svg';
 import {
     _number,
     UniformControls,
     UniformGroup,
-} from "./components/Controls/UniformControls";
+} from './components/Controls/UniformControls';
 p5svg(p5);
 
 /**
@@ -56,8 +56,8 @@ type Params<UC extends UniformControls> = {
  * */
 export type Uniforms<UC extends UniformControls> = {
     [Property in keyof UC]: UC[Property] extends UniformGroup
-        ? Uniforms<UC[Property]["value"]>
-        : UC[Property]["value"];
+        ? Uniforms<UC[Property]['value']>
+        : UC[Property]['value'];
 };
 
 class Sketcher<UC extends UniformControls> {
@@ -115,7 +115,7 @@ class Sketcher<UC extends UniformControls> {
 
     getUniform(target, prop, _) {
         const uniform = target[prop];
-        if (uniform.type === "group")
+        if (uniform.type === 'group')
             return new Proxy(uniform.value, {
                 get: this.getUniform.bind(this),
             });

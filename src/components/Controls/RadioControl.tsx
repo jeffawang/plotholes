@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
     FormControl,
     FormHelperText,
@@ -6,9 +6,9 @@ import {
     Radio,
     RadioGroup,
     Stack,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import { UniformRadio } from "./UniformControls";
+import { UniformRadio } from './UniformControls';
 
 export default function RadioControl({
     uniform,
@@ -20,7 +20,7 @@ export default function RadioControl({
     const onChange = (newSelected: string) => {
         uniform.value = newSelected;
         if (uniform.onChange !== undefined) uniform.onChange(uniform);
-        document.dispatchEvent(new Event("controlChanged"));
+        document.dispatchEvent(new Event('controlChanged'));
     };
 
     return (

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
     Accordion,
     AccordionItem,
@@ -8,10 +8,10 @@ import {
     Box,
     FormControl,
     FormLabel,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import { Controls } from "../ControlPanel";
-import { UniformGroup } from "./UniformControls";
+import { Controls } from '../ControlPanel';
+import { UniformGroup } from './UniformControls';
 
 export default function GroupControl({
     name,

@@ -1,7 +1,7 @@
-import { Checkbox, Stack } from "@chakra-ui/react";
-import React from "react";
-import { useState } from "react";
-import { UniformCheckbox } from "./UniformControls";
+import { Checkbox, Stack } from '@chakra-ui/react';
+import React from 'react';
+import { useState } from 'react';
+import { UniformCheckbox } from './UniformControls';
 
 export default function CheckboxControl({
     name,
@@ -15,7 +15,7 @@ export default function CheckboxControl({
         uniform.value = e.target.checked;
         setValue(e.target.checked);
         if (uniform.onChange !== undefined) uniform.onChange(uniform);
-        document.dispatchEvent(new Event("controlChanged"));
+        document.dispatchEvent(new Event('controlChanged'));
     };
 
     return (

@@ -14,8 +14,8 @@ import {
     Td,
     Kbd,
     ModalFooter,
-} from "@chakra-ui/react";
-import React from "react";
+} from '@chakra-ui/react';
+import React from 'react';
 
 export default function HotKeyModal({ isOpen, onClose }) {
     return (
@@ -42,7 +42,7 @@ export default function HotKeyModal({ isOpen, onClose }) {
                             <Tbody>
                                 <Tr>
                                     <Td>
-                                        <Kbd color="black">G</Kbd> or{" "}
+                                        <Kbd color="black">G</Kbd> or{' '}
                                         <Kbd color="black">P</Kbd>
                                     </Td>
                                     <Td>Start or Pause the sketch.</Td>
@@ -67,7 +67,7 @@ export default function HotKeyModal({ isOpen, onClose }) {
                                 </Tr>
                                 <Tr>
                                     <Td>
-                                        <Kbd color="black">shift</Kbd> +{" "}
+                                        <Kbd color="black">shift</Kbd> +{' '}
                                         <Kbd color="black">?</Kbd>
                                     </Td>
                                     <Td>Show this keyboard shortcut window.</Td>

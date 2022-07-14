@@ -1,8 +1,8 @@
-import { Box, useDisclosure } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import { Sketcher } from "../sketcher";
-import { ControlPanel } from "./ControlPanel";
-import { Plot } from "./Plot";
+import { Box, useDisclosure } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { Sketcher } from '../sketcher';
+import { ControlPanel } from './ControlPanel';
+import { Plot } from './Plot';
 import {
     checkbox,
     slider,
@@ -11,10 +11,10 @@ import {
     UniformCheckbox,
     UniformNumber,
     UniformSlider,
-} from "./Controls/UniformControls";
-import { GlobalHotKeys } from "react-hotkeys";
-import { Centered } from "./Helpers";
-import HotKeyModal from "./HotKeyModal";
+} from './Controls/UniformControls';
+import { GlobalHotKeys } from 'react-hotkeys';
+import { Centered } from './Helpers';
+import HotKeyModal from './HotKeyModal';
 
 type Settings = {
     autoresize: UniformCheckbox;
@@ -53,13 +53,13 @@ export function SketcherComponent<UC extends UniformControls>({
     }
 
     useEffect(() => {
-        window.addEventListener("resize", handleResize);
-        document.addEventListener("controlChanged", handleControlChanged);
+        window.addEventListener('resize', handleResize);
+        document.addEventListener('controlChanged', handleControlChanged);
         handleResize();
         return () => {
-            window.removeEventListener("resize", handleResize);
+            window.removeEventListener('resize', handleResize);
             document.removeEventListener(
-                "controlChanged",
+                'controlChanged',
                 handleControlChanged
             );
         };
@@ -103,10 +103,10 @@ export function SketcherComponent<UC extends UniformControls>({
     sketcher.setFramerate(settings.framerate.value as number);
 
     const keyMap = {
-        playpause: ["g", `p`],
-        redraw: "r",
-        help: "shift+?",
-        save: "s",
+        playpause: ['g', `p`],
+        redraw: 'r',
+        help: 'shift+?',
+        save: 's',
     };
 
     const { isOpen, onClose, onToggle } = useDisclosure();
@@ -121,14 +121,14 @@ export function SketcherComponent<UC extends UniformControls>({
         <GlobalHotKeys keyMap={keyMap} handlers={handlers}>
             <Centered>
                 <HotKeyModal isOpen={isOpen} onClose={onClose} />
-                <Box marginTop={"30px"} padding="16px" minWidth="270px">
+                <Box marginTop={'30px'} padding="16px" minWidth="270px">
                     <ControlPanel sketcher={sketcher} settings={settings} />
                 </Box>
                 <Box
                     width={sketcher.params.width * plotScale}
                     height={sketcher.params.height * plotScale}
                     position="relative"
-                    boxShadow={"0px 10px 30px #aaa"}
+                    boxShadow={'0px 10px 30px #aaa'}
                 >
                     <Box
                         transform={`scale(${plotScale})`}

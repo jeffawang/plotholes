@@ -1,5 +1,5 @@
-import { Box, Spacer } from "@chakra-ui/react";
-import React from "react";
+import { Box, Spacer } from '@chakra-ui/react';
+import React from 'react';
 
 export function Centered({ children }) {
     return (

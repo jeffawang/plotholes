@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { ButtonGroup, Button } from "@chakra-ui/react";
-import { GlobalHotKeys, HotKeys } from "react-hotkeys";
+import React, { useEffect, useState } from 'react';
+import { ButtonGroup, Button } from '@chakra-ui/react';
+import { GlobalHotKeys, HotKeys } from 'react-hotkeys';
 
 function Butt({ selected, children, onClick }) {
     return selected ? (
@@ -8,8 +8,8 @@ function Butt({ selected, children, onClick }) {
             onClick={onClick}
             borderColor="black"
             color="blue.500"
-            _hover={{ bgColor: "blue.200" }}
-            _active={{ bgColor: "blue.300", color: "blue.600" }}
+            _hover={{ bgColor: 'blue.200' }}
+            _active={{ bgColor: 'blue.300', color: 'blue.600' }}
             zIndex={2}
             _focus={{ zIndex: 2 }}
         >

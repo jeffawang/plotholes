@@ -1,22 +1,22 @@
-import p5 from "p5";
+import p5 from 'p5';
 import {
     checkbox,
     group,
     radio,
     slider,
-} from "../components/controls/UniformControls";
-import { Sketcher, Uniforms } from "../sketcher";
+} from '../components/controls/UniformControls';
+import { Sketcher, Uniforms } from '../sketcher';
 
 let controls = {
     amplitude: { type: slider, value: 42, min: 0, max: 100 },
     noiseFactor: { type: slider, value: 0.003, min: 0, max: 0.1, step: 0.001 },
     lines: { type: slider, value: 24, min: 1, max: 50, step: 1 },
-    noiseDimensions: { type: radio, value: "one", options: ["one", "two"] },
+    noiseDimensions: { type: radio, value: 'one', options: ['one', 'two'] },
     debug: { type: checkbox, value: true },
 };
 
 export const sketcher = new Sketcher({
-    title: "bezier",
+    title: 'bezier',
     width: 900,
     height: 900,
     controls: controls,

@@ -1,6 +1,6 @@
-import p5 from "p5";
-import { group, radio, slider } from "../components/controls/UniformControls";
-import { Sketcher, Uniforms } from "../sketcher";
+import p5 from 'p5';
+import { group, radio, slider } from '../components/controls/UniformControls';
+import { Sketcher, Uniforms } from '../sketcher';
 
 let controls = {
     radius: { type: slider, value: 100, min: 0, max: 500 },
@@ -10,7 +10,7 @@ let controls = {
 };
 
 export const sketcher = new Sketcher({
-    title: "morphing shapes",
+    title: 'morphing shapes',
     width: 900,
     height: 1200,
     controls: controls,
