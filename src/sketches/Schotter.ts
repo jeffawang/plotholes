@@ -2,7 +2,7 @@ import p5 from 'p5';
 import { group, radio, slider } from '../components/Controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
 
-let controls = {
+const controls = {
     shift_factor: { type: slider, value: 1.5, min: 0, max: 10 },
     jitter: { type: slider, value: 0.2, min: 0, max: 1 },
     greeting: {

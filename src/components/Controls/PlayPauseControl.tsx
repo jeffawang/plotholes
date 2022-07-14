@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ButtonGroup, Button } from '@chakra-ui/react';
-import { GlobalHotKeys, HotKeys } from 'react-hotkeys';
+import { GlobalHotKeys } from 'react-hotkeys';
 
 function Butt({ selected, children, onClick }) {
     return selected ? (
@@ -23,11 +23,11 @@ function Butt({ selected, children, onClick }) {
 }
 
 export default function PlayPauseControl({ sketcher }) {
-    let [state, setState] = useState(sketcher.params.loop);
+    const [state, setState] = useState(sketcher.params.loop);
 
     // Hotkey keyMap defined in Sketcher.tsx
     const hotkeyHandlers = {
-        playpause: (_) => {
+        playpause: () => {
             setState((prevState) => {
                 sketcher.setLoop(!prevState);
                 return !prevState;
@@ -36,7 +36,7 @@ export default function PlayPauseControl({ sketcher }) {
         redraw: () => setLoop(false, true),
     };
 
-    const setLoop = (loop: boolean, redraw: boolean = false) => {
+    const setLoop = (loop: boolean, redraw = false) => {
         sketcher.setLoop(loop);
         setState(loop);
         if (redraw) sketcher.step();

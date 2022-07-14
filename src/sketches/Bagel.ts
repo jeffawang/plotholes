@@ -2,7 +2,7 @@ import p5 from 'p5';
 import { slider } from '../components/controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
 
-let controls = {
+const controls = {
     points: { type: slider, value: 50, min: 1, max: 50, step: 2 },
     step: { type: slider, value: 21, min: 1, max: 50, step: 1 },
     hop: { type: slider, value: 1, min: -5, max: 5, step: 1 },

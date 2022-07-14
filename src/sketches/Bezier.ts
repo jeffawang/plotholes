@@ -1,13 +1,12 @@
 import p5 from 'p5';
 import {
     checkbox,
-    group,
     radio,
     slider,
 } from '../components/controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
 
-let controls = {
+const controls = {
     amplitude: { type: slider, value: 42, min: 0, max: 100 },
     noiseFactor: { type: slider, value: 0.003, min: 0, max: 0.1, step: 0.001 },
     lines: { type: slider, value: 24, min: 1, max: 50, step: 1 },

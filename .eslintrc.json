@@ -21,5 +21,8 @@
         "@typescript-eslint"
     ],
     "rules": {
-    }
+    },
+    "ignorePatterns": [
+        "dist/*"
+    ]
 }

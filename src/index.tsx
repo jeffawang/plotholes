@@ -11,8 +11,6 @@ import { SketchIndex } from './components/SketchIndex';
 // @ts-ignore Note(jw): glob imports are a non-standard parcel feature. IDE might not understand.
 import * as Sketches from './sketches/*.ts';
 
-const appElement = document.getElementById('app') as HTMLElement;
-
 function App() {
     return (
         <ChakraProvider theme={theme}>
@@ -41,5 +39,8 @@ function App() {
     );
 }
 
-const root = ReactDOM.createRoot(document.getElementById('app')!);
-root.render(<App />);
+const el = document.getElementById('app');
+if (el) {
+    const root = ReactDOM.createRoot(el);
+    root.render(<App />);
+}

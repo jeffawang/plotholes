@@ -1,8 +1,8 @@
 import p5 from 'p5';
-import { group, radio, slider } from '../components/controls/UniformControls';
+import { slider } from '../components/controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
 
-let controls = {
+const controls = {
     radius: { type: slider, value: 100, min: 0, max: 500 },
     factor: { type: slider, value: 100, min: -100, max: 2000 },
     points: { type: slider, value: 10, min: 1, max: 100, step: 1 },
@@ -21,7 +21,6 @@ export const sketcher = new Sketcher({
         s: Sketcher<typeof controls>,
         u: Uniforms<typeof controls>
     ) => {
-        const MARGIN = 100;
         const COLORS = {
             BG: p.color(252),
             FG: p.color(0),
@@ -56,7 +55,7 @@ export const sketcher = new Sketcher({
                 return p.abs(((theta * i) % 2) - 1) - 0.5;
             }
 
-            function polyline(points: p5.Vector[], close: boolean = true) {
+            function polyline(points: p5.Vector[], close = true) {
                 p.beginShape();
                 for (const point of points) p.vertex(point.x, point.y);
                 if (close) p.vertex(points[0].x, points[0].y);
