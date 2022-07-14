@@ -1,7 +1,7 @@
 import { Box, Spacer } from '@chakra-ui/react';
 import React from 'react';
 
-export function Centered({ children }) {
+export function Centered({ children }: React.PropsWithChildren) {
     return (
         <Box
             display="flex"

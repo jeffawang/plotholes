@@ -22,11 +22,12 @@ export function SketchIndex<UC extends UniformControls>({
 }: {
     // Note(jw): The filename keys come from the parcel glob import syntax, and
     //           `sketcher` comes from a standard in this project.
-    [filename: string]: {
-        sketcher: Sketcher<UC>;
+    sketches: {
+        [filename: string]: {
+            sketcher: Sketcher<UC>;
+        }
     };
 }) {
-    console.log(sketches);
 
     const SketchTable = () => (
         <TableContainer>

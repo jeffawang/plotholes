@@ -131,6 +131,7 @@ class Sketcher<UC extends UniformControls> {
      */
     setup(p: p5) {
         return () => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore NOTE(jw): p.SVG gets imperitively added by p5svg, IDE may not understand it, so ts-ignore it.
             p.createCanvas(this.params.width, this.params.height, p.SVG);
             if (!this.params.settings.loop) p.noLoop();

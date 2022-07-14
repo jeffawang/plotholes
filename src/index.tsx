@@ -8,6 +8,7 @@ import { theme } from './theme';
 import { SketcherComponent } from './components/Sketcher';
 import { SketchIndex } from './components/SketchIndex';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore Note(jw): glob imports are a non-standard parcel feature. IDE might not understand.
 import * as Sketches from './sketches/*.ts';
 

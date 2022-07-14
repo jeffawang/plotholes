@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import { ButtonGroup, Button } from '@chakra-ui/react';
 import { GlobalHotKeys } from 'react-hotkeys';
+import { Sketcher } from '../../sketcher';
+import { UniformControls } from './UniformControls';
 
-function Butt({ selected, children, onClick }) {
+function Butt({ selected, children, onClick }: {
+    selected: boolean,
+    children: React.ReactNode,
+    onClick: () => void
+}
+) {
     return selected ? (
         <Button
             onClick={onClick}
@@ -22,8 +29,10 @@ function Butt({ selected, children, onClick }) {
     );
 }
 
-export default function PlayPauseControl({ sketcher }) {
-    const [state, setState] = useState(sketcher.params.loop);
+export default function PlayPauseControl<UC extends UniformControls>({ sketcher }: {
+    sketcher: Sketcher<UC>
+}) {
+    const [state, setState] = useState(sketcher.params.settings.loop || false);
 
     // Hotkey keyMap defined in Sketcher.tsx
     const hotkeyHandlers = {
