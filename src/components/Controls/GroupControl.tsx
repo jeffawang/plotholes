@@ -1,28 +1,42 @@
 import React from "react";
-import { Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Box, FormControl, FormLabel } from "@chakra-ui/react";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionIcon,
+  AccordionPanel,
+  Box,
+  FormControl,
+  FormLabel,
+} from "@chakra-ui/react";
 
 import { Controls } from "../ControlPanel";
 import { UniformGroup } from "./UniformControls";
 
-export default function GroupControl({ name, uniform }: {
-    name: string,
-    uniform: UniformGroup
+export default function GroupControl({
+  name,
+  uniform,
+}: {
+  name: string;
+  uniform: UniformGroup;
 }) {
-    return <FormControl as="fieldset">
-        <Accordion allowMultiple defaultIndex={uniform.collapsed ? [] : [0]}>
-            <AccordionItem>
-                <h2>
-                    <AccordionButton>
-                        <Box flex='1' textAlign='left'>
-                            <FormLabel as="legend">{name}</FormLabel>
-                        </Box>
-                        <AccordionIcon />
-                    </AccordionButton>
-                </h2>
-                <AccordionPanel pb={4}>
-                    <Controls uniforms={uniform.value} />
-                </AccordionPanel>
-            </AccordionItem>
-        </Accordion>
-    </FormControl>;
+  return (
+    <FormControl as="fieldset">
+      <Accordion allowMultiple defaultIndex={uniform.collapsed ? [] : [0]}>
+        <AccordionItem>
+          <h2>
+            <AccordionButton>
+              <Box flex="1" textAlign="left">
+                <FormLabel as="legend">{name}</FormLabel>
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+          </h2>
+          <AccordionPanel pb={4}>
+            <Controls uniforms={uniform.value} />
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+    </FormControl>
+  );
 }

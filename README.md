@@ -56,35 +56,35 @@ For example, if you specify a set of controls like this:
 
 ```ts
 let controls = {
-    amazement: { type: slider, value: 1.5, min: 0, max: 9001 }
-}
+  amazement: { type: slider, value: 1.5, min: 0, max: 9001 },
+};
 ```
 
 This will create an "amazement" slider, whose value can be accessed inside the sketch closure as `u.amazement`.
 
 ### Types of controls
 
-| control type | value type | description |
-| --- | --- | --- |
-| `slider` | number | A slider with min, max, step, and starting values |
-| `_number` | number | A number text input field |
-| `radio` | string | A set of radio buttons |
-| `checkbox` | boolean | A checkbox |
-| `group` | `UniformControls` | A collapsible group of other controls |
+| control type | value type        | description                                       |
+| ------------ | ----------------- | ------------------------------------------------- |
+| `slider`     | number            | A slider with min, max, step, and starting values |
+| `_number`    | number            | A number text input field                         |
+| `radio`      | string            | A set of radio buttons                            |
+| `checkbox`   | boolean           | A checkbox                                        |
+| `group`      | `UniformControls` | A collapsible group of other controls             |
 
 See some of the existing sketches for examples of how to instantiate these controls.
 
 ### Keybinds in the browser
 
-| key | action |
-| --- | ---  |
-| `s` | save the result as an svg for plotting. The `title` and seed will be interpolated into the filename (but not the version of the code!). |
-| `r` | redraw the sketch once |
-| `g` / `p` | toggle playing/pausing the sketch. |
+| key       | action                                                                                                                                  |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `s`       | save the result as an svg for plotting. The `title` and seed will be interpolated into the filename (but not the version of the code!). |
+| `r`       | redraw the sketch once                                                                                                                  |
+| `g` / `p` | toggle playing/pausing the sketch.                                                                                                      |
 
 ## Todo
 
 - [ ] Improve SVG -> pen plotter workflow
-    - manual zeroing via eyeballing
-    - networked?
+  - manual zeroing via eyeballing
+  - networked?
 - [ ] Figure out svg scaling for plotting
