@@ -13,35 +13,30 @@ import { SketchIndex } from './components/SketchIndex';
 import * as Sketches from './sketches/*.ts';
 
 function App() {
-    return (
-        <ChakraProvider theme={theme}>
-            <Box padding="30px">
-                <BrowserRouter>
-                    <Routes>
-                        {Object.keys(Sketches).map((filename) => (
-                            <Route
-                                key={filename}
-                                path={`/${encodeURIComponent(filename)}`}
-                                element={
-                                    <SketcherComponent
-                                        sketcher={Sketches[filename].sketcher}
-                                    />
-                                }
-                            />
-                        ))}
-                        <Route
-                            path="/"
-                            element={<SketchIndex sketches={Sketches} />}
-                        />
-                    </Routes>
-                </BrowserRouter>
-            </Box>
-        </ChakraProvider>
-    );
+  return (
+    <ChakraProvider theme={theme}>
+      <Box padding="30px">
+        <BrowserRouter>
+          <Routes>
+            {Object.keys(Sketches).map((filename) => (
+              <Route
+                key={filename}
+                path={`/${encodeURIComponent(filename)}`}
+                element={
+                  <SketcherComponent sketcher={Sketches[filename].sketcher} />
+                }
+              />
+            ))}
+            <Route path="/" element={<SketchIndex sketches={Sketches} />} />
+          </Routes>
+        </BrowserRouter>
+      </Box>
+    </ChakraProvider>
+  );
 }
 
 const el = document.getElementById('app');
 if (el) {
-    const root = ReactDOM.createRoot(el);
-    root.render(<App />);
+  const root = ReactDOM.createRoot(el);
+  root.render(<App />);
 }
