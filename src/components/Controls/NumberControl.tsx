@@ -5,6 +5,7 @@ import {
   NumberInputField,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+
 import { UniformNumber } from './UniformControls';
 
 export default function NumberControl({

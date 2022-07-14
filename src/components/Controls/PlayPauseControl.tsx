@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ButtonGroup, Button } from '@chakra-ui/react';
 import { GlobalHotKeys } from 'react-hotkeys';
+import { ButtonGroup, Button } from '@chakra-ui/react';
+
 import { Sketcher } from '../../sketcher';
 import { UniformControls } from './UniformControls';
 

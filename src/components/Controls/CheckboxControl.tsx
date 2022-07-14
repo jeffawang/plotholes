@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from 'react';
 import { Checkbox, Stack } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+
 import { UniformCheckbox } from './UniformControls';
 
 export default function CheckboxControl({
