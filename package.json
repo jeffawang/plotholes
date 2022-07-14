@@ -21,7 +21,8 @@
         "typescript": "^4.7.4"
     },
     "scripts": {
-        "start": "parcel index.html"
+        "start": "parcel index.html",
+        "lint": "eslint ."
     },
     "dependencies": {
         "@chakra-ui/icons": "^2.0.3",
