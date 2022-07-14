@@ -4,12 +4,15 @@ import { GlobalHotKeys } from 'react-hotkeys';
 import { Sketcher } from '../../sketcher';
 import { UniformControls } from './UniformControls';
 
-function Butt({ selected, children, onClick }: {
-    selected: boolean,
-    children: React.ReactNode,
-    onClick: () => void
-}
-) {
+function Butt({
+    selected,
+    children,
+    onClick,
+}: {
+    selected: boolean;
+    children: React.ReactNode;
+    onClick: () => void;
+}) {
     return selected ? (
         <Button
             onClick={onClick}
@@ -29,8 +32,10 @@ function Butt({ selected, children, onClick }: {
     );
 }
 
-export default function PlayPauseControl<UC extends UniformControls>({ sketcher }: {
-    sketcher: Sketcher<UC>
+export default function PlayPauseControl<UC extends UniformControls>({
+    sketcher,
+}: {
+    sketcher: Sketcher<UC>;
 }) {
     const [state, setState] = useState(sketcher.params.settings.loop || false);
 

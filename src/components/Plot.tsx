@@ -12,8 +12,7 @@ export function Plot<UC extends UniformControls>({
     const elRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (elRef.current)
-            new p5(sketcher.p5Sketch(), elRef.current);
+        if (elRef.current) new p5(sketcher.p5Sketch(), elRef.current);
     }, []);
 
     return <Box ref={elRef} />;

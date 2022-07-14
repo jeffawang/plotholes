@@ -17,9 +17,12 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 
-export default function HotKeyModal({ isOpen, onClose }: {
-    isOpen: boolean,
-    onClose: () => void
+export default function HotKeyModal({
+    isOpen,
+    onClose,
+}: {
+    isOpen: boolean;
+    onClose: () => void;
 }) {
     return (
         <Modal

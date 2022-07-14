@@ -25,10 +25,9 @@ export function SketchIndex<UC extends UniformControls>({
     sketches: {
         [filename: string]: {
             sketcher: Sketcher<UC>;
-        }
+        };
     };
 }) {
-
     const SketchTable = () => (
         <TableContainer>
             <Table
