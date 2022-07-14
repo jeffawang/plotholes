@@ -30,10 +30,24 @@ type Params<UC extends UniformControls> = {
   sketch: (p: p5, s: Sketcher<UC>, u: Uniforms<UC>) => void;
 
   settings: {
+    /** seed is the random seed passed to p5 as random and noise seeds. */
     seed?: number;
+
+    /** loop is whether or not the sketch is in a redraw loop or just drawing
+     * once */
     loop?: boolean;
+
+    /** autoresize tells Sketcher whether or not to scale the sketch to fit the
+     * screen vertically. This is useful if the sketch size exceeds the window
+     * size and you want to see the whole thing. */
     autoresize?: boolean;
+
+    /** if redrawOnChanges is true, the sketch will redraw when the user
+     * updates the Uniforms. */
     redrawOnChanges?: boolean;
+
+    /** framerate defines the target framerate for p5js. It is not a min or a
+     * max, but p5 will try to follow it. */
     framerate?: number;
   };
 };
