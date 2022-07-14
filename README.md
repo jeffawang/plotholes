@@ -56,7 +56,7 @@ For example, if you specify a set of controls like this:
 
 ```ts
 let controls = {
-  amazement: { type: slider, value: 1.5, min: 0, max: 9001 },
+    amazement: { type: slider, value: 1.5, min: 0, max: 9001 },
 };
 ```
 
@@ -84,7 +84,7 @@ See some of the existing sketches for examples of how to instantiate these contr
 
 ## Todo
 
-- [ ] Improve SVG -> pen plotter workflow
-  - manual zeroing via eyeballing
-  - networked?
-- [ ] Figure out svg scaling for plotting
+-   [ ] Improve SVG -> pen plotter workflow
+    -   manual zeroing via eyeballing
+    -   networked?
+-   [ ] Figure out svg scaling for plotting
