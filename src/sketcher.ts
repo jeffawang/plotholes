@@ -76,7 +76,7 @@ export type Uniforms<UC extends UniformControls> = {
 class Sketcher<UC extends UniformControls> {
   params: Params<UC>;
   uniforms: UC | Uniforms<UC>;
-  p: p5;
+  p?: p5;
 
   constructor(params: Params<UC>) {
     params.settings ??= {};
@@ -124,7 +124,7 @@ class Sketcher<UC extends UniformControls> {
       else this.p.noLoop();
   }
 
-  getUniform(target, prop, _) {
+  getUniform(target: any, prop: any, _: any): any {
     const uniform = target[prop];
     if (uniform.type === 'group')
       return new Proxy(uniform.value, {
@@ -180,4 +180,5 @@ class Sketcher<UC extends UniformControls> {
   }
 }
 
-export { Sketcher, Params };
+export type { Params };
+export { Sketcher };
