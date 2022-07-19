@@ -124,7 +124,20 @@ class Sketcher<UC extends UniformControls> {
       else this.p.noLoop();
   }
 
-  getUniform(target: any, prop: any, _: any): any {
+  /** getUniform implements the javascript Proxy object's `get` method. See
+   * upstream [documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/get)
+   * for more about it.
+   *
+   * @param target the target UniformControls
+   * @param prop the name or Symbol of the property to get
+   * @param _receiver (unused): the proxy or an object that inherits from it
+   * @returns a value from the object, or another proxy if the value was a group of controls.
+   */
+  private getUniform(
+    target: UC,
+    prop: string,
+    _receiver: UC
+  ): string | number | boolean | UniformControls {
     const uniform = target[prop];
     if (uniform.type === 'group')
       return new Proxy(uniform.value, {
