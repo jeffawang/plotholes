@@ -60,7 +60,7 @@ export const sketcher = new Sketcher({
         return data[y][x] > threshold ? 1 : 0;
       }
 
-      function contour(threshold: number) {
+      const contour = (threshold: number) => {
         const check = stepNoise.bind(this, threshold);
         p.stroke(colors.fg);
         p.strokeWeight(2);
@@ -76,7 +76,7 @@ export const sketcher = new Sketcher({
             contourSegment(v, x * u.gridSize, y * u.gridSize, u.gridSize);
           }
         }
-      }
+      };
 
       for (let i = 1; i < u.strata; i++) {
         contour((255 * i) / u.strata);
