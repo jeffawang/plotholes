@@ -5,6 +5,7 @@ import { Sketcher, Uniforms } from '../sketcher';
 const controls = {
   noiseSize: { type: slider, value: 0.1, min: 0, max: 1, step: 0.01 },
   gridSize: { type: slider, value: 10, min: 1, max: 100, step: 1 },
+  strata: { type: slider, value: 2, min: 1, max: 25, step: 1 },
 };
 
 export const sketcher = new Sketcher({
@@ -35,7 +36,7 @@ export const sketcher = new Sketcher({
       p.background(colors.bg);
       p.stroke(colors.fg);
       p.noFill();
-      p.strokeWeight(5);
+      p.strokeWeight(u.gridSize * 0.5);
 
       const cols = p.floor(1 + p.width / u.gridSize);
       const rows = p.floor(1 + p.height / u.gridSize);
@@ -59,21 +60,26 @@ export const sketcher = new Sketcher({
         return data[y][x] > threshold ? 1 : 0;
       }
 
-      const threshold = 128;
-      const check = stepNoise.bind(this, threshold);
-      p.stroke(colors.fg);
-      p.strokeWeight(2);
-      for (let i = 0; i < cols - 1; i++) {
-        for (let j = 0; j < rows - 1; j++) {
-          const x = i;
-          const y = j;
-          const v =
-            8 * check(x, y) +
-            4 * check(x + 1, y) +
-            2 * check(x + 1, y + 1) +
-            1 * check(x, y + 1);
-          contourSegment(v, x * u.gridSize, y * u.gridSize, u.gridSize);
+      function contour(threshold: number) {
+        const check = stepNoise.bind(this, threshold);
+        p.stroke(colors.fg);
+        p.strokeWeight(2);
+        for (let i = 0; i < cols - 1; i++) {
+          for (let j = 0; j < rows - 1; j++) {
+            const x = i;
+            const y = j;
+            const v =
+              8 * check(x, y) +
+              4 * check(x + 1, y) +
+              2 * check(x + 1, y + 1) +
+              1 * check(x, y + 1);
+            contourSegment(v, x * u.gridSize, y * u.gridSize, u.gridSize);
+          }
         }
+      }
+
+      for (let i = 1; i < u.strata; i++) {
+        contour((255 * i) / u.strata);
       }
     };
 
