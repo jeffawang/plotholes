@@ -21,7 +21,8 @@
   },
   "scripts": {
     "start": "parcel index.html",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build": "parcel build --dist-dir docs --no-content-hash index.html"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.3",
