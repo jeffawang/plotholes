@@ -18,13 +18,13 @@ const controls = {
     },
     collapse: true, // TODO: this doesn't work, fix it
   },
-  placementStrategy: {
+  placement: {
     type: radio,
     value: 'random',
     options: ['random', 'forces'],
   },
   spawnDelay: { type: slider, value: 30, min: 0, max: 1000, step: 0.25 },
-  forceParams: {
+  forces: {
     type: group,
     value: {
       repulsionFactor: { type: slider, value: 100, min: 0, max: 1000, step: 1 },
@@ -133,7 +133,7 @@ export const sketcher = new Sketcher({
         p.floor(p.frameCount % u.spawnDelay) == 0
       ) {
         let c;
-        switch (u.placementStrategy) {
+        switch (u.placement) {
           case 'random':
           default:
             c = randomChoice();
