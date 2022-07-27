@@ -1,12 +1,19 @@
 import p5 from 'p5';
-import { group, radio, slider } from '../components/controls/UniformControls';
+import {
+  checkbox,
+  group,
+  radio,
+  slider,
+} from '../components/controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
 
 const controls = {
   r: { type: slider, value: 8, min: 1, max: 100, step: 1 },
-  k: { type: slider, value: 20, min: 1, max: 100, step: 1 },
+  k: { type: slider, value: 30, min: 1, max: 100, step: 1 },
+  lines: { type: checkbox, value: true },
 };
 
+// https://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf
 export const sketcher = new Sketcher({
   title: 'fish',
   width: 600,
@@ -59,10 +66,10 @@ export const sketcher = new Sketcher({
 
       function near(pt: Point): boolean {
         const [gx, gy] = cell(pt);
-        const x0 = Math.max(0, gx - 2),
-          x1 = Math.min(cols, gx + 2),
-          y0 = Math.max(0, gy - 2),
-          y1 = Math.min(rows, gy + 2);
+        const x0 = Math.max(0, gx - 2);
+        const x1 = Math.min(cols, gx + 2);
+        const y0 = Math.max(0, gy - 2);
+        const y1 = Math.min(rows, gy + 2);
         for (let cy = y0; cy < y1; cy++) {
           const rowStart = cy * cols;
           for (let cx = x0; cx < x1; cx++) {
@@ -91,26 +98,36 @@ export const sketcher = new Sketcher({
       }
 
       const center = Point.new(p.width / 2, p.height / 2);
+      const gridCell = cell(center);
+      grid[gridCell[0] + gridCell[1] * cols] = center;
       center.show();
       const active = [center];
 
       const start = Date.now();
       p.stroke('red');
-      while (active.length && Date.now() - start < 16) {
-        const curr = active.pop() as Point;
-        for (let i = 0; i < u.k; i++) {
+      while (active.length && Date.now() - start < 17) {
+        const idx = Math.floor(p.random(active.length));
+        const curr = active[idx] as Point;
+        let i;
+        for (i = 0; i < u.k; i++) {
           const next = annulus(curr);
           if (!near(next)) {
-            console.log(next);
             const c = cell(next);
             grid[c[0] + c[1] * cols] = next;
             next.show();
             active.push(next);
-            p.push();
-            p.strokeWeight(1);
-            p.line(curr.pos.x, curr.pos.y, next.pos.x, next.pos.y);
-            p.pop();
+            if (u.lines) {
+              p.push();
+              p.strokeWeight(1);
+              p.line(curr.pos.x, curr.pos.y, next.pos.x, next.pos.y);
+              p.pop();
+              break;
+            }
           }
+        }
+        if (i == u.k) {
+          active[idx] = active[active.length - 1];
+          active.pop();
         }
         // break;
       }
