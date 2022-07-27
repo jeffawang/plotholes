@@ -110,7 +110,6 @@ export const sketcher = new Sketcher({
             p.strokeWeight(1);
             p.line(curr.pos.x, curr.pos.y, next.pos.x, next.pos.y);
             p.pop();
-            break;
           }
         }
         // break;
