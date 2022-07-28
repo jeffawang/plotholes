@@ -5,7 +5,7 @@ import {
   radio,
   slider,
   UniformControls,
-} from '../components/controls/UniformControls';
+} from '../components/Controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
 
 const controls = {
