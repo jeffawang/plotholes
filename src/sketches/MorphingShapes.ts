@@ -1,5 +1,5 @@
 import p5 from 'p5';
-import { slider } from '../components/controls/UniformControls';
+import { slider } from '../components/Controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
 
 const controls = {

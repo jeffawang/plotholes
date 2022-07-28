@@ -1,5 +1,5 @@
 import p5 from 'p5';
-import { radio, slider } from '../components/controls/UniformControls';
+import { radio, slider } from '../components/Controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
 
 const controls = {
