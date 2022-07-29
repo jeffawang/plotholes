@@ -21,7 +21,8 @@ jobs:
         run: npm install --global yarn
       - name: commit
         run: |
-          git log
+          git branch
+          git log --all
           git fetch origin main
           git merge origin/main
 
