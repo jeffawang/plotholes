@@ -22,11 +22,10 @@ export default function RadioControl({
   useEffect(() => {
     uniform.value = value;
     document.dispatchEvent(new Event('controlChanged'));
+    if (uniform.onChange !== undefined) uniform.onChange(uniform);
   }, [value]);
 
   const onChange = (newSelected: string) => {
-    uniform.value = newSelected;
-    if (uniform.onChange !== undefined) uniform.onChange(uniform);
     setValue(newSelected);
   };
 

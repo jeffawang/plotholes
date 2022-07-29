@@ -4,7 +4,7 @@ import { Sketcher, Uniforms } from '../sketcher';
 
 const controls = {
   r: { type: slider, value: 8, min: 1, max: 100, step: 1 },
-  radius: { type: slider, value: 300, min: 1, max: 1000, step: 1 },
+  radius: { type: slider, value: 350, min: 1, max: 1000, step: 1 },
   k: { type: slider, value: 30, min: 1, max: 100, step: 1 },
   lines: { type: checkbox, value: true },
 };
@@ -132,7 +132,7 @@ export const sketcher = new Sketcher({
     };
 
     p.draw = function () {
-      // p.background(colors.bg);
+      p.background(colors.bg);
       p.stroke(colors.fg);
       p.noFill();
       p.strokeWeight(5);
@@ -157,12 +157,12 @@ export const sketcher = new Sketcher({
             }
         }
         if (i == u.k) {
-          curr.show(u.lines);
+          // curr.show(u.lines);
           queue[idx] = queue[queue.length - 1];
           queue.pop();
         }
       }
-      // graph.show(u.lines);
+      graph.show(u.lines);
     };
   },
 });

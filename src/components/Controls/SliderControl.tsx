@@ -27,11 +27,11 @@ export default function SliderControl({
   useEffect(() => {
     uniform.value = value;
     document.dispatchEvent(new Event('controlChanged'));
+    if (uniform.onChange !== undefined) uniform.onChange(uniform);
   }, [value]);
 
   const onChange = (n: number) => {
     setValue(n);
-    if (uniform.onChange !== undefined) uniform.onChange(uniform);
   };
   const onChangeWithString = (_: string, n: number) => {
     onChange(n);
