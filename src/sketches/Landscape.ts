@@ -1,8 +1,13 @@
 import p5 from 'p5';
-import { slider, checkbox } from '../components/Controls/UniformControls';
+import {
+  slider,
+  checkbox,
+  radio,
+} from '../components/Controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
 
 const controls = {
+  style: { type: radio, value: 'fill', options: ['fill', 'line'] },
   count: { type: slider, value: 5, min: 1, max: 100, step: 1 },
   perpcent: { type: slider, value: 0.1, min: 0, max: 0.6, step: 0.01 },
   noise: { type: slider, value: 0.2, min: 0, max: 0.6, step: 0.05 },
@@ -67,6 +72,9 @@ export const sketcher = new Sketcher({
 
       draw() {
         p.beginShape();
+        if (u.style == 'fill') {
+          p.vertex(0.05 * p.width, p.height);
+        }
         for (const line of this.leaves()) {
           p.vertex(line[0].x, line[0].y);
         }
@@ -74,6 +82,9 @@ export const sketcher = new Sketcher({
           this.lines[this.lines.length - 1][1].x,
           this.lines[this.lines.length - 1][1].y
         );
+        if (u.style == 'fill') {
+          p.vertex(0.95 * p.width, p.height);
+        }
         p.endShape();
       }
 
@@ -82,11 +93,13 @@ export const sketcher = new Sketcher({
       }
 
       debug() {
+        p.push();
         p.fill('red');
         for (const node of this.lines) {
           p.circle(node[0].x, node[0].y, 10);
           p.circle(node[1].x, node[1].y, 10);
         }
+        p.pop();
       }
     }
 
@@ -100,6 +113,9 @@ export const sketcher = new Sketcher({
       p.stroke(colors.fg);
       p.noFill();
       p.strokeWeight(1);
+      if (u.style == 'fill') {
+        p.noStroke();
+      }
 
       for (let c = 0; c < u.count; c++) {
         p.randomSeed((s.params.settings.seed as number) + c);
@@ -117,6 +133,9 @@ export const sketcher = new Sketcher({
           landscape.step();
         }
 
+        if (u.style == 'fill') {
+          p.fill(p.lerpColor(p.color(252), p.color(0), c / u.count));
+        }
         landscape.draw();
         if (u.debug) {
           landscape.debug();
