@@ -22,8 +22,6 @@ jobs:
       - name: merge
         run: |
           git checkout gh-pages
-          git branch
-          git log --all
           git fetch origin main
           git merge origin/main
       - name: build
