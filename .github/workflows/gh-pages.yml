@@ -17,17 +17,20 @@ jobs:
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
-
       - name: install yarn
         run: npm install --global yarn
-      - name: commit
+      - name: merge
         run: |
           git checkout gh-pages
           git branch
           git log --all
           git fetch origin main
           git merge origin/main
-
+      - name: build
+        run: |
+          yarn
           yarn build
+      - name: commit
+        run: |
           git commit -am'build'
           git push origin gh-pages
