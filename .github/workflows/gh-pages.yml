@@ -1,4 +1,4 @@
-name: Commit date to master
+name: render gh-pages
 on: [push]
 jobs:
   gh-pages:
