@@ -51,8 +51,6 @@ export default function SliderControl({
           onChange={onChangeWithString}
           size="xs"
           textAlign="right"
-          max={1}
-          min={0}
           maxW="3rem"
         >
           <NumberInputField
