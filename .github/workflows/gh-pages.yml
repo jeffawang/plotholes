@@ -1,0 +1,27 @@
+name: Commit date to master
+on: [push]
+jobs:
+  gh-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: setup git config
+        run: |
+          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+
+      - name: install yarn
+        run: npm install --global yarn
+      - name: commit
+        run: |
+          git checkout gh-pages
+          git merge main
+
+          yarn build
+          git commit -am'build'
+          git push origin gh-pages
