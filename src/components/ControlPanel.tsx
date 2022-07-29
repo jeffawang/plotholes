@@ -20,6 +20,7 @@ import PlayPauseControl from './Controls/PlayPauseControl';
 
 import { UniformControls } from './Controls/UniformControls';
 import { Sketcher } from '../sketcher';
+import ButtonControl from './Controls/ButtonControl';
 
 export function Controls({ uniforms }: { uniforms: UniformControls }) {
   return (
@@ -37,6 +38,8 @@ export function Controls({ uniforms }: { uniforms: UniformControls }) {
             return <Checkbox name={name} uniform={uniform} key={name} />;
           case 'number':
             return <NumberControl name={name} uniform={uniform} key={name} />;
+          case 'button':
+            return <ButtonControl name={name} uniform={uniform} key={name} />;
           default:
             console.error('uh oh');
         }

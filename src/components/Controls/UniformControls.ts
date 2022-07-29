@@ -3,7 +3,8 @@ export type UniformControl =
   | UniformNumber
   | UniformRadio
   | UniformCheckbox
-  | UniformGroup;
+  | UniformGroup
+  | UniformButton;
 export type UniformControls = {
   [key: string]: UniformControl;
 };
@@ -12,6 +13,7 @@ export const slider = 'slider' as const;
 export const _number = 'number' as const;
 export const radio = 'radio' as const;
 export const checkbox = 'checkbox' as const;
+export const button = 'button' as const;
 export const group = 'group' as const;
 
 export type UniformSlider = {
@@ -44,6 +46,12 @@ export type UniformCheckbox = {
   type: 'checkbox';
   value: boolean;
   onChange?: (u: UniformCheckbox) => void;
+};
+
+export type UniformButton = {
+  type: 'button';
+  onChange?: (u: UniformButton) => void;
+  onClick?: (u: UniformButton) => void;
 };
 
 export type UniformGroup = {

@@ -15,12 +15,12 @@ export default function CheckboxControl({
   useEffect(() => {
     uniform.value = value;
     document.dispatchEvent(new Event('controlChanged'));
+    if (uniform.onChange !== undefined) uniform.onChange(uniform);
   }, [value]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     uniform.value = e.target.checked;
     setValue(e.target.checked);
-    if (uniform.onChange !== undefined) uniform.onChange(uniform);
   };
 
   return (

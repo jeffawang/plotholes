@@ -20,12 +20,11 @@ export default function NumberControl({
   useEffect(() => {
     uniform.value = value;
     document.dispatchEvent(new Event('controlChanged'));
+    if (uniform.onChange !== undefined) uniform.onChange(uniform);
   }, [value]);
 
   const onChange = (_: string, n: number) => {
     setValue(n);
-    uniform.value = n;
-    if (uniform.onChange !== undefined) uniform.onChange(uniform);
   };
 
   return (
