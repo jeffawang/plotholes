@@ -187,6 +187,10 @@ class Sketcher<UC extends UniformControls> {
   p5Sketch() {
     return (p: p5) => {
       this.p = p;
+      // p5 adds these before calling setup and draw, but it's nice to have
+      // them around in the sketch closure.
+      this.p.width = this.params.width;
+      this.p.height = this.params.height;
       this.params.sketch(p, this, this.uniforms as Uniforms<UC>);
       this.setDefaults(p);
     };
