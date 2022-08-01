@@ -44,6 +44,7 @@ export const sketcher = new Sketcher({
   settings: {
     loop: true,
     redrawOnChanges: true,
+    svgRenderer: false,
   },
 
   sketch: (
@@ -225,8 +226,6 @@ export const sketcher = new Sketcher({
     }
 
     (s.params.controls.inc as UniformSlider).onChange = init;
-
-    p.disableFriendlyErrors = true;
 
     p.setup = function () {
       s.setup(p)();

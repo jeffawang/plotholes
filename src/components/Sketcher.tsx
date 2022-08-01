@@ -21,6 +21,7 @@ type Settings = {
   redrawOnChanges: UniformCheckbox;
   seed: UniformNumber;
   framerate: UniformSlider;
+  svgRenderer: UniformCheckbox;
 };
 
 export function SketcherComponent<UC extends UniformControls>({
@@ -92,6 +93,10 @@ export function SketcherComponent<UC extends UniformControls>({
       max: 60,
       step: 0.5,
       onChange: (u) => sketcher.setFramerate(u.value),
+    },
+    svgRenderer: {
+      type: checkbox,
+      value: true,
     },
   };
 
