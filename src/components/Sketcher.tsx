@@ -66,7 +66,7 @@ export function SketcherComponent<UC extends UniformControls>({
   const settings: Settings = {
     autoresize: {
       type: checkbox,
-      value: true,
+      value: sketcher.params.settings.autoresize ?? true,
       onChange: (u) => {
         sketcher.params.settings.autoresize = u.value;
         handleResize();
@@ -74,7 +74,7 @@ export function SketcherComponent<UC extends UniformControls>({
     },
     redrawOnChanges: {
       type: checkbox,
-      value: sketcher.params.settings.redrawOnChanges || false,
+      value: sketcher.params.settings.redrawOnChanges ?? false,
       onChange: (u) => {
         sketcher.params.settings.redrawOnChanges = u.value;
       },
@@ -82,7 +82,7 @@ export function SketcherComponent<UC extends UniformControls>({
     seed: {
       type: _number,
       value:
-        sketcher.params.settings.seed ||
+        sketcher.params.settings.seed ??
         Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
       onChange: (u) => sketcher.setSeed(u.value),
     },
@@ -96,11 +96,10 @@ export function SketcherComponent<UC extends UniformControls>({
     },
     svgRenderer: {
       type: checkbox,
-      value: true,
+      value: sketcher.params.settings.svgRenderer ?? false,
     },
   };
 
-  sketcher.params.settings.redrawOnChanges = settings.redrawOnChanges.value;
   sketcher.setSeed(settings.seed.value as number);
   sketcher.setFramerate(settings.framerate.value as number);
 
