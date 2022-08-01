@@ -1,18 +1,46 @@
 import p5 from 'p5';
-import { checkbox, slider } from '../components/Controls/UniformControls';
+import {
+  checkbox,
+  group,
+  radio,
+  slider,
+  UniformSlider,
+} from '../components/Controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
+import PoissonDisc from './helpers/PoissonDisc';
 
 const controls = {
-  noiseSize: { type: slider, value: 0.02, min: 0.01, max: 0.05, step: 0.001 },
-  gridSize: { type: slider, value: 10, min: 8, max: 100, step: 1 },
-  move: { type: slider, value: 5, min: 1, max: 25, step: 1 },
+  inc: { type: slider, value: 0.002, min: 0.0005, max: 0.5 },
+  noiseIterations: { type: slider, value: 0, min: 0, max: 5 },
+  minLength: { type: slider, value: 10, min: 1, max: 200, step: 1 },
+  length: { type: slider, value: 50, min: 1, max: 200, step: 1 },
+  ttl: { type: slider, value: 40, min: 10, max: 240 },
+  speed: { type: slider, value: 5, min: 1, max: 240 },
+  placement: {
+    type: radio,
+    value: 'poisson',
+    options: ['poisson', 'random'],
+  },
+  flow: {
+    type: radio,
+    value: 'swirl',
+    options: ['noise', 'attractor', 'swirl'],
+  },
+  angle: {
+    type: slider,
+    value: Math.PI / 3,
+    min: 0,
+    max: Math.PI * 2,
+    step: 0.001,
+  },
+  alternate: { type: checkbox, value: false },
   debug: { type: checkbox, value: false },
 };
 
 export const sketcher = new Sketcher({
   title: 'flow',
-  width: 600,
-  height: 600,
+  width: 512,
+  height: 512,
   controls: controls,
   settings: {
     loop: true,
@@ -24,112 +52,228 @@ export const sketcher = new Sketcher({
     s: Sketcher<typeof controls>,
     u: Uniforms<typeof controls>
   ) => {
-    const rows = p.floor(s.params.height / u.gridSize);
-    const cols = p.floor(s.params.width / u.gridSize);
-    const flowfield: p5.Vector[] = new Array(rows * cols);
+    const MARGIN = 100;
+    const COLORS = {
+      BG: p.color(252),
+      FG: p.color(42),
+    };
 
-    class FlowLine {
-      pos: p5.Vector;
+    function fnoise(count: number, xoff: number, yoff: number) {
+      let n = p.noise(xoff, yoff);
+      for (let i = 0; i < count; i++) {
+        n = p.noise(xoff + n, yoff + n);
+      }
+      return n;
+    }
+
+    function fnoiseImg(count: number) {
+      const img = p.createImage(p.width, p.height);
+      let yoff = 0;
+
+      p.noiseDetail(8, 0.6);
+
+      img.loadPixels();
+      for (let y = 0; y < img.height; y++) {
+        let xoff = 0;
+        for (let x = 0; x < img.width; x++) {
+          const index = (x + y * img.width) * 4;
+          // let r = random(255);
+          // const r = p.noise(xoff, yoff) * 255;
+
+          const r = fnoise(count, xoff, yoff) * 255;
+
+          img.pixels[index + 0] = r;
+          img.pixels[index + 1] = 0;
+          img.pixels[index + 2] = 0;
+          img.pixels[index + 3] = 255;
+
+          xoff += u.inc + 0.00001;
+        }
+        yoff += u.inc + 0.00001;
+      }
+      img.updatePixels();
+      return img;
+    }
+
+    type velocityFunc = (p: p5.Vector) => p5.Vector;
+
+    class Particle {
       vel: p5.Vector;
-      acc: p5.Vector;
-      prevPos: p5.Vector;
 
-      constructor() {
-        this.pos = p.createVector(
-          p.random(s.params.width),
-          p.random(s.params.height)
+      ttl: number;
+
+      points: p5.Vector[];
+      i: number;
+
+      constructor(pos: p5.Vector) {
+        this.vel = p.createVector(0);
+        this.ttl = p.floor(p.random(10, u.ttl));
+
+        this.i = 0;
+        this.points = Array.from(
+          { length: p.floor(p.random(u.minLength, u.length)) },
+          () => pos.copy()
         );
-        this.vel = p.createVector();
-        this.acc = p.createVector();
-        this.prevPos = this.pos.copy();
       }
 
-      sample(flowfield: p5.Vector[]) {
-        const i = p.floor(this.pos.x / u.gridSize);
-        const j = p.floor(this.pos.y / u.gridSize);
-        this.acc.set(flowfield[i + j * cols]);
-      }
+      update(vf: velocityFunc) {
+        if (this.ttl-- <= 0) {
+          this.reset(placePoint());
+        }
+        const curr = this.points[this.i];
+        const nextI = (this.i + 1) % this.points.length;
 
-      update() {
-        this.prevPos.set(this.pos);
-        this.pos.add(this.vel);
-        this.edges();
-        this.vel.add(this.acc);
-        this.vel.limit(u.move);
+        const v = vf(curr);
+        this.vel.set(v);
+
+        this.vel.limit(u.speed);
+
+        this.points[nextI].set(curr);
+        this.points[nextI].add(this.vel);
+        this.i = nextI;
       }
 
       edges() {
-        if (this.pos.x > s.params.width) {
-          this.pos.x = 0;
-          this.prevPos.x = 0;
+        const pos = this.points[this.i];
+        return pos.x < 0 || pos.y < 0 || pos.x > p.width || pos.y > p.height;
+      }
+
+      reset(pos: p5.Vector) {
+        for (let i = 0; i < this.points.length; i++) {
+          this.points[i].set(pos);
         }
-        if (this.pos.x < 0) {
-          this.pos.x = s.params.width;
-          this.prevPos.x = s.params.width;
-        }
-        if (this.pos.y > s.params.height) {
-          this.pos.y = 0;
-          this.prevPos.y = 0;
-        }
-        if (this.pos.y < 0) {
-          this.pos.y = s.params.height;
-          this.prevPos.y = s.params.height;
-        }
+
+        this.ttl = p.floor(p.random(10, u.ttl));
+
+        this.vel.set(0);
       }
 
       show() {
-        p.stroke(0, 50);
-        p.strokeWeight(3);
-        // p.point(this.pos.x, this.pos.y);
-        p.line(this.prevPos.x, this.prevPos.y, this.pos.x, this.pos.y);
+        p.beginShape();
+        for (const pt of this.points.slice(this.i + 1)) {
+          p.vertex(pt.x, pt.y);
+        }
+        for (const pt of this.points.slice(0, this.i + 1)) {
+          p.vertex(pt.x, pt.y);
+        }
+        p.endShape();
       }
     }
 
-    function fieldSample(x: number, y: number): p5.Vector {
-      const n = p.noise(x * u.noiseSize, y * u.noiseSize) * p.TAU * 4;
-      return p.createVector(p.cos(n), p.sin(n));
-    }
+    let img: p5.Image;
+    let disc: PoissonDisc;
+    let particles: Particle[];
+    let attractors: p5.Vector[];
 
-    const colors = {
-      bg: p.color(252),
-      fg: p.color(0),
-      debug: p.color('red'),
+    const velFuncs: {
+      [Property: string]: velocityFunc;
+    } = {
+      noise: function (pt: p5.Vector): p5.Vector {
+        // const sample = img.get(pt.x, pt.y)[0];
+        const sample = fnoise(u.noiseIterations, pt.x * u.inc, pt.y * u.inc);
+        const a = sample * p.TAU * 2;
+        return p.createVector(Math.cos(a) * u.speed, Math.sin(a) * u.speed);
+      },
+      attractor: function (pt: p5.Vector): p5.Vector {
+        const vel = p.createVector(0);
+        for (let i = 0; i < attractors.length; i++) {
+          const attractor = attractors[i];
+          const diff = p5.Vector.sub(attractor, pt);
+          const dist = diff.mag();
+          diff.setMag(200 / dist);
+          if (i % 2 == 0) {
+            diff.mult(-1);
+          }
+          vel.add(diff);
+        }
+        vel.normalize().setMag(3);
+        return vel;
+      },
+      swirl: function (pt: p5.Vector): p5.Vector {
+        const vel = p.createVector(0);
+        for (let i = 0; i < attractors.length; i++) {
+          const attractor = attractors[i];
+          const a = u.alternate && i % 2 != 0 ? -u.angle : u.angle;
+          const diff = p5.Vector.sub(attractor, pt).rotate(a);
+          const dist = diff.mag();
+          diff.setMag(200 / dist);
+          vel.add(diff);
+        }
+        vel.normalize().setMag(3);
+        return vel;
+      },
     };
 
-    // The setup() function is defaulted by Sketcher,
-    //      but it can be overridden in this scope.
-    // p.setup = function() { ... }
+    function placePoint() {
+      switch (u.placement) {
+        case 'poisson':
+          return disc.points[p.floor(p.random(disc.points.length))];
+        case 'random':
+        default:
+          return p.createVector(p.random(p.width), p.random(p.height));
+      }
+    }
 
-    const fls = [...new Array(1000)].map(() => {
-      return new FlowLine();
-    });
+    function init() {
+      img = fnoiseImg(u.noiseIterations);
+      const margin = 10;
+      disc = new PoissonDisc({ p, r: 10 });
+      particles = disc.points.map((v) => new Particle(v));
+      attractors = new PoissonDisc({
+        p,
+        r: p.width / 5,
+        maxPoints: 5,
+        seedPoints: [p.createVector(p.width / 2, p.height / 2)],
+      }).points;
+    }
+
+    (s.params.controls.inc as UniformSlider).onChange = init;
+
+    p.disableFriendlyErrors = true;
+
+    p.setup = function () {
+      s.setup(p)();
+      init();
+    };
 
     p.draw = function () {
-      p.background(colors.bg);
-      p.stroke(colors.fg);
+      p.background(COLORS.BG);
+      p.stroke(COLORS.FG);
       p.strokeWeight(1);
+      p.noFill();
 
-      for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
-          const idx = i + j * cols;
-          flowfield[idx] = fieldSample(i, j);
-          if (u.debug) {
-            const x = i * u.gridSize;
-            const y = j * u.gridSize;
-            const f = flowfield[idx];
-            p.push();
-            p.stroke(colors.debug);
-            p.line(x, y, x + f.x * 10, y + f.y * 10);
-            p.pop();
+      if (u.debug) {
+        if (u.flow == 'noise') {
+          p.image(img, 0, 0);
+        }
+
+        if (u.flow == 'attractor' || u.flow == 'swirl') {
+          p.push();
+          p.strokeWeight(10);
+          p.stroke('red');
+          for (const attractor of attractors) {
+            p.point(attractor);
           }
+          p.pop();
         }
       }
 
-      for (const fl of fls) {
-        fl.sample(flowfield);
-        fl.update();
-        fl.show();
+      for (const particle of particles) {
+        const vf = velFuncs[u.flow] || velFuncs.swirl;
+        particle.update(vf);
+
+        if (particle.edges()) {
+          particle.reset(placePoint());
+        }
+
+        particle.show();
       }
+
+      // p.image(img, 0, 0);
+      // for (const pt of particles) {
+      //   pt.show();
+      //   pt.update(img);
+      // }
     };
   },
 });
