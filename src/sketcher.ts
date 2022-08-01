@@ -49,6 +49,16 @@ type Params<UC extends UniformControls> = {
     /** framerate defines the target framerate for p5js. It is not a min or a
      * max, but p5 will try to follow it. */
     framerate?: number;
+
+    /** svgRenderer uses svg rendering. If this is off, then the
+     * canvas renderer is used until saving. There are a couple nuances with
+     * this behavior -- we need to swap the renderer in flight and draw once,
+     * so you will get one frame beyond what you see on the canvas. If you enable
+     * this and use the svg renderer, saving will give you exactly what you see
+     * on the screen, but rendering performance is worse per frame.
+     *
+     * */
+    svgRenderer?: boolean;
   };
 };
 
@@ -85,6 +95,7 @@ class Sketcher<UC extends UniformControls> {
     );
     params.settings.loop ??= false;
     params.settings.autoresize ??= true;
+    params.settings.svgRenderer ??= true;
     this.params = params;
     this.uniforms = new Proxy(params.controls, {
       get: this.getUniform.bind(this),
@@ -113,8 +124,46 @@ class Sketcher<UC extends UniformControls> {
   }
 
   save() {
-    if (this.p !== undefined)
-      this.p.save(`${this.params.title}_${this.params.settings.seed}.svg`);
+    // console.log(this.p);
+    if (this.p !== undefined) {
+      if (this.params.settings.svgRenderer) {
+        // We're using the svg renderer, so we can just use the save function directly.
+        this.p.save(`${this.params.title}_${this.params.settings.seed}.svg`);
+      } else {
+        // WARNING(jw): Shenanigans ahead!!
+        // We entered this block because we're using the canvas renderer, but
+        // we want to save an svg. To do this, we swap out p5's renderer to a
+        // fake svg element, draw a frame, save it, then swap the renderer back
+        // to what it was before we started. Note that this means that we don't
+        // actually save the current frame, but instead we get the next frame,
+        // so it's not a perfect solution.
+
+        // NOTE(jw): Because of how p5 and the svg extension work, some of the
+        // typing here doesn't work. So we ignore some errors. Yes, it sucks.
+        /* eslint-disable @typescript-eslint/ban-ts-comment */
+        // @ts-ignore
+        const oldRenderer = this.p._renderer;
+        const fakeParent = document.createElement('div');
+        const fakeChild = fakeParent.appendChild(
+          document.createElement('canvas')
+        );
+        // @ts-ignore
+        this.p._setProperty(
+          '_renderer',
+          // @ts-ignore
+          new p5.RendererSVG(fakeChild, this.p, false)
+        );
+        // @ts-ignore
+        this.p._renderer.resize(this.params.width, this.params.height);
+
+        this.p.redraw();
+        this.p.save(`${this.params.title}_${this.params.settings.seed}.svg`);
+
+        // @ts-ignore
+        this.p._setProperty('_renderer', oldRenderer);
+        /* eslint-enable @typescript-eslint/ban-ts-comment */
+      }
+    }
   }
 
   setLoop(loop: boolean) {
@@ -156,9 +205,13 @@ class Sketcher<UC extends UniformControls> {
    */
   setup(p: p5) {
     return () => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore NOTE(jw): p.SVG gets imperitively added by p5svg, IDE may not understand it, so ts-ignore it.
-      p.createCanvas(this.params.width, this.params.height);
+      if (this.params.settings.svgRenderer) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore NOTE(jw): p.SVG gets imperitively added by p5svg, IDE may not understand it, so ts-ignore it.
+        p.createCanvas(this.params.width, this.params.height, p.SVG);
+      } else {
+        p.createCanvas(this.params.width, this.params.height);
+      }
       if (!this.params.settings.loop) p.noLoop();
 
       const seed = this.params.settings.seed as number;
