@@ -50,6 +50,7 @@ export type UniformCheckbox = {
 
 export type UniformButton = {
   type: 'button';
+  value: boolean;
   onChange?: (u: UniformButton) => void;
   onClick?: (u: UniformButton) => void;
 };

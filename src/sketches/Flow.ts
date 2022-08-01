@@ -1,7 +1,6 @@
 import p5 from 'p5';
 import {
   checkbox,
-  group,
   radio,
   slider,
   UniformSlider,
@@ -52,7 +51,6 @@ export const sketcher = new Sketcher({
     s: Sketcher<typeof controls>,
     u: Uniforms<typeof controls>
   ) => {
-    const MARGIN = 100;
     const COLORS = {
       BG: p.color(252),
       FG: p.color(42),
@@ -216,7 +214,6 @@ export const sketcher = new Sketcher({
 
     function init() {
       img = fnoiseImg(u.noiseIterations);
-      const margin = 10;
       disc = new PoissonDisc({ p, r: 10 });
       particles = disc.points.map((v) => new Particle(v));
       attractors = new PoissonDisc({
