@@ -44,7 +44,6 @@ export const sketcher = new Sketcher({
   settings: {
     loop: true,
     redrawOnChanges: true,
-    svgRenderer: false,
   },
 
   sketch: (
