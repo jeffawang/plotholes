@@ -14,7 +14,7 @@ export default function ButtonControl({
     <Button
       size="sm"
       variant="outline"
-      onClick={(u) => {
+      onClick={(_u) => {
         if (uniform.onClick) uniform.onClick(uniform);
       }}
     >

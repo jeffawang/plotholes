@@ -1,11 +1,5 @@
 import p5 from 'p5';
-import {
-  checkbox,
-  group,
-  radio,
-  slider,
-  UniformControls,
-} from '../components/Controls/UniformControls';
+import { group, radio, slider } from '../components/Controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
 
 const controls = {
@@ -207,7 +201,6 @@ export const sketcher = new Sketcher({
             }
           }
         } else if (u.placement == 'forces') {
-          let intersections = 0;
           for (const other of circles) {
             if (circle === other) {
               continue;
