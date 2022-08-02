@@ -3,7 +3,7 @@ import { checkbox, slider } from '../components/Controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
 
 const controls = {
-  noiseSize: { type: slider, value: 0.02, min: 0.01, max: 0.05, step: 0.001 },
+  noiseSize: { type: slider, value: 50, min: 0.01, max: 100, step: 0.001 },
   gridSize: { type: slider, value: 10, min: 8, max: 100, step: 1 },
   move: { type: slider, value: 5, min: 1, max: 25, step: 1 },
   debug: { type: checkbox, value: false },
@@ -127,17 +127,15 @@ export const sketcher = new Sketcher({
 
       p.translate(center);
 
-      p.push();
-      p.strokeWeight(10);
-      p.point(0, 0);
-      p.pop();
-
       const shapes: Shape[] = [];
+
+      const n = p.noise(1613, 234623, p.frameCount * 0.01);
+
       shapes[0] = new Shape([]);
-      shapes[0].add(p.createVector(10, 100));
-      shapes[0].add(p.createVector(60, 100));
-      shapes[0].add(p.createVector(60, 200));
-      shapes[0].add(p.createVector(10, 200));
+      shapes[0].add(p.createVector(10, 100 + n * u.noiseSize));
+      shapes[0].add(p.createVector(60, 100 + n * u.noiseSize));
+      shapes[0].add(p.createVector(60, 200 + n * u.noiseSize));
+      shapes[0].add(p.createVector(10, 200 + n * u.noiseSize));
       shapes[0].draw();
 
       shapes[1] = new Shape([]);
@@ -155,27 +153,74 @@ export const sketcher = new Sketcher({
       shapes[2].draw();
 
       p.stroke('red');
-      p.line(0, 0, mouse.x * 1000, mouse.y * 1000);
 
-      const ray = new LineSegment(p.createVector(0, 0), mouse, true);
+      p.push();
+      p.strokeWeight(10);
+      p.point(mouse);
+      p.pop();
+
+      // const ray = new LineSegment(p.createVector(0, 0), mouse, true);\
+
+      const rayOrigin = mouse;
+      const intersections: [p5.Vector, number][] = [];
       for (const shape of shapes) {
         for (let i = 0; i < shape.points.length; i++) {
-          const seg = LineSegment.fromPoints(
-            shape.points[i],
-            shape.points[(i + 1) % shape.points.length],
-            false
+          let closest: p5.Vector | undefined = undefined;
+          const ray = new LineSegment(
+            rayOrigin,
+            p5.Vector.sub(shape.points[i], mouse),
+            true
           );
-          const pt = ray.intersectionPoint(seg);
-          if (pt == null) {
-            continue;
+
+          for (const shape of shapes) {
+            for (let j = 0; j < shape.points.length; j++) {
+              const seg = LineSegment.fromPoints(
+                shape.points[j],
+                shape.points[(j + 1) % shape.points.length],
+                false
+              );
+              const pt = ray.intersectionPoint(seg);
+              if (pt == null) {
+                continue;
+              }
+
+              p.push();
+              p.strokeWeight(10);
+              p.stroke('red');
+              p.point(pt);
+              p.pop();
+
+              if (!closest || rayOrigin.dist(pt) < rayOrigin.dist(closest)) {
+                closest = pt;
+              }
+            }
           }
-          p.push();
-          p.strokeWeight(10);
-          p.stroke('red');
-          p.point(pt);
-          p.pop();
+
+          if (closest) {
+            p.push();
+            p.strokeWeight(1);
+            p.line(rayOrigin.x, rayOrigin.y, closest.x, closest.y);
+            p.pop();
+            intersections.push([
+              closest,
+              p5.Vector.sub(closest, rayOrigin).heading(),
+            ]);
+          }
         }
       }
+      p.push();
+      p.stroke('red');
+      p.fill(255, 0, 0, 50);
+      p.beginShape();
+      intersections.sort((a, b) => a[1] - b[1]);
+      for (let i = 0; i < intersections.length; i++) {
+        const curr = intersections[i][0];
+        const next = intersections[(i + 1) % intersections.length][0];
+        p.triangle(curr.x, curr.y, next.x, next.y, rayOrigin.x, rayOrigin.y);
+      }
+
+      p.endShape(p.CLOSE);
+      p.pop();
     };
   },
 });
