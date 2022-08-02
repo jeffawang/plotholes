@@ -95,7 +95,7 @@ class Sketcher<UC extends UniformControls> {
     );
     params.settings.loop ??= false;
     params.settings.autoresize ??= true;
-    params.settings.svgRenderer ??= true;
+    params.settings.svgRenderer ??= false;
     this.params = params;
     this.uniforms = new Proxy(params.controls, {
       get: this.getUniform.bind(this),
