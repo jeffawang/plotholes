@@ -1,6 +1,7 @@
 import p5 from 'p5';
 import {
   checkbox,
+  group,
   radio,
   slider,
   UniformSlider,
@@ -9,22 +10,16 @@ import { Sketcher, Uniforms } from '../sketcher';
 import PoissonDisc from './helpers/PoissonDisc';
 
 const controls = {
-  inc: { type: slider, value: 0.002, min: 0.0005, max: 0.5 },
-  noiseIterations: { type: slider, value: 0, min: 0, max: 5 },
-  minLength: { type: slider, value: 10, min: 1, max: 200, step: 1 },
-  length: { type: slider, value: 50, min: 1, max: 200, step: 1 },
-  ttl: { type: slider, value: 40, min: 10, max: 240 },
-  speed: { type: slider, value: 5, min: 1, max: 240 },
-  placement: {
-    type: radio,
-    value: 'poisson',
-    options: ['poisson', 'random'],
-  },
   flow: {
     type: radio,
     value: 'swirl',
     options: ['noise', 'attractor', 'swirl'],
   },
+
+  ttl: { type: slider, value: 40, min: 10, max: 240 },
+  speed: { type: slider, value: 5, min: 1, max: 240 },
+  alternate: { type: checkbox, value: false },
+
   angle: {
     type: slider,
     value: Math.PI / 3,
@@ -32,7 +27,27 @@ const controls = {
     max: Math.PI * 2,
     step: 0.001,
   },
-  alternate: { type: checkbox, value: false },
+
+  placement: {
+    type: radio,
+    value: 'poisson',
+    options: ['poisson', 'random'],
+  },
+  noiseParams: {
+    type: group,
+    value: {
+      inc: {
+        type: slider,
+        value: 0.0005,
+        min: 0.0001,
+        max: 0.005,
+        step: 0.0001,
+      },
+      noiseIterations: { type: slider, value: 0, min: 0, max: 5 },
+    },
+  },
+  minLength: { type: slider, value: 10, min: 1, max: 200, step: 1 },
+  length: { type: slider, value: 50, min: 1, max: 200, step: 1 },
   debug: { type: checkbox, value: false },
 };
 
@@ -85,9 +100,9 @@ export const sketcher = new Sketcher({
           img.pixels[index + 2] = 0;
           img.pixels[index + 3] = 255;
 
-          xoff += u.inc + 0.00001;
+          xoff += u.noiseParams.inc + 0.00001;
         }
-        yoff += u.inc + 0.00001;
+        yoff += u.noiseParams.inc + 0.00001;
       }
       img.updatePixels();
       return img;
@@ -168,7 +183,11 @@ export const sketcher = new Sketcher({
     } = {
       noise: function (pt: p5.Vector): p5.Vector {
         // const sample = img.get(pt.x, pt.y)[0];
-        const sample = fnoise(u.noiseIterations, pt.x * u.inc, pt.y * u.inc);
+        const sample = fnoise(
+          u.noiseParams.noiseIterations,
+          pt.x * u.noiseParams.inc,
+          pt.y * u.noiseParams.inc
+        );
         const a = sample * p.TAU * 2;
         return p.createVector(Math.cos(a) * u.speed, Math.sin(a) * u.speed);
       },
@@ -213,7 +232,7 @@ export const sketcher = new Sketcher({
     }
 
     function init() {
-      img = fnoiseImg(u.noiseIterations);
+      img = fnoiseImg(u.noiseParams.noiseIterations);
       disc = new PoissonDisc({ p, r: 10 });
       particles = disc.points.map((v) => new Particle(v));
       attractors = new PoissonDisc({
@@ -224,7 +243,7 @@ export const sketcher = new Sketcher({
       }).points;
     }
 
-    (s.params.controls.inc as UniformSlider).onChange = init;
+    (s.params.controls.noiseParams.value.inc as UniformSlider).onChange = init;
 
     p.setup = function () {
       s.setup(p)();
