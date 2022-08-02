@@ -11,6 +11,7 @@ import {
 } from '../components/Controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
 import PoissonDisc from './helpers/PoissonDisc';
+import { scaledMargin } from './helpers/Book';
 
 const controls = {
   flow: {
@@ -124,12 +125,7 @@ export const sketcher = new Sketcher({
       return img;
     }
 
-    const MARGIN = {
-      left: 150 * 0.75,
-      right: 50 * 0.75,
-      top: 50 * 0.75,
-      bottom: 50 * 0.75,
-    };
+    const MARGIN = scaledMargin(0.75);
 
     class Particle {
       vel: p5.Vector;
