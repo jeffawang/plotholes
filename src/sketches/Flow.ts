@@ -1,9 +1,12 @@
 import p5 from 'p5';
 import {
+  button,
   checkbox,
   group,
   radio,
   slider,
+  UniformButton,
+  UniformRadio,
   UniformSlider,
 } from '../components/Controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
@@ -15,6 +18,8 @@ const controls = {
     value: 'swirl',
     options: ['noise', 'attractor', 'swirl'],
   },
+
+  reset: { type: button, value: false },
 
   ttl: { type: slider, value: 40, min: 10, max: 240 },
   speed: { type: slider, value: 5, min: 1, max: 240 },
@@ -28,10 +33,21 @@ const controls = {
     step: 0.001,
   },
 
-  placement: {
+  spawn: {
     type: radio,
     value: 'poisson',
     options: ['poisson', 'random'],
+  },
+  attractors: {
+    type: group,
+    value: {
+      distribution: {
+        type: radio,
+        value: 'poisson',
+        options: ['poisson', 'circle'],
+      },
+      count: { type: slider, value: 4, min: 1, max: 10, step: 1 },
+    },
   },
   noiseParams: {
     type: group,
@@ -53,8 +69,8 @@ const controls = {
 
 export const sketcher = new Sketcher({
   title: 'flow',
-  width: 512,
-  height: 512,
+  width: 1400 * 0.75,
+  height: 1100 * 0.75,
   controls: controls,
   settings: {
     loop: true,
@@ -108,7 +124,12 @@ export const sketcher = new Sketcher({
       return img;
     }
 
-    type velocityFunc = (p: p5.Vector) => p5.Vector;
+    const MARGIN = {
+      left: 150 * 0.75,
+      right: 50 * 0.75,
+      top: 50 * 0.75,
+      bottom: 50 * 0.75,
+    };
 
     class Particle {
       vel: p5.Vector;
@@ -163,11 +184,23 @@ export const sketcher = new Sketcher({
 
       show() {
         p.beginShape();
+
+        function vert(pt: p5.Vector) {
+          if (
+            pt.x > MARGIN.left &&
+            pt.x < p.width - MARGIN.right &&
+            pt.y > MARGIN.top &&
+            pt.y < p.height - MARGIN.bottom
+          ) {
+            p.vertex(pt.x, pt.y);
+          }
+        }
+
         for (const pt of this.points.slice(this.i + 1)) {
-          p.vertex(pt.x, pt.y);
+          vert(pt);
         }
         for (const pt of this.points.slice(0, this.i + 1)) {
-          p.vertex(pt.x, pt.y);
+          vert(pt);
         }
         p.endShape();
       }
@@ -178,6 +211,7 @@ export const sketcher = new Sketcher({
     let particles: Particle[];
     let attractors: p5.Vector[];
 
+    type velocityFunc = (p: p5.Vector) => p5.Vector;
     const velFuncs: {
       [Property: string]: velocityFunc;
     } = {
@@ -222,7 +256,7 @@ export const sketcher = new Sketcher({
     };
 
     function placePoint() {
-      switch (u.placement) {
+      switch (u.spawn) {
         case 'poisson':
           return disc.points[p.floor(p.random(disc.points.length))];
         case 'random':
@@ -233,7 +267,7 @@ export const sketcher = new Sketcher({
 
     function init() {
       img = fnoiseImg(u.noiseParams.noiseIterations);
-      disc = new PoissonDisc({ p, r: 10 });
+      disc = new PoissonDisc({ p, r: 8 });
       particles = disc.points.map((v) => new Particle(v));
       attractors = new PoissonDisc({
         p,
@@ -243,6 +277,43 @@ export const sketcher = new Sketcher({
       }).points;
     }
 
+    function reset() {
+      init();
+    }
+
+    function resetAttractors() {
+      switch (u.attractors.distribution) {
+        case 'poisson':
+          attractors = new PoissonDisc({
+            p,
+            r: p.width / 5,
+            maxPoints: 5,
+            seedPoints: [p.createVector(p.width / 2, p.height / 2)],
+          }).points;
+          break;
+        case 'circle':
+          const da = p.TAU / u.attractors.count;
+          const center = p.createVector(p.width / 2, p.height / 2);
+          const radius = 200;
+          attractors = Array.from({ length: u.attractors.count }, (_, k) => {
+            const a = da * k;
+            return center
+              .copy()
+              .add(p.createVector(Math.cos(a) * radius, Math.sin(a) * radius));
+          });
+          // attractors = [
+          //   p.createVector(p.width / 3, p.height / 2),
+          //   p.createVector((p.width / 3) * 2, p.height / 2),
+          // ];
+          break;
+      }
+    }
+
+    (s.params.controls.reset as UniformButton).onClick = reset;
+    (s.params.controls.attractors.value.distribution as UniformRadio).onChange =
+      resetAttractors;
+    (s.params.controls.attractors.value.count as UniformSlider).onChange =
+      resetAttractors;
     (s.params.controls.noiseParams.value.inc as UniformSlider).onChange = init;
 
     p.setup = function () {
