@@ -206,7 +206,6 @@ export const sketcher = new Sketcher({
               continue;
             }
             if (circle.intersects(other)) {
-              intersections += 1;
               const forceDirection = p5.Vector.sub(
                 other.pos,
                 circle.pos
