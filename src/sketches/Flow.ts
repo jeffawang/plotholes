@@ -198,7 +198,7 @@ export const sketcher = new Sketcher({
           const diff = p5.Vector.sub(attractor, pt);
           const dist = diff.mag();
           diff.setMag(200 / dist);
-          if (i % 2 == 0) {
+          if (u.alternate && i % 2 == 0) {
             diff.mult(-1);
           }
           vel.add(diff);
