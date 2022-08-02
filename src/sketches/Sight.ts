@@ -4,7 +4,7 @@ import { Sketcher, Uniforms } from '../sketcher';
 
 const controls = {
   noiseSize: { type: slider, value: 50, min: 0.01, max: 100, step: 0.001 },
-  dotCount: { type: slider, value: 3, min: 1, max: 3, step: 1 },
+  dotCount: { type: slider, value: 4, min: 1, max: 4, step: 1 },
   move: { type: slider, value: 5, min: 1, max: 25, step: 1 },
   debug: { type: checkbox, value: false },
   veryDebug: { type: checkbox, value: false },
@@ -191,11 +191,15 @@ export const sketcher = new Sketcher({
           rayOrigin: mouse.copy().rotate((p.TAU / u.dotCount) * 2),
           color: p.color(255, 255, 0, 50),
         },
+        {
+          rayOrigin: mouse.copy().rotate((p.TAU / u.dotCount) * 3),
+          color: p.color(0, 0, 0, 50),
+        },
       ];
 
       for (const { rayOrigin, color } of emitters.slice(
         0,
-        Math.min(u.dotCount, 3)
+        Math.min(u.dotCount, 4)
       )) {
         // const rayOrigin = mouse;
         const intersections: [p5.Vector, number][] = [];
@@ -242,7 +246,7 @@ export const sketcher = new Sketcher({
           }
         }
         p.push();
-        p.stroke('red');
+        p.stroke(100);
         p.strokeWeight(1);
         p.fill(color);
         p.beginShape();
