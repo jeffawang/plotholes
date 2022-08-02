@@ -1,6 +1,7 @@
 import p5 from 'p5';
 import { group, radio, slider } from '../components/Controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
+import { effectiveCenter, scaledMargin } from './helpers/Book';
 
 const controls = {
   circles: {
@@ -8,16 +9,17 @@ const controls = {
     value: {
       margin: { type: slider, value: 0, min: 0, max: 100, step: 1 },
       maxCircles: { type: slider, value: 1000, min: 0, max: 5000, step: 1 },
-      growRate: { type: slider, value: 1, min: 0, max: 10, step: 0.25 },
+      growRate: { type: slider, value: 3, min: 0, max: 10, step: 0.25 },
+      maxDist: { type: slider, value: 220, min: 100, max: 1000, step: 5 },
     },
     collapse: true, // TODO: this doesn't work, fix it
   },
   placement: {
     type: radio,
-    value: 'forces',
+    value: 'random',
     options: ['random', 'forces'],
   },
-  spawnDelay: { type: slider, value: 2, min: 0, max: 1000, step: 0.25 },
+  spawnDelay: { type: slider, value: 1, min: 0, max: 1000, step: 0.25 },
   forces: {
     type: group,
     value: {
@@ -34,6 +36,7 @@ const controls = {
 };
 
 const scale = 0.75;
+const MARGIN = scaledMargin(scale);
 
 export const sketcher = new Sketcher({
   title: 'circles',
@@ -65,24 +68,29 @@ export const sketcher = new Sketcher({
       color: p5.Color;
 
       lifetimeIntersections: number;
+      stunt?: (c: Circle) => boolean;
 
-      constructor(center: p5.Vector) {
+      constructor(center: p5.Vector, stunt?: (c: Circle) => boolean) {
         this.pos = center;
         this.radius = 0;
         this.growing = true;
         this.vel = p.createVector(0, 0);
         this.color = p.color(0);
         this.lifetimeIntersections = 0;
+        this.stunt = stunt;
       }
 
       show() {
         p.push();
-        p.fill(this.color);
+        // p.fill(this.color);
         p.circle(this.pos.x, this.pos.y, this.radius * 2);
         p.pop();
       }
 
       update() {
+        if (this.stunt && this.stunt(this)) {
+          this.growing = false;
+        }
         if (this.growing) {
           this.radius += u.circles.growRate;
         }
@@ -153,6 +161,7 @@ export const sketcher = new Sketcher({
           const c = randomPoint();
 
           if (
+            center.dist(c) < maxDist &&
             allCircles
               .slice(0, numCircles)
               .every(
@@ -168,6 +177,22 @@ export const sketcher = new Sketcher({
       function forces(): p5.Vector {
         const c = randomPoint();
         return c;
+      }
+
+      const ec = effectiveCenter(p.width, p.height, MARGIN);
+      const offset = p.createVector(-100, 100);
+      const redCircles = 500;
+      let maxDist = u.circles.maxDist;
+      if (numCircles < redCircles) {
+        ec.add(offset);
+      } else {
+        maxDist = offset.mag() + u.circles.maxDist;
+      }
+
+      const center = ec;
+
+      function stunt(c: Circle) {
+        return center.dist(c.pos) + c.radius > maxDist;
       }
 
       // add a circle if we can
@@ -186,7 +211,7 @@ export const sketcher = new Sketcher({
             break;
         }
         if (c != null) {
-          allCircles[numCircles] = new Circle(c);
+          allCircles[numCircles] = new Circle(c, stunt);
           numCircles += 1;
         } else {
           console.log('failed to place a new circle, sorry buddy!');
@@ -225,8 +250,14 @@ export const sketcher = new Sketcher({
           }
         }
       }
-      for (const circle of circles) {
+      for (let i = 0; i < circles.length; i++) {
+        const circle = circles[i];
         circle.update();
+        if (i < redCircles) {
+          p.stroke('red');
+        } else {
+          p.stroke(colors.fg);
+        }
         circle.show();
       }
     };
