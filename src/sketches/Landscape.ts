@@ -10,7 +10,8 @@ const controls = {
   style: { type: radio, value: 'fill', options: ['fill', 'line'] },
   count: { type: slider, value: 5, min: 1, max: 100, step: 1 },
   perpcent: { type: slider, value: 0.1, min: 0, max: 0.6, step: 0.01 },
-  noise: { type: slider, value: 0.2, min: 0, max: 0.6, step: 0.05 },
+  noise: { type: slider, value: 0.2, min: -0.6, max: 0.6, step: 0.05 },
+  jitter: { type: slider, value: 0.2, min: -1, max: 1, step: 0.05 },
   debug: { type: checkbox, value: false },
   iterations: { type: slider, value: 6, min: 1, max: 13, step: 1 },
 };
@@ -39,6 +40,13 @@ export const sketcher = new Sketcher({
 
     type line = [p5.Vector, p5.Vector];
 
+    function maybeNegate(x: number) {
+      if (p.random(0, 1) > 0.5) {
+        return -x;
+      }
+      return x;
+    }
+
     class Landscape {
       // implicit binary tree structure
       lines: line[];
@@ -60,11 +68,9 @@ export const sketcher = new Sketcher({
             .setMag(1)
             .rotate(p.PI / 2);
           // calculate new point
-          let mag =
-            p5.Vector.dist(line[0], line[1]) * u.perpcent * p.random(0.5, 1);
-          if (p.random(0, 1) > 0.5) {
-            mag *= -1;
-          }
+          const mag = maybeNegate(
+            p5.Vector.dist(line[0], line[1]) * u.perpcent * p.random(0.5, 1)
+          );
           const newPoint = midpoint.add(perp.mult(mag));
           this.lines.push([line[0], newPoint], [newPoint, line[1]]);
         }
@@ -125,8 +131,14 @@ export const sketcher = new Sketcher({
           startY = p.height / 2;
         }
         const landscape = new Landscape(
-          p.createVector(p.width * 0.05, startY),
-          p.createVector(p.width * 0.95, startY)
+          p.createVector(
+            p.width * 0.05,
+            startY + u.jitter * p.random(-0.5, 0.5) * p.height
+          ),
+          p.createVector(
+            p.width * 0.95,
+            startY + u.jitter * p.random(-0.5, 0.5) * p.height
+          )
         );
 
         for (let i = 0; i < Math.min(numIterations, u.iterations); i++) {
