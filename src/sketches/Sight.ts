@@ -167,6 +167,16 @@ export const sketcher = new Sketcher({
         ])
       );
 
+      const numSamples = 80;
+      const radius = 290;
+      const circle = new Shape(
+        Array.from({ length: numSamples }, (_, k) => {
+          const a = (p.TAU / numSamples) * k;
+          return p.createVector(p.cos(a), p.sin(a)).mult(radius);
+        })
+      );
+      shapes.push(circle);
+
       p.stroke('red');
 
       p.push();
