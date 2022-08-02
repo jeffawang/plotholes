@@ -197,10 +197,6 @@ export const sketcher = new Sketcher({
           }
 
           if (closest) {
-            p.push();
-            p.strokeWeight(1);
-            p.line(rayOrigin.x, rayOrigin.y, closest.x, closest.y);
-            p.pop();
             intersections.push([
               closest,
               p5.Vector.sub(closest, rayOrigin).heading(),
@@ -210,16 +206,14 @@ export const sketcher = new Sketcher({
       }
       p.push();
       p.stroke('red');
+      p.strokeWeight(1);
       p.fill(255, 0, 0, 50);
-      p.beginShape();
       intersections.sort((a, b) => a[1] - b[1]);
       for (let i = 0; i < intersections.length; i++) {
         const curr = intersections[i][0];
         const next = intersections[(i + 1) % intersections.length][0];
         p.triangle(curr.x, curr.y, next.x, next.y, rayOrigin.x, rayOrigin.y);
       }
-
-      p.endShape(p.CLOSE);
       p.pop();
     };
   },
