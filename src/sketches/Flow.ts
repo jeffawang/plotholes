@@ -11,7 +11,7 @@ import {
 } from '../components/Controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
 import PoissonDisc from './helpers/PoissonDisc';
-import { scaledMargin } from './helpers/Book';
+import { scaledMargin, effectiveCenter } from './helpers/Book';
 
 const controls = {
   flow: {
@@ -289,7 +289,7 @@ export const sketcher = new Sketcher({
           break;
         case 'circle':
           const da = p.TAU / u.attractors.count;
-          const center = p.createVector(p.width / 2, p.height / 2);
+          const center = effectiveCenter(p.width, p.height, MARGIN);
           const radius = 200;
           attractors = Array.from({ length: u.attractors.count }, (_, k) => {
             const a = da * k;

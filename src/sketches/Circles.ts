@@ -33,10 +33,12 @@ const controls = {
   },
 };
 
+const scale = 0.75;
+
 export const sketcher = new Sketcher({
   title: 'circles',
-  width: 600,
-  height: 600,
+  width: 1400 * scale,
+  height: 1100 * scale,
   controls: controls,
   settings: {
     loop: true,
