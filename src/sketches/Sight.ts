@@ -131,26 +131,41 @@ export const sketcher = new Sketcher({
 
       const n = p.noise(1613, 234623, p.frameCount * 0.01);
 
-      shapes[0] = new Shape([]);
-      shapes[0].add(p.createVector(10, 100 + n * u.noiseSize));
-      shapes[0].add(p.createVector(60, 100 + n * u.noiseSize));
-      shapes[0].add(p.createVector(60, 200 + n * u.noiseSize));
-      shapes[0].add(p.createVector(10, 200 + n * u.noiseSize));
+      shapes[0] = new Shape([
+        p.createVector(10, 100 + n * u.noiseSize),
+        p.createVector(60, 100 + n * u.noiseSize),
+        p.createVector(60, 200 + n * u.noiseSize),
+        p.createVector(10, 200 + n * u.noiseSize),
+      ]);
       shapes[0].draw();
 
-      shapes[1] = new Shape([]);
-      shapes[1].add(p.createVector(50, -10));
-      shapes[1].add(p.createVector(160, 10));
-      shapes[1].add(p.createVector(60, -200));
+      shapes[1] = new Shape([
+        p.createVector(50, -10),
+        p.createVector(160, 10),
+        p.createVector(60, -200),
+      ]);
       shapes[1].draw();
 
-      shapes[2] = new Shape([]);
-      shapes[2].add(p.createVector(-200, -200));
-      shapes[2].add(p.createVector(-250, -150));
-      shapes[2].add(p.createVector(-220, -100));
-      shapes[2].add(p.createVector(-150, -130));
-      shapes[2].add(p.createVector(-160, -180));
+      shapes[2] = new Shape([
+        p.createVector(-200, -200),
+        p.createVector(-250, -150),
+        p.createVector(-220, -100),
+        p.createVector(-150, -130),
+        p.createVector(-160, -180),
+      ]);
       shapes[2].draw();
+
+      const hw = p.width / 2;
+      const hh = p.height / 2;
+      shapes.push(
+        new Shape([
+          p.createVector(-hw, -hh),
+          p.createVector(hw, -hh),
+          p.createVector(hw, hh),
+          p.createVector(0, hh),
+          p.createVector(-hw, hh),
+        ])
+      );
 
       p.stroke('red');
 
@@ -165,42 +180,40 @@ export const sketcher = new Sketcher({
       const intersections: [p5.Vector, number][] = [];
       for (const shape of shapes) {
         for (let i = 0; i < shape.points.length; i++) {
-          let closest: p5.Vector | undefined = undefined;
-          const ray = new LineSegment(
-            rayOrigin,
-            p5.Vector.sub(shape.points[i], mouse),
-            true
-          );
+          const pointRay = p5.Vector.sub(shape.points[i], rayOrigin);
+          const rays = [
+            pointRay.copy().rotate(-0.0001),
+            pointRay,
+            pointRay.copy().rotate(0.0001),
+          ].map((target) => new LineSegment(rayOrigin, target, true));
 
-          for (const shape of shapes) {
-            for (let j = 0; j < shape.points.length; j++) {
-              const seg = LineSegment.fromPoints(
-                shape.points[j],
-                shape.points[(j + 1) % shape.points.length],
-                false
-              );
-              const pt = ray.intersectionPoint(seg);
-              if (pt == null) {
-                continue;
-              }
+          for (const ray of rays) {
+            let closest: p5.Vector | undefined = undefined;
 
-              p.push();
-              p.strokeWeight(10);
-              p.stroke('red');
-              p.point(pt);
-              p.pop();
+            for (const shape of shapes) {
+              for (let j = 0; j < shape.points.length; j++) {
+                const seg = LineSegment.fromPoints(
+                  shape.points[j],
+                  shape.points[(j + 1) % shape.points.length],
+                  false
+                );
+                const pt = ray.intersectionPoint(seg);
+                if (pt == null) {
+                  continue;
+                }
 
-              if (!closest || rayOrigin.dist(pt) < rayOrigin.dist(closest)) {
-                closest = pt;
+                if (!closest || rayOrigin.dist(pt) < rayOrigin.dist(closest)) {
+                  closest = pt;
+                }
               }
             }
-          }
 
-          if (closest) {
-            intersections.push([
-              closest,
-              p5.Vector.sub(closest, rayOrigin).heading(),
-            ]);
+            if (closest) {
+              intersections.push([
+                closest,
+                p5.Vector.sub(closest, rayOrigin).heading(),
+              ]);
+            }
           }
         }
       }
@@ -208,12 +221,20 @@ export const sketcher = new Sketcher({
       p.stroke('red');
       p.strokeWeight(1);
       p.fill(255, 0, 0, 50);
-      intersections.sort((a, b) => a[1] - b[1]);
-      for (let i = 0; i < intersections.length; i++) {
-        const curr = intersections[i][0];
-        const next = intersections[(i + 1) % intersections.length][0];
-        p.triangle(curr.x, curr.y, next.x, next.y, rayOrigin.x, rayOrigin.y);
-      }
+      p.beginShape();
+      intersections
+        .sort((a, b) => a[1] - b[1])
+        .forEach(([pt, _]) => {
+          p.vertex(pt.x, pt.y);
+          p.line(rayOrigin.x, rayOrigin.y, pt.x, pt.y);
+
+          p.push();
+          p.strokeWeight(8);
+          p.stroke('red');
+          p.point(pt);
+          p.pop();
+        });
+      p.endShape(p.CLOSE);
       p.pop();
     };
   },
