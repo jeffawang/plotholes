@@ -7,6 +7,7 @@ const controls = {
   gridSize: { type: slider, value: 10, min: 8, max: 100, step: 1 },
   move: { type: slider, value: 5, min: 1, max: 25, step: 1 },
   debug: { type: checkbox, value: false },
+  veryDebug: { type: checkbox, value: false },
 };
 
 export const sketcher = new Sketcher({
@@ -84,7 +85,7 @@ export const sketcher = new Sketcher({
           p5.Vector.sub(this.origin, other.origin).dot(n1) /
           other.direction.dot(n1);
 
-        if (u.debug) {
+        if (u.veryDebug) {
           const ns = this.direction.copy();
           p.push();
           ns.mult(s1);
@@ -93,7 +94,7 @@ export const sketcher = new Sketcher({
           p.point(p5.Vector.add(this.origin, ns));
           p.pop();
         }
-        if (u.debug) {
+        if (u.veryDebug) {
           const ns = other.direction.copy();
           ns.mult(s2);
           p.push();
@@ -167,7 +168,7 @@ export const sketcher = new Sketcher({
         ])
       );
 
-      const numSamples = 80;
+      const numSamples = 60;
       const radius = 290;
       const circle = new Shape(
         Array.from({ length: numSamples }, (_, k) => {
@@ -236,13 +237,15 @@ export const sketcher = new Sketcher({
         .sort((a, b) => a[1] - b[1])
         .forEach(([pt, _]) => {
           p.vertex(pt.x, pt.y);
-          p.line(rayOrigin.x, rayOrigin.y, pt.x, pt.y);
 
-          p.push();
-          p.strokeWeight(8);
-          p.stroke('red');
-          p.point(pt);
-          p.pop();
+          if (u.debug) {
+            p.line(rayOrigin.x, rayOrigin.y, pt.x, pt.y);
+            p.push();
+            p.strokeWeight(8);
+            p.stroke('red');
+            p.point(pt);
+            p.pop();
+          }
         });
       p.endShape(p.CLOSE);
       p.pop();
