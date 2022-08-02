@@ -24,7 +24,7 @@ export const sketcher = new Sketcher({
   height: 600,
   controls: controls,
   settings: {
-    loop: false,
+    loop: true,
     redrawOnChanges: true,
   },
 
