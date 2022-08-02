@@ -122,6 +122,7 @@ export const sketcher = new Sketcher({
       p.background(colors.bg);
       p.stroke(colors.fg);
       p.strokeWeight(1);
+      p.fill(colors.bg);
 
       const center = p.createVector(p.width / 2, p.height / 2);
       const mouse = p.createVector(p.mouseX - center.x, p.mouseY - center.y);
@@ -178,77 +179,81 @@ export const sketcher = new Sketcher({
       );
       shapes.push(circle);
 
-      p.stroke('red');
-
-      p.push();
-      p.strokeWeight(10);
-      p.point(mouse);
-      p.pop();
-
       // const ray = new LineSegment(p.createVector(0, 0), mouse, true);\
 
-      const rayOrigin = mouse;
-      const intersections: [p5.Vector, number][] = [];
-      for (const shape of shapes) {
-        for (let i = 0; i < shape.points.length; i++) {
-          const pointRay = p5.Vector.sub(shape.points[i], rayOrigin);
-          const rays = [
-            pointRay.copy().rotate(-0.0001),
-            pointRay,
-            pointRay.copy().rotate(0.0001),
-          ].map((target) => new LineSegment(rayOrigin, target, true));
+      for (const { rayOrigin, color } of [
+        { rayOrigin: mouse, color: p.color(0, 255, 255, 50) },
+        { rayOrigin: mouse.copy().mult(-1), color: p.color(255, 0, 255, 50) },
+      ]) {
+        // const rayOrigin = mouse;
+        const intersections: [p5.Vector, number][] = [];
+        for (const shape of shapes) {
+          for (let i = 0; i < shape.points.length; i++) {
+            const pointRay = p5.Vector.sub(shape.points[i], rayOrigin);
+            const rays = [
+              pointRay.copy().rotate(-0.0001),
+              pointRay,
+              pointRay.copy().rotate(0.0001),
+            ].map((target) => new LineSegment(rayOrigin, target, true));
 
-          for (const ray of rays) {
-            let closest: p5.Vector | undefined = undefined;
+            for (const ray of rays) {
+              let closest: p5.Vector | undefined = undefined;
 
-            for (const shape of shapes) {
-              for (let j = 0; j < shape.points.length; j++) {
-                const seg = LineSegment.fromPoints(
-                  shape.points[j],
-                  shape.points[(j + 1) % shape.points.length],
-                  false
-                );
-                const pt = ray.intersectionPoint(seg);
-                if (pt == null) {
-                  continue;
-                }
+              for (const shape of shapes) {
+                for (let j = 0; j < shape.points.length; j++) {
+                  const seg = LineSegment.fromPoints(
+                    shape.points[j],
+                    shape.points[(j + 1) % shape.points.length],
+                    false
+                  );
+                  const pt = ray.intersectionPoint(seg);
+                  if (pt == null) {
+                    continue;
+                  }
 
-                if (!closest || rayOrigin.dist(pt) < rayOrigin.dist(closest)) {
-                  closest = pt;
+                  if (
+                    !closest ||
+                    rayOrigin.dist(pt) < rayOrigin.dist(closest)
+                  ) {
+                    closest = pt;
+                  }
                 }
               }
-            }
 
-            if (closest) {
-              intersections.push([
-                closest,
-                p5.Vector.sub(closest, rayOrigin).heading(),
-              ]);
+              if (closest) {
+                intersections.push([
+                  closest,
+                  p5.Vector.sub(closest, rayOrigin).heading(),
+                ]);
+              }
             }
           }
         }
-      }
-      p.push();
-      p.stroke('red');
-      p.strokeWeight(1);
-      p.fill(255, 0, 0, 50);
-      p.beginShape();
-      intersections
-        .sort((a, b) => a[1] - b[1])
-        .forEach(([pt, _]) => {
-          p.vertex(pt.x, pt.y);
+        p.push();
+        p.stroke('red');
+        p.strokeWeight(1);
+        p.fill(color);
+        p.beginShape();
+        intersections
+          .sort((a, b) => a[1] - b[1])
+          .forEach(([pt, _]) => {
+            p.vertex(pt.x, pt.y);
 
-          if (u.debug) {
-            p.line(rayOrigin.x, rayOrigin.y, pt.x, pt.y);
-            p.push();
-            p.strokeWeight(8);
-            p.stroke('red');
-            p.point(pt);
-            p.pop();
-          }
-        });
-      p.endShape(p.CLOSE);
-      p.pop();
+            if (u.debug) {
+              p.line(rayOrigin.x, rayOrigin.y, pt.x, pt.y);
+              p.push();
+              p.strokeWeight(8);
+              p.stroke('red');
+              p.point(pt);
+              p.pop();
+            }
+          });
+        p.endShape(p.CLOSE);
+        p.stroke(color);
+        p.strokeWeight(10);
+        p.point(rayOrigin);
+        p.pop();
+      }
     };
   },
 });
