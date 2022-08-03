@@ -26,7 +26,7 @@ const controls = {
 };
 
 export const sketcher = new Sketcher({
-  title: 'dragon',
+  title: 'subdiv',
   width: 1400 * 0.75,
   height: 1100 * 0.75,
   controls: controls,
