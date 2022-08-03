@@ -1,34 +1,15 @@
 import p5 from 'p5';
-import {
-  button,
-  checkbox,
-  group,
-  radio,
-  slider,
-  UniformButton,
-  UniformRadio,
-  UniformSlider,
-} from '../components/Controls/UniformControls';
+import { slider } from '../components/Controls/UniformControls';
 import { Sketcher, Uniforms } from '../sketcher';
-import PoissonDisc from './helpers/PoissonDisc';
-import { scaledMargin, effectiveCenter } from './helpers/Book';
+import { scaledMargin } from './helpers/Book';
 
-const controls = {
-  iterations: { type: slider, value: 13, min: 0, max: 20, step: 1 },
-  zoom: { type: slider, value: 175, min: 0, max: 200, step: 1 },
-  angle: {
-    type: slider,
-    value: Math.PI / 2,
-    min: 0,
-    max: Math.PI * 2,
-    step: 0.01,
-  },
-};
+const controls = {};
 
+const scale = 0.75;
 export const sketcher = new Sketcher({
   title: 'subdiv',
-  width: 1400 * 0.75,
-  height: 1100 * 0.75,
+  width: 1400 * scale,
+  height: 1100 * scale,
   controls: controls,
   settings: {
     loop: false,
@@ -45,61 +26,61 @@ export const sketcher = new Sketcher({
       FG: p.color(42),
     };
 
-    function dragon(s: string): string {
-      let result = '';
-      for (let i = 0; i < s.length; i++) {
-        const c = s.charAt(i);
-        if (c === 'F') result += 'F+G';
-        else if (c === 'G') result += 'F-G';
-        else result += c;
+    type direction = 'h' | 'v';
+
+    class Subdiv {
+      pos: p5.Vector;
+      w: number;
+      h: number;
+
+      l?: Subdiv;
+      r?: Subdiv;
+
+      direction: direction;
+
+      constructor(direction: direction, w: number, h: number, pos: p5.Vector) {
+        this.direction = direction;
+        this.w = w;
+        this.h = h;
+        this.pos = pos;
       }
-      return result;
+      show() {
+        p.rect(this.pos.x, this.pos.y, this.w, this.h);
+        if (this.l) this.l.show();
+        if (this.r) this.r.show();
+      }
+
+      div(depth: number) {
+        if (depth <= 0) return [];
+        console.log(depth);
+        const dir = Math.random() > 0.5 ? 'h' : 'v';
+        const amt = Math.random() * 0.5 + 0.25;
+        const w = dir == 'h' ? this.w * amt : this.w;
+        const h = dir == 'v' ? this.h * amt : this.h;
+        const lpos = this.pos.copy();
+        const rpos = this.pos.copy();
+        this.l = new Subdiv(dir, w, h, lpos);
+        this.r = new Subdiv(dir, w, h, rpos);
+        return [this.l, this.r, ...this.l.div(depth - 1)];
+      }
     }
 
-    function draw(s: string, a: number, l: number) {
-      p.push();
-      p.beginShape();
-      p.vertex(0, 0);
-      for (let i = 0; i < s.length; i++) {
-        const c = s.charAt(i);
-        switch (c) {
-          case 'F':
-          case 'G':
-            p.line(0, 0, 0, l);
-            p.translate(0, l);
-            break;
-          case '-':
-            p.rotate(-a);
-            break;
-          case '+':
-            p.rotate(a);
-            break;
-          default:
-            console.warn('draw got unknown input!!');
-            break;
-        }
-      }
-      p.endShape();
-      p.pop();
-    }
+    const MARGIN = scaledMargin(scale);
 
     p.draw = function () {
       p.background(COLORS.BG);
       p.stroke(COLORS.FG);
-      p.strokeWeight(5);
+      p.strokeWeight(2);
       p.noFill();
 
-      const center = p.createVector(p.width / 2, p.height / 2);
+      const w = p.width - MARGIN.left - MARGIN.right;
+      const h = p.height - MARGIN.top - MARGIN.bottom;
 
-      let s = 'F';
-      for (let i = 0; i < u.iterations; i++) {
-        s = dragon(s);
-      }
-      p.translate(center);
-      p.translate(120, 210);
-      p.rotate(-p.PI / 6);
-      p.scale(10 / u.zoom);
-      draw(s, u.angle, 100);
+      const start = p.createVector(MARGIN.left, MARGIN.top);
+
+      const s = new Subdiv('h', w, h, start);
+      s.div(30);
+      s.show();
     };
   },
 });
