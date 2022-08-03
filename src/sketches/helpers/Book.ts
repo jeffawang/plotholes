@@ -8,8 +8,8 @@ export const MARGIN = {
   bottom: 50,
 };
 
-export function scaledMargin(scale: number) {
-  const scaled = {};
+export function scaledMargin(scale: number): typeof MARGIN {
+  const scaled: typeof MARGIN = {};
   Object.keys(MARGIN).forEach((v) => {
     scaled[v] = MARGIN[v] * scale;
   });

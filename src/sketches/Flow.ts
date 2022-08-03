@@ -339,6 +339,8 @@ export const sketcher = new Sketcher({
         }
       }
 
+      console.log('particles', particles.length);
+
       for (const particle of particles) {
         const vf = velFuncs[u.flow] || velFuncs.swirl;
         particle.update(vf);
