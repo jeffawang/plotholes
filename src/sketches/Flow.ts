@@ -22,8 +22,10 @@ const controls = {
 
   reset: { type: button, value: false },
 
-  ttl: { type: slider, value: 40, min: 10, max: 240 },
+  ttl: { type: slider, value: 400, min: 10, max: 240 },
   speed: { type: slider, value: 5, min: 1, max: 240 },
+  frameIter: { type: slider, value: 50, min: 0, max: 100 },
+  minDist: { type: slider, value: 5, min: 3, max: 100 },
   alternate: { type: checkbox, value: false },
 
   angle: {
@@ -36,8 +38,8 @@ const controls = {
 
   spawn: {
     type: radio,
-    value: 'poisson',
-    options: ['poisson', 'random'],
+    value: 'random',
+    options: ['poisson', 'random', 'jobard'],
   },
   attractors: {
     type: group,
@@ -64,14 +66,14 @@ const controls = {
     },
   },
   minLength: { type: slider, value: 10, min: 1, max: 200, step: 1 },
-  length: { type: slider, value: 50, min: 1, max: 200, step: 1 },
+  maxLength: { type: slider, value: 100, min: 1, max: 200, step: 1 },
   debug: { type: checkbox, value: false },
 };
 
 export const sketcher = new Sketcher({
   title: 'flow',
-  width: 1400 * 0.75,
-  height: 1100 * 0.75,
+  width: 1400 * 0.5,
+  height: 1100 * 0.5,
   controls: controls,
   settings: {
     loop: true,
@@ -141,14 +143,15 @@ export const sketcher = new Sketcher({
 
         this.i = 0;
         this.points = Array.from(
-          { length: p.floor(p.random(u.minLength, u.length)) },
+          { length: p.floor(p.random(u.minLength, u.maxLength)) },
           () => pos.copy()
         );
       }
 
       update(vf: velocityFunc) {
         if (this.ttl-- <= 0) {
-          this.reset(placePoint());
+          // this.reset(placePoint());
+          return;
         }
         const curr = this.points[this.i];
         const nextI = (this.i + 1) % this.points.length;
@@ -158,8 +161,29 @@ export const sketcher = new Sketcher({
 
         this.vel.limit(u.speed);
 
-        this.points[nextI].set(curr);
-        this.points[nextI].add(this.vel);
+        const maybeNext = curr.copy().add(this.vel);
+        const neighbors = grid.neighbors(maybeNext);
+
+        if (
+          maybeNext.x < MARGIN.left ||
+          maybeNext.x > p.width - MARGIN.right ||
+          maybeNext.y < MARGIN.top ||
+          maybeNext.y > p.height - MARGIN.bottom
+        )
+          return;
+
+        for (const neighbor of neighbors.values()) {
+          if (neighbor === this) {
+            continue;
+          }
+          for (const pt of neighbor.points) {
+            if (maybeNext.dist(pt) < grid.size) {
+              return;
+            }
+          }
+        }
+        this.points[nextI].set(maybeNext);
+        grid.add(this.points[nextI], this);
         this.i = nextI;
       }
 
@@ -168,7 +192,8 @@ export const sketcher = new Sketcher({
         return pos.x < 0 || pos.y < 0 || pos.x > p.width || pos.y > p.height;
       }
 
-      reset(pos: p5.Vector) {
+      reset(pos?: p5.Vector) {
+        if (!pos) return;
         for (let i = 0; i < this.points.length; i++) {
           this.points[i].set(pos);
         }
@@ -206,6 +231,8 @@ export const sketcher = new Sketcher({
     let disc: PoissonDisc;
     let particles: Particle[];
     let attractors: p5.Vector[];
+
+    let grid: Grid;
 
     type velocityFunc = (p: p5.Vector) => p5.Vector;
     const velFuncs: {
@@ -251,19 +278,125 @@ export const sketcher = new Sketcher({
       },
     };
 
+    function jobard() {
+      const attempts = 50;
+      for (let i = 0; i < attempts; i++) {
+        if (particles.length == 0) {
+          return p.createVector(p.random(p.width), p.random(p.height));
+        }
+        const randomParticle = particles[p.floor(p.random(particles.length))];
+        const randomPoint =
+          randomParticle.points[
+            p.floor(p.random(randomParticle.points.length))
+          ];
+
+        // const pos = p.createVector(p.random(p.width), p.random(p.height));
+        const pos = grid.annulus(randomPoint);
+        if (grid.check(pos)) {
+          return pos;
+        }
+      }
+      return undefined;
+    }
+
     function placePoint() {
       switch (u.spawn) {
         case 'poisson':
           return disc.points[p.floor(p.random(disc.points.length))];
+        case 'jobard':
+          return jobard();
         case 'random':
-        default:
-          return p.createVector(p.random(p.width), p.random(p.height));
+        default: {
+          const pos = p.createVector(p.random(p.width), p.random(p.height));
+          if (grid.check(pos)) return pos;
+        }
+      }
+    }
+
+    const gridSize = 3;
+
+    class Grid {
+      grid: Set<Particle>[];
+      size: number;
+
+      private rows: number;
+      private cols: number;
+
+      constructor(gridSize: number) {
+        this.size = gridSize;
+        this.rows = p.ceil(p.height / gridSize);
+        this.cols = p.ceil(p.width / gridSize);
+        this.grid = Array.from(
+          { length: this.rows * this.cols },
+          () => new Set()
+        );
+      }
+
+      cellID(pos: p5.Vector) {
+        return (
+          p.floor(pos.y / this.size) * this.cols + p.floor(pos.x / this.size)
+        );
+      }
+
+      cell(pos: p5.Vector): Set<Particle> {
+        // console.log(this.grid.length, this.cellID(pos));
+        return this.grid[this.cellID(pos)];
+      }
+
+      neighbors(pos: p5.Vector): Set<Particle> {
+        const neighbors = new Set<Particle>();
+        const i = Math.floor(pos.x / this.size);
+        const j = Math.floor(pos.y / this.size);
+        const x0 = Math.max(0, i - 2);
+        const x1 = Math.min(this.cols, i + 2);
+        const y0 = Math.max(0, j - 2);
+        const y1 = Math.min(this.rows, j + 2);
+
+        for (let y = y0; y < y1; y++) {
+          const row = y * this.cols;
+          for (let x = x0; x < x1; x++) {
+            const cell = this.grid[row + x];
+            for (const particle of cell) {
+              neighbors.add(particle);
+            }
+          }
+        }
+        return neighbors;
+      }
+
+      add(pos: p5.Vector, part: Particle) {
+        const cell = this.cell(pos);
+        cell.add(part);
+      }
+
+      annulus(pt: p5.Vector) {
+        // https://stackoverflow.com/questions/9048095/create-random-number-within-an-annulus/9048443#9048443
+        const theta = p.random(p.TAU);
+        const rMax = this.size * 2;
+        const rMin = this.size;
+        const A = 2 / (rMax * rMax - rMin * rMin);
+        const radius = Math.sqrt((2 * Math.random()) / A + rMin * rMin);
+        return p.createVector(
+          pt.x + radius * Math.cos(theta),
+          pt.y + radius * Math.sin(theta)
+        );
+      }
+      check(pos: p5.Vector): boolean {
+        const neighbors = this.neighbors(pos);
+        for (const neighbor of neighbors.values()) {
+          for (const pt of neighbor.points) {
+            if (pos.dist(pt) < this.size) {
+              return false;
+            }
+          }
+        }
+        return true;
       }
     }
 
     function init() {
       img = fnoiseImg(u.noiseParams.noiseIterations);
-      disc = new PoissonDisc({ p, r: 8 });
+      disc = new PoissonDisc({ p, r: 80 });
       particles = disc.points.map((v) => new Particle(v));
       attractors = new PoissonDisc({
         p,
@@ -271,6 +404,10 @@ export const sketcher = new Sketcher({
         maxPoints: 5,
         seedPoints: [p.createVector(p.width / 2, p.height / 2)],
       }).points;
+
+      grid = new Grid(u.minDist);
+      particles = [];
+      resetAttractors();
     }
 
     function reset() {
@@ -288,8 +425,12 @@ export const sketcher = new Sketcher({
           }).points;
           break;
         case 'circle':
+          // TODO(jw): fix this stuff.
+          // eslint-disable-next-line no-case-declarations
           const da = p.TAU / u.attractors.count;
+          // eslint-disable-next-line no-case-declarations
           const center = effectiveCenter(p.width, p.height, MARGIN);
+          // eslint-disable-next-line no-case-declarations
           const radius = 200;
           attractors = Array.from({ length: u.attractors.count }, (_, k) => {
             const a = da * k;
@@ -307,10 +448,12 @@ export const sketcher = new Sketcher({
 
     (s.params.controls.reset as UniformButton).onClick = reset;
     (s.params.controls.attractors.value.distribution as UniformRadio).onChange =
-      resetAttractors;
-    (s.params.controls.attractors.value.count as UniformSlider).onChange =
-      resetAttractors;
+      init;
+    (s.params.controls.attractors.value.count as UniformSlider).onChange = init;
+
     (s.params.controls.noiseParams.value.inc as UniformSlider).onChange = init;
+    (s.params.controls.minDist as UniformSlider).onChange = init;
+    // (s.params.controls.spawn as UniformRadio).onChange = init;
 
     p.setup = function () {
       s.setup(p)();
@@ -339,16 +482,25 @@ export const sketcher = new Sketcher({
         }
       }
 
-      console.log('particles', particles.length);
+      // console.log('particle count:', particles.length);
 
-      for (const particle of particles) {
-        const vf = velFuncs[u.flow] || velFuncs.swirl;
-        particle.update(vf);
+      for (let i = 0; i < u.frameIter; i++) {
+        for (const particle of particles) {
+          const vf = velFuncs[u.flow] || velFuncs.swirl;
+          particle.update(vf);
 
-        if (particle.edges()) {
-          particle.reset(placePoint());
+          if (particle.edges()) {
+            particle.reset(placePoint());
+          }
         }
 
+        const pos = placePoint();
+        if (pos) {
+          particles.push(new Particle(pos));
+        }
+      }
+
+      for (const particle of particles) {
         particle.show();
       }
 
