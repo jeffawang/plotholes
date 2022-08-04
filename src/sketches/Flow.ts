@@ -6,6 +6,7 @@ import {
   radio,
   slider,
   UniformButton,
+  UniformCheckbox,
   UniformRadio,
   UniformSlider,
 } from '../components/Controls/UniformControls';
@@ -22,11 +23,11 @@ const controls = {
 
   reset: { type: button, value: false },
 
-  ttl: { type: slider, value: 400, min: 10, max: 240 },
+  ttl: { type: slider, value: 500, min: 10, max: 240 },
   speed: { type: slider, value: 5, min: 1, max: 240 },
-  frameIter: { type: slider, value: 50, min: 0, max: 100 },
-  minDist: { type: slider, value: 5, min: 3, max: 100 },
-  alternate: { type: checkbox, value: false },
+  frameIter: { type: slider, value: 100, min: 0, max: 100, step: 1 },
+  minDist: { type: slider, value: 6, min: 3, max: 100 },
+  alternate: { type: checkbox, value: true },
 
   angle: {
     type: slider,
@@ -46,10 +47,10 @@ const controls = {
     value: {
       distribution: {
         type: radio,
-        value: 'poisson',
-        options: ['poisson', 'circle'],
+        value: 'random',
+        options: ['poisson', 'circle', 'random'],
       },
-      count: { type: slider, value: 4, min: 1, max: 10, step: 1 },
+      count: { type: slider, value: 10, min: 1, max: 10, step: 1 },
     },
   },
   noiseParams: {
@@ -70,10 +71,12 @@ const controls = {
   debug: { type: checkbox, value: false },
 };
 
+const scale = 0.3;
+
 export const sketcher = new Sketcher({
   title: 'flow',
-  width: 1400 * 0.5,
-  height: 1100 * 0.5,
+  width: 1400 * scale * 2,
+  height: 1100 * scale,
   controls: controls,
   settings: {
     loop: true,
@@ -127,7 +130,8 @@ export const sketcher = new Sketcher({
       return img;
     }
 
-    const MARGIN = scaledMargin(0.75);
+    const MARGIN = scaledMargin(scale);
+    MARGIN.right = MARGIN.left;
 
     class Particle {
       vel: p5.Vector;
@@ -136,6 +140,7 @@ export const sketcher = new Sketcher({
 
       points: p5.Vector[];
       i: number;
+      size: number;
 
       constructor(pos: p5.Vector) {
         this.vel = p.createVector(0);
@@ -146,6 +151,7 @@ export const sketcher = new Sketcher({
           { length: p.floor(p.random(u.minLength, u.maxLength)) },
           () => pos.copy()
         );
+        this.size = 1;
       }
 
       update(vf: velocityFunc) {
@@ -159,18 +165,25 @@ export const sketcher = new Sketcher({
         const v = vf(curr);
         this.vel.set(v);
 
-        this.vel.limit(u.speed);
+        this.vel.limit(u.speed * scale);
 
         const maybeNext = curr.copy().add(this.vel);
         const neighbors = grid.neighbors(maybeNext);
 
         if (
-          maybeNext.x < MARGIN.left ||
-          maybeNext.x > p.width - MARGIN.right ||
-          maybeNext.y < MARGIN.top ||
-          maybeNext.y > p.height - MARGIN.bottom
-        )
+          maybeNext.x < 0 ||
+          maybeNext.x > p.width ||
+          maybeNext.y < 0 ||
+          maybeNext.y > p.height
+        ) {
           return;
+        }
+
+        for (const a of attractors) {
+          if (maybeNext.dist(a) < grid.size * 0.75) {
+            return;
+          }
+        }
 
         for (const neighbor of neighbors.values()) {
           if (neighbor === this) {
@@ -185,6 +198,7 @@ export const sketcher = new Sketcher({
         this.points[nextI].set(maybeNext);
         grid.add(this.points[nextI], this);
         this.i = nextI;
+        this.size++;
       }
 
       edges() {
@@ -205,24 +219,50 @@ export const sketcher = new Sketcher({
 
       show() {
         p.beginShape();
+        let inShape = true;
 
-        function vert(pt: p5.Vector) {
-          if (
+        function valid(pt: p5.Vector): boolean {
+          return (
             pt.x > MARGIN.left &&
             pt.x < p.width - MARGIN.right &&
             pt.y > MARGIN.top &&
             pt.y < p.height - MARGIN.bottom
-          ) {
-            p.vertex(pt.x, pt.y);
-          }
+          );
         }
 
-        for (const pt of this.points.slice(this.i + 1)) {
+        const vert = (pt: p5.Vector) => {
+          if (valid(pt)) {
+            if (!inShape) {
+              inShape = true;
+              p.beginShape();
+            }
+            p.vertex(pt.x, pt.y);
+          } else if (inShape) {
+            inShape = false;
+            p.endShape();
+          }
+        };
+
+        function isLeft(pt: p5.Vector) {
+          return pt.x < p.width / 2;
+        }
+
+        let left = isLeft(this.points[0]);
+        p.stroke(left ? 'red' : 'black');
+        for (let i = 0; i < this.i; i++) {
+          const pt = this.points[i];
+          const ptLeft = isLeft(pt);
+          if (ptLeft != left) {
+            if (inShape) {
+              p.endShape();
+              p.stroke(ptLeft ? 'red' : 'black');
+              p.beginShape();
+              left = ptLeft;
+            }
+          }
           vert(pt);
         }
-        for (const pt of this.points.slice(0, this.i + 1)) {
-          vert(pt);
-        }
+
         p.endShape();
       }
     }
@@ -398,14 +438,8 @@ export const sketcher = new Sketcher({
       img = fnoiseImg(u.noiseParams.noiseIterations);
       disc = new PoissonDisc({ p, r: 80 });
       particles = disc.points.map((v) => new Particle(v));
-      attractors = new PoissonDisc({
-        p,
-        r: p.width / 5,
-        maxPoints: 5,
-        seedPoints: [p.createVector(p.width / 2, p.height / 2)],
-      }).points;
 
-      grid = new Grid(u.minDist);
+      grid = new Grid(u.minDist * scale);
       particles = [];
       resetAttractors();
     }
@@ -419,9 +453,16 @@ export const sketcher = new Sketcher({
         case 'poisson':
           attractors = new PoissonDisc({
             p,
-            r: p.width / 5,
-            maxPoints: 5,
-            seedPoints: [p.createVector(p.width / 2, p.height / 2)],
+            r: p.width / u.attractors.count,
+            maxPoints: u.attractors.count,
+            seedPoints: [
+              p.createVector(
+                // p.randomGaussian(p.width / 2, p.width / 8),
+                // p.randomGaussian(p.height / 2, p.width / 8)
+                p.random(p.width),
+                p.random(p.height)
+              ),
+            ],
           }).points;
           break;
         case 'circle':
@@ -443,13 +484,21 @@ export const sketcher = new Sketcher({
           //   p.createVector((p.width / 3) * 2, p.height / 2),
           // ];
           break;
+        case 'random':
+          attractors = Array.from({ length: u.attractors.count }, () => {
+            return p.createVector(p.random(p.width), p.random(p.height));
+          });
+          break;
       }
     }
 
     (s.params.controls.reset as UniformButton).onClick = reset;
+    (s.params.controls.flow as UniformRadio).onChange = init;
+    (s.params.controls.alternate as UniformCheckbox).onChange = init;
     (s.params.controls.attractors.value.distribution as UniformRadio).onChange =
       init;
     (s.params.controls.attractors.value.count as UniformSlider).onChange = init;
+    (s.params.controls.angle as UniformSlider).onChange = init;
 
     (s.params.controls.noiseParams.value.inc as UniformSlider).onChange = init;
     (s.params.controls.minDist as UniformSlider).onChange = init;
